@@ -3,6 +3,7 @@ Skeleton for building a simple Hyperledger Fabric service network
 
 # Prerequisites
 * Docker
+* docker-compose
 * GNU make
 * curl
 * Python3
