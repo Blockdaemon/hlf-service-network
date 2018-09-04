@@ -13,7 +13,7 @@ all: tools crypto-config genesis channel anchors .env
 .PHONY: tools
 tools: tools/.stamp
 
-tools/.stamp: Makefile
+tools/.stamp: tools/hyperledger-fabric-linux-amd64-1.0.5/README tools/hyperledger-fabric-darwin-amd64-1.0.5/README
 	@rm -f tools/.stamp
 	curl -s $(shell cat tools/hyperledger-fabric-linux-amd64-1.0.5/README) | tar xvz -C tools/hyperledger-fabric-linux-amd64-1.0.5
 	curl -s $(shell cat tools/hyperledger-fabric-darwin-amd64-1.0.5/README) | tar xvz -C tools/hyperledger-fabric-darwin-amd64-1.0.5
