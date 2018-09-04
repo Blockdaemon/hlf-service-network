@@ -24,4 +24,9 @@ Skeleton for building a simple Hyperledger Fabric service network
 # To clean up
     make clean
 
+# Overridding default config.env
+
+You can put overrides in local.env
+
+# References
 See also [How to build your first Hyperledger fabric network](https://chainhero.io/2018/04/tutorial-hyperledger-fabric-how-to-build-your-first-network/)

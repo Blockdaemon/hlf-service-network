@@ -1,5 +1,10 @@
 include config.env
 
+# include overrides if the file exists
+-include local.env
+
+MAKEFILES:=Makefile config.env $(wildcard local.env)	# only care about local.env if it is there
+
 UNAME:=$(shell uname -s)
 ARCH:=$(shell arch)
 
@@ -22,7 +27,7 @@ tools/.stamp: tools/hyperledger-fabric-linux-amd64-1.0.5/README tools/hyperledge
 .PHONY: crypto-config
 crypto-config: $(CRYPTO_DIR)/ca/current_sk
 
-$(CRYPTO_DIR)/ca/current_sk: Makefile config.env crypto-config.yaml
+$(CRYPTO_DIR)/ca/current_sk: $(MAKEFILES) crypto-config.yaml
 	@mkdir -p crypto-config
 	@rm -f $@
 	$(BINDIR)/cryptogen generate --config=./crypto-config.yaml
@@ -31,7 +36,7 @@ $(CRYPTO_DIR)/ca/current_sk: Makefile config.env crypto-config.yaml
 .PHONY: genesis
 genesis: artifacts/orderer.genesis.block
 
-artifacts/orderer.genesis.block: Makefile config.env configtx.yaml
+artifacts/orderer.genesis.block: $(MAKEFILES) configtx.yaml
 	@mkdir -p artifacts
 	@rm -f $@
 	FABRIC_CFG_PATH=$(PWD) $(BINDIR)/configtxgen -profile $(PROFILE) -outputBlock $@
@@ -39,7 +44,7 @@ artifacts/orderer.genesis.block: Makefile config.env configtx.yaml
 .PHONY: channel
 channel: artifacts/$(CHANNEL).channel.tx
 
-artifacts/$(CHANNEL).channel.tx: Makefile config.env configtx.yaml
+artifacts/$(CHANNEL).channel.tx: $(MAKEFILES) configtx.yaml
 	@mkdir -p artifacts
 	@rm -f $@
 	FABRIC_CFG_PATH=$(PWD) $(BINDIR)/configtxgen -profile $(PROFILE) -outputCreateChannelTx $@ -channelID $(CHANNEL)
@@ -47,14 +52,13 @@ artifacts/$(CHANNEL).channel.tx: Makefile config.env configtx.yaml
 .PHONY: anchors
 anchors: artifacts/$(CHANNEL).anchors.tx
 
-artifacts/$(CHANNEL).anchors.tx: Makefile config.env configtx.yaml
+artifacts/$(CHANNEL).anchors.tx: $(MAKEFILES) configtx.yaml
 	FABRIC_CFG_PATH=$(PWD) $(BINDIR)/configtxgen -profile $(PROFILE) -outputAnchorPeersUpdate $@ -channelID $(CHANNEL) -asOrg $(ORG)Organization1
 
 # .env file for docker-compose
-.env: Makefile config.env
+.env: $(MAKEFILES)
 	@echo "PROFILE=$(PROFILE)" > $@
 	@echo "DOMAIN=$(DOMAIN)" >> $@
-
 
 # jinja2 rule
 %.yaml: templates/%.yaml.in

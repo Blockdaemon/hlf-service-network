@@ -1,5 +1,7 @@
 .env
 
+local.env
+
 __pycache__
 artifacts
 crypto-config
