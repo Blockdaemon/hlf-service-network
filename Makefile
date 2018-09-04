@@ -56,6 +56,7 @@ artifacts/$(CHANNEL).anchors.tx: $(BINDIR)/configtxgen $(MAKEFILES) configtx.yam
 .env: $(MAKEFILES)
 	@echo "PROFILE=$(PROFILE)" > $@
 	@echo "DOMAIN=$(DOMAIN)" >> $@
+	@echo "NETWORKID=$(NETWORKID)" >> $@
 
 # jinja2 rule
 %.yaml: templates/%.yaml.in
