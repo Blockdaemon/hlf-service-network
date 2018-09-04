@@ -20,9 +20,9 @@ Profiles:
             <<: *ApplicationDefaults
             Organizations:
                 - *Org1{{env['ORG'] or "SomeOrg"}}
-        Consortium: SampleConsortium
+        Consortium: {{env['CONSORTIUM'] or "SomeConsortum"}}
         Consortiums:
-            SampleConsortium:
+            {{env['CONSORTIUM'] or "SomeConsortum"}}:
                 Organizations:
                     - *{{env['ORG'] or "SomeOrg"}}
                     - *Org1{{env['ORG'] or "SomeOrg"}}

@@ -60,7 +60,7 @@ artifacts/$(CHANNEL).anchors.tx: $(BINDIR)/configtxgen $(MAKEFILES) configtx.yam
 
 # jinja2 rule
 %.yaml: templates/%.yaml.in
-	DOMAIN=$(DOMAIN) ORG=$(ORG) tools/jinja2-cli.py < $< > $@ || (rm -f $@; false)
+	ORG=$(ORG) CONSORTIUM=$(CONSORTIUM) DOMAIN=$(DOMAIN) tools/jinja2-cli.py < $< > $@ || (rm -f $@; false)
 
 .PHONY: clean
 clean:
