@@ -58,7 +58,7 @@ artifacts/$(CHANNEL).anchors.tx: Makefile config.env configtx.yaml
 
 # jinja2 rule
 %.yaml: templates/%.yaml.in
-	DOMAIN=$(DOMAIN) ORG=$(ORG) tools/jinja2-cli.py < $< > $@ || rm -f $@
+	DOMAIN=$(DOMAIN) ORG=$(ORG) tools/jinja2-cli.py < $< > $@ || (rm -f $@; false)
 
 .PHONY: clean
 clean:
