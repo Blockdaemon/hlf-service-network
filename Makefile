@@ -38,7 +38,7 @@ $(BINDIR)/cryptogen $(BINDIR)/configtxgen: # $(MAKEFILES)
 	curl -s $(TOOLURL) | tar xvz -C $(TOOLDIR) || (rm -rf $(BINDIR); false)
 	@touch $(BINDIR)/cryptogen $(BINDIR)/configtxgen	# tar will extract with the old date, which will be older than README
 
-.PHONY: crypto-config
+.PHONY: crypto-config genesis channel anchors
 crypto-config: $(CRYPTO_DIR)/ca/current_sk
 
 $(CRYPTO_DIR)/ca/current_sk: $(BINDIR)/cryptogen $(MAKEFILES) crypto-config.yaml
@@ -47,7 +47,6 @@ $(CRYPTO_DIR)/ca/current_sk: $(BINDIR)/cryptogen $(MAKEFILES) crypto-config.yaml
 	$(BINDIR)/cryptogen generate --config=./crypto-config.yaml
 	LATEST=$$(ls -1t $(CRYPTO_DIR)/ca/*_sk | head -1); ln -sf $$(basename $$LATEST) $@
 
-.PHONY: genesis
 genesis: artifacts/orderer.genesis.block
 
 artifacts/orderer.genesis.block: $(BINDIR)/configtxgen $(MAKEFILES) configtx.yaml
@@ -55,7 +54,6 @@ artifacts/orderer.genesis.block: $(BINDIR)/configtxgen $(MAKEFILES) configtx.yam
 	@rm -f $@
 	FABRIC_CFG_PATH=$(PWD) $(BINDIR)/configtxgen -profile $(PROFILE) -outputBlock $@ -channelID $(CHANNEL)
 
-.PHONY: channel
 channel: artifacts/$(CHANNEL).channel.tx
 
 artifacts/$(CHANNEL).channel.tx: $(BINDIR)/configtxgen $(MAKEFILES) configtx.yaml
@@ -63,7 +61,6 @@ artifacts/$(CHANNEL).channel.tx: $(BINDIR)/configtxgen $(MAKEFILES) configtx.yam
 	@rm -f $@
 	FABRIC_CFG_PATH=$(PWD) $(BINDIR)/configtxgen -profile $(PROFILE) -outputCreateChannelTx $@ -channelID $(CHANNEL)
 
-.PHONY: anchors
 anchors: artifacts/$(CHANNEL).anchors.tx
 
 artifacts/$(CHANNEL).anchors.tx: $(BINDIR)/configtxgen $(MAKEFILES) configtx.yaml
@@ -86,11 +83,13 @@ run: all
 %.yaml: templates/%.yaml.in
 	ORG=$(ORG) CONSORTIUM=$(CONSORTIUM) DOMAIN=$(DOMAIN) tools/jinja2-cli.py < $< > $@ || (rm -f $@; false)
 
-.PHONY: clean
+.PHONY: clean distclean
 clean:
 	rm -rf __pycache__
 	rm -rf artifacts crypto-config
 	rm -f configtx.yaml crypto-config.yaml .env
+
+distclean: clean
 	rm -rf tools/*/*
 
 .PHONY: FORCE

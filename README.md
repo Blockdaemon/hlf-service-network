@@ -5,7 +5,7 @@ Skeleton for building a simple Hyperledger Fabric service network
 * Peer anchor
 * Certs for one admin and two users
 * Orderer genesis block
-* One channel 
+* One channel
 
 # Prerequisites
 * Docker
@@ -45,6 +45,15 @@ make clean
 # Overriding default config.env
 
 You can put overrides in local.env
+
+# Bugs
+
+* Artifacts may not be compatible across versions. Do a `make clean` if you change `HLF_VERSION`!
+
+* The Hyperledger Fabric docker image tags changed format between 1.0.5 and 1.2.0:
+** 1.0.5 only has `x86_64` tags
+** 1.1.0 has `x86_64` and `amd64` tags
+** 1.2.0 only has `amd64` tags
 
 # References
 See also [How to build your first Hyperledger fabric network](https://chainhero.io/2018/04/tutorial-hyperledger-fabric-how-to-build-your-first-network/)
