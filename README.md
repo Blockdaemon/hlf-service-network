@@ -10,12 +10,16 @@ Skeleton for building a simple Hyperledger Fabric service network
 * Python3 jinja2
 
 ## MacOS
+* [Install docker](https://store.docker.com/editions/community/docker-ce-desktop-mac)
+* Install other stuff:
     brew install python3
     pip3 install jinja2
 
 ## Ubuntu/Debian
+* [Install docker](https://docs.docker.com/install/linux/docker-ce/ubuntu/#install-using-the-repository)
+* Install other stuff:
     apt-get install make curl
-    apt-get python3-jinja2
+    apt-get install python3-jinja2
 
 # QUICKSTART
     make
