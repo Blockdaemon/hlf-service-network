@@ -1,32 +1,3 @@
-
-################################################################################
-#
-#   SECTION : Profile
-#
-#   - Different configuration profiles may be encoded here to be specified
-#   as parameters to the configtxgen tool. The profiles which specify consortiums
-#   are to be used for generating the orderer genesis block.  With the correct
-#   consortium members defined in the orderer genesis block, channel creation
-#   requests may be generated with only the org member names and a consortium name
-#
-################################################################################
-Profiles:
-    {{env['ORG'] or "SomeOrg"}}:
-        Orderer:
-            <<: *OrdererDefaults
-            Organizations:
-                - *{{env['ORG'] or "SomeOrg"}}
-        Application:
-            <<: *ApplicationDefaults
-            Organizations:
-                - *Org1{{env['ORG'] or "SomeOrg"}}
-        Consortium: {{env['CONSORTIUM'] or "SomeConsortum"}}
-        Consortiums:
-            {{env['CONSORTIUM'] or "SomeConsortum"}}:
-                Organizations:
-                    - *{{env['ORG'] or "SomeOrg"}}
-                    - *Org1{{env['ORG'] or "SomeOrg"}}
-
 ################################################################################
 #
 #   SECTION: Organizations
@@ -96,3 +67,31 @@ Orderer: &OrdererDefaults
 ################################################################################
 Application: &ApplicationDefaults
     Organizations:
+
+################################################################################
+#
+#   SECTION : Profile
+#
+#   - Different configuration profiles may be encoded here to be specified
+#   as parameters to the configtxgen tool. The profiles which specify consortiums
+#   are to be used for generating the orderer genesis block.  With the correct
+#   consortium members defined in the orderer genesis block, channel creation
+#   requests may be generated with only the org member names and a consortium name
+#
+################################################################################
+Profiles:
+    {{env['ORG'] or "SomeOrg"}}:
+        Orderer:
+            <<: *OrdererDefaults
+            Organizations:
+                - *{{env['ORG'] or "SomeOrg"}}
+        Application:
+            <<: *ApplicationDefaults
+            Organizations:
+                - *Org1{{env['ORG'] or "SomeOrg"}}
+        Consortium: {{env['CONSORTIUM'] or "SomeConsortum"}}
+        Consortiums:
+            {{env['CONSORTIUM'] or "SomeConsortum"}}:
+                Organizations:
+                    - *{{env['ORG'] or "SomeOrg"}}
+                    - *Org1{{env['ORG'] or "SomeOrg"}}

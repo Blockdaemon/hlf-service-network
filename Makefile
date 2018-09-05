@@ -33,7 +33,7 @@ CRYPTO_DIR:=crypto-config/peerOrganizations/org1.hf.$(DOMAIN)
 .PHONY: all
 all: crypto-config genesis channel anchors .env
 
-$(BINDIR)/cryptogen $(BINDIR)/configtxgen: $(MAKEFILES)
+$(BINDIR)/cryptogen $(BINDIR)/configtxgen: # $(MAKEFILES)
 	mkdir -p $(TOOLDIR)
 	curl -s $(TOOLURL) | tar xvz -C $(TOOLDIR) || (rm -rf $(BINDIR); false)
 	@touch $(BINDIR)/cryptogen $(BINDIR)/configtxgen	# tar will extract with the old date, which will be older than README
