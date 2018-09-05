@@ -3,6 +3,11 @@ include config.env
 # include overrides if the file exists
 -include local.env
 
+ifndef GOPATH
+    GOPATH:=/home/$(USER)/go
+    export GOPATH
+endif
+
 MAKEFILES:=Makefile config.env $(wildcard local.env)	# only care about local.env if it is there
 
 UNAME:=$(shell uname -s)
@@ -57,6 +62,7 @@ artifacts/$(CHANNEL).anchors.tx: $(BINDIR)/configtxgen $(MAKEFILES) configtx.yam
 	@echo "PROFILE=$(PROFILE)" > $@
 	@echo "DOMAIN=$(DOMAIN)" >> $@
 	@echo "NETWORKID=$(NETWORKID)" >> $@
+	@echo "GOPATH=$(GOPATH)" >> $@
 
 .PHONY: run
 run: all
