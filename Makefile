@@ -71,7 +71,8 @@ artifacts/$(CHANNEL).anchors.tx: $(BINDIR)/configtxgen $(MAKEFILES) configtx.yam
 
 # .env file for docker-compose
 .env: $(MAKEFILES)
-	@echo "HLF_VERSION=$(HLF_VERSION)" > $@
+	@echo "HLF_ARCH=$(HLF_ARCH)" > $@
+	@echo "HLF_VERSION=$(HLF_VERSION)" >> $@
 	@echo "PROFILE=$(PROFILE)" >> $@
 	@echo "DOMAIN=$(DOMAIN)" >> $@
 	@echo "NETWORKID=$(NETWORKID)" >> $@
