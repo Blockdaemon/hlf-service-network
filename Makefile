@@ -58,6 +58,10 @@ artifacts/$(CHANNEL).anchors.tx: $(BINDIR)/configtxgen $(MAKEFILES) configtx.yam
 	@echo "DOMAIN=$(DOMAIN)" >> $@
 	@echo "NETWORKID=$(NETWORKID)" >> $@
 
+.PHONY: run
+run: all
+	docker-compose up
+
 # jinja2 rule
 %.yaml: templates/%.yaml.in
 	ORG=$(ORG) CONSORTIUM=$(CONSORTIUM) DOMAIN=$(DOMAIN) tools/jinja2-cli.py < $< > $@ || (rm -f $@; false)

@@ -28,7 +28,7 @@ apt-get install python3-jinja2
 # QUICKSTART
 ```
 make
-docker-compose up
+make run
 ```
 
 # To clean up
@@ -36,7 +36,7 @@ docker-compose up
 make clean
 ```
 
-# Overridding default config.env
+# Overriding default config.env
 
 You can put overrides in local.env
 
