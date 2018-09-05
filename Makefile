@@ -13,8 +13,19 @@ MAKEFILES:=Makefile config.env $(wildcard local.env)	# only care about local.env
 UNAME:=$(shell uname -s)
 ARCH:=$(shell arch)
 
-TOOLDIR:=tools/$(shell readlink tools/$(UNAME)-$(ARCH))
-TOOLURL:=$(TOOLDIR)/README
+ARCHURL_Darwin-i386:=darwin-amd64
+ARCHURL_Linux-x86_64:=linux-amd64
+URLPATH:=$(ARCHURL_$(UNAME)-$(ARCH))
+ifndef URLPATH
+$(error Do not know how to handle $(UNAME)-$(ARCH))
+endif
+TOOLURL:=https://nexus.hyperledger.org/content/repositories/releases/org/hyperledger/fabric/hyperledger-fabric/$(URLPATH)-$(HLF_VERSION)/hyperledger-fabric-$(URLPATH)-$(HLF_VERSION).tar.gz
+
+TOOLDIR:=tools/$(UNAME)-$(ARCH)/$(HLF_VERSION)
+ifndef URLPATH
+# Prevent really bad things on rm -rf $(BINDIR)
+$(error TOOLDIR is empty!)
+endif
 BINDIR:=$(TOOLDIR)/bin
 
 CRYPTO_DIR:=crypto-config/peerOrganizations/org1.hf.$(DOMAIN)
@@ -22,8 +33,9 @@ CRYPTO_DIR:=crypto-config/peerOrganizations/org1.hf.$(DOMAIN)
 .PHONY: all
 all: crypto-config genesis channel anchors .env
 
-$(BINDIR)/cryptogen $(BINDIR)/configtxgen: $(TOOLURL)
-	curl -s $(shell cat $(TOOLURL)) | tar xvz -C $(TOOLDIR) || (rm -rf $(BINDIR); false)
+$(BINDIR)/cryptogen $(BINDIR)/configtxgen: $(MAKEFILES)
+	mkdir -p $(TOOLDIR)
+	curl -s $(TOOLURL) | tar xvz -C $(TOOLDIR) || (rm -rf $(BINDIR); false)
 	@touch $(BINDIR)/cryptogen $(BINDIR)/configtxgen	# tar will extract with the old date, which will be older than README
 
 .PHONY: crypto-config
@@ -41,7 +53,7 @@ genesis: artifacts/orderer.genesis.block
 artifacts/orderer.genesis.block: $(BINDIR)/configtxgen $(MAKEFILES) configtx.yaml
 	@mkdir -p artifacts
 	@rm -f $@
-	FABRIC_CFG_PATH=$(PWD) $(BINDIR)/configtxgen -profile $(PROFILE) -outputBlock $@
+	FABRIC_CFG_PATH=$(PWD) $(BINDIR)/configtxgen -profile $(PROFILE) -outputBlock $@ -channelID $(CHANNEL)
 
 .PHONY: channel
 channel: artifacts/$(CHANNEL).channel.tx
@@ -59,7 +71,8 @@ artifacts/$(CHANNEL).anchors.tx: $(BINDIR)/configtxgen $(MAKEFILES) configtx.yam
 
 # .env file for docker-compose
 .env: $(MAKEFILES)
-	@echo "PROFILE=$(PROFILE)" > $@
+	@echo "HLF_VERSION=$(HLF_VERSION)" > $@
+	@echo "PROFILE=$(PROFILE)" >> $@
 	@echo "DOMAIN=$(DOMAIN)" >> $@
 	@echo "NETWORKID=$(NETWORKID)" >> $@
 	@echo "GOPATH=$(GOPATH)" >> $@
@@ -77,7 +90,6 @@ clean:
 	rm -rf __pycache__
 	rm -rf artifacts crypto-config
 	rm -f configtx.yaml crypto-config.yaml .env
-	rm -rf tools/hyperledger-fabric-linux-amd64-1.0.5/bin
-	rm -rf tools/hyperledger-fabric-darwin-amd64-1.0.5/bin
+	rm -rf tools/*/*
 
 .PHONY: FORCE
