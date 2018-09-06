@@ -52,7 +52,8 @@ genesis: artifacts/orderer.genesis.block
 artifacts/orderer.genesis.block: $(BINDIR)/configtxgen $(MAKEFILES) configtx.yaml
 	@mkdir -p artifacts
 	@rm -f $@
-	FABRIC_CFG_PATH=$(PWD) $(BINDIR)/configtxgen -profile $(PROFILE) -outputBlock $@ -channelID $(CHANNEL)
+	@# FIXME - 1.2.0 requires -channelID, but this breaks 1.1.0
+	FABRIC_CFG_PATH=$(PWD) $(BINDIR)/configtxgen -profile $(PROFILE) -outputBlock $@ # -channelID $(CHANNEL)
 
 channel: artifacts/$(CHANNEL).channel.tx
 
