@@ -86,11 +86,11 @@ run: all
 
 .PHONY: clean distclean
 clean:
-	rm -rf __pycache__
 	rm -rf artifacts crypto-config
 	rm -f configtx.yaml crypto-config.yaml .env
 
 distclean: clean
+	rm -rf __pycache__
 	rm -rf tools/*/*
 
 .PHONY: FORCE
