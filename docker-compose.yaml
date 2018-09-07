@@ -57,28 +57,43 @@ services:
         aliases:
           - ca.org1.hf.${DOMAIN}
 
+  couchdb0:
+    container_name: couchdb0.org1.hf.${DOMAIN}
+    image: hyperledger/fabric-couchdb
+    env_file:
+      - couch.env
+    ports:
+      - "5984:5984"
+    networks:
+      default:
+        aliases:
+          - couchdb0.org1.hf.${DOMAIN}
+
+  couchdb1:
+    container_name: couchdb1.org1.hf.${DOMAIN}
+    image: hyperledger/fabric-couchdb
+    env_file:
+      - couch.env
+    ports:
+      - "6984:5984"
+    networks:
+      default:
+        aliases:
+          - couchdb1.org1.hf.${DOMAIN}
+
   peer0.org1.hf:
     image: hyperledger/fabric-peer:${HLF_ARCH}-${HLF_VERSION}
     container_name: peer0.org1.hf.${DOMAIN}
+    env_file:
+      - couch.env
+      - peer.env
     environment:
-      - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
-      - CORE_VM_DOCKER_ATTACHSTDOUT=true
-      - CORE_LOGGING_LEVEL=DEBUG
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb0.org1.hf.${DOMAIN}:5984
       - CORE_PEER_NETWORKID=${NETWORKID}
-      - CORE_PEER_PROFILE_ENABLED=true
-      - CORE_PEER_TLS_ENABLED=true
-      - CORE_PEER_TLS_CERT_FILE=/var/hyperledger/tls/server.crt
-      - CORE_PEER_TLS_KEY_FILE=/var/hyperledger/tls/server.key
-      - CORE_PEER_TLS_ROOTCERT_FILE=/var/hyperledger/tls/ca.crt
       - CORE_PEER_ID=peer0.org1.hf.${DOMAIN}
-      - CORE_PEER_ADDRESSAUTODETECT=true
       - CORE_PEER_ADDRESS=peer0.org1.hf.${DOMAIN}:7051
       - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.org1.hf.${DOMAIN}:7051
-      - CORE_PEER_GOSSIP_USELEADERELECTION=true
-      - CORE_PEER_GOSSIP_ORGLEADER=false
-      - CORE_PEER_GOSSIP_SKIPHANDSHAKE=true
       - CORE_PEER_LOCALMSPID=org1.hf.${DOMAIN}
-      - CORE_PEER_MSPCONFIGPATH=/var/hyperledger/msp
       - CORE_PEER_TLS_SERVERHOSTOVERRIDE=peer0.org1.hf.${DOMAIN}
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
     command: peer node start
@@ -91,6 +106,7 @@ services:
       - 7053:7053
     depends_on:
       - orderer.hf
+      - couchdb0
     links:
       - orderer.hf
     networks:
@@ -101,25 +117,16 @@ services:
   peer1.org1.hf:
     image: hyperledger/fabric-peer:${HLF_ARCH}-${HLF_VERSION}
     container_name: peer1.org1.hf.${DOMAIN}
+    env_file:
+      - couch.env
+      - peer.env
     environment:
-      - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
-      - CORE_VM_DOCKER_ATTACHSTDOUT=true
-      - CORE_LOGGING_LEVEL=DEBUG
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb1.org1.hf.${DOMAIN}:5984
       - CORE_PEER_NETWORKID=${NETWORKID}
-      - CORE_PEER_PROFILE_ENABLED=true
-      - CORE_PEER_TLS_ENABLED=true
-      - CORE_PEER_TLS_CERT_FILE=/var/hyperledger/tls/server.crt
-      - CORE_PEER_TLS_KEY_FILE=/var/hyperledger/tls/server.key
-      - CORE_PEER_TLS_ROOTCERT_FILE=/var/hyperledger/tls/ca.crt
       - CORE_PEER_ID=peer1.org1.hf.${DOMAIN}
-      - CORE_PEER_ADDRESSAUTODETECT=true
       - CORE_PEER_ADDRESS=peer1.org1.hf.${DOMAIN}:7051
       - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer1.org1.hf.${DOMAIN}:7051
-      - CORE_PEER_GOSSIP_USELEADERELECTION=true
-      - CORE_PEER_GOSSIP_ORGLEADER=false
-      - CORE_PEER_GOSSIP_SKIPHANDSHAKE=true
       - CORE_PEER_LOCALMSPID=org1.hf.${DOMAIN}
-      - CORE_PEER_MSPCONFIGPATH=/var/hyperledger/msp
       - CORE_PEER_TLS_SERVERHOSTOVERRIDE=peer1.org1.hf.${DOMAIN}
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
     command: peer node start
@@ -132,6 +139,7 @@ services:
       - 8053:7053
     depends_on:
       - orderer.hf
+      - couchdb1
     links:
       - orderer.hf
     networks:
