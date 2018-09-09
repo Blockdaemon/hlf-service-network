@@ -76,9 +76,14 @@ artifacts/$(CHANNEL).anchors.tx: $(BINDIR)/configtxgen $(MAKEFILES) configtx.yam
 	@echo "NETWORKID=$(NETWORKID)" >> $@
 	@echo "GOPATH=$(GOPATH)" >> $@
 
-.PHONY: run
-run: all
+.PHONY: up down persistent
+up: all
 	docker-compose up
+down:
+	docker-compose down
+
+persistent: all
+	COMPOSE_FILE=docker-compose.yaml:docker-compose-persistent.yaml docker-compose up
 
 # jinja2 rule
 %.yaml: templates/%.yaml.in

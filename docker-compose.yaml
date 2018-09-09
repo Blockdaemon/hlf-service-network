@@ -107,8 +107,6 @@ services:
     depends_on:
       - orderer.hf
       - couchdb0
-    links:
-      - orderer.hf
     networks:
       default:
         aliases:
@@ -140,8 +138,6 @@ services:
     depends_on:
       - orderer.hf
       - couchdb1
-    links:
-      - orderer.hf
     networks:
       default:
         aliases:

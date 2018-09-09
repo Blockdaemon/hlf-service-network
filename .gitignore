@@ -12,4 +12,7 @@ crypto-config.yaml
 tools/Linux-x86_64
 tools/Darwin-i386
 
+# persistent storage
+data
+
 .*.swp
