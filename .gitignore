@@ -1,6 +1,6 @@
 .env
 
-local.env
+local.mk
 
 __pycache__
 artifacts

@@ -47,9 +47,9 @@ make clean
 make persistent
 ```
 
-# Overriding default config.env
+# Overriding default config.mk
 
-You can put overrides in local.env
+You can put overrides in local.mk
 
 # couchdb access
 

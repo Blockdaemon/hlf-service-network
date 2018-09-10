@@ -1,14 +1,14 @@
-include config.env
+include config.mk
 
 # include overrides if the file exists
--include local.env
+-include local.mk
 
 ifndef GOPATH
     GOPATH:=$(HOME)/go
     export GOPATH
 endif
 
-MAKEFILES:=Makefile config.env $(wildcard local.env)	# only care about local.env if it is there
+MAKEFILES:=Makefile config.mk $(wildcard local.mk)	# only care about local.mk if it is there
 
 UNAME:=$(shell uname -s)
 ARCH:=$(shell arch)

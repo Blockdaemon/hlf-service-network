@@ -61,7 +61,7 @@ services:
     container_name: couchdb0.org1.hf.${DOMAIN}
     image: hyperledger/fabric-couchdb
     env_file:
-      - couch.env
+      - dc-envfiles/couch.env
     ports:
       - "5984:5984"
     networks:
@@ -73,7 +73,7 @@ services:
     container_name: couchdb1.org1.hf.${DOMAIN}
     image: hyperledger/fabric-couchdb
     env_file:
-      - couch.env
+      - dc-envfiles/couch.env
     ports:
       - "6984:5984"
     networks:
@@ -85,8 +85,8 @@ services:
     image: hyperledger/fabric-peer:${HLF_ARCH}-${HLF_VERSION}
     container_name: peer0.org1.hf.${DOMAIN}
     env_file:
-      - couch.env
-      - peer.env
+      - dc-envfiles/couch.env
+      - dc-envfiles/peer.env
     environment:
       - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb0.org1.hf.${DOMAIN}:5984
       - CORE_PEER_NETWORKID=${NETWORKID}
@@ -116,8 +116,8 @@ services:
     image: hyperledger/fabric-peer:${HLF_ARCH}-${HLF_VERSION}
     container_name: peer1.org1.hf.${DOMAIN}
     env_file:
-      - couch.env
-      - peer.env
+      - dc-envfiles/couch.env
+      - dc-envfiles/peer.env
     environment:
       - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb1.org1.hf.${DOMAIN}:5984
       - CORE_PEER_NETWORKID=${NETWORKID}
