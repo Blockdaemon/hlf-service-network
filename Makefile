@@ -45,7 +45,7 @@ $(CRYPTO_DIR)/ca/current_sk: $(BINDIR)/cryptogen $(MAKEFILES) crypto-config.yaml
 	@mkdir -p crypto-config
 	@rm -f $@
 	$(BINDIR)/cryptogen generate --config=./crypto-config.yaml
-	LATEST=$$(ls -1t $(CRYPTO_DIR)/ca/*_sk | head -1); ln -sf $$(basename $$LATEST) $@
+	LATEST=$$(ls -1t $(CRYPTO_DIR)/ca/*_sk | head -1); mv $$LATEST $@
 
 genesis: artifacts/orderer.genesis.block
 
@@ -96,6 +96,7 @@ clean:
 
 distclean: clean
 	rm -rf __pycache__
+	rm -rf data
 	rm -rf tools/*/*
 
 .PHONY: FORCE
