@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 import os
 import sys
-import jinja2
+from jinja2 import Environment, FileSystemLoader
 
-sys.stdout.write(jinja2.Template(sys.stdin.read()).render(env=os.environ) + "\n")
+sys.stdout.write(Environment(loader=FileSystemLoader('templates/')).from_string(sys.stdin.read()).render(env=os.environ) + "\n")

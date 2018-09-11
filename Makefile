@@ -42,7 +42,7 @@ $(CRYPTO_DIR)/ca/current_sk: $(BINDIR)/cryptogen crypto-config.yaml
 	@rm -rf crypto-config # hack to get around configtxgen bug - make sure all certs are regenned
 	@mkdir -p crypto-config
 	$(BINDIR)/cryptogen generate --config=./crypto-config.yaml
-	LATEST=$$(ls -1t $(CRYPTO_DIR)/ca/*_sk | head -1); mv $$LATEST $@
+	LATEST=$$(ls -1t $(CRYPTO_DIR)/ca/*_sk | head -1); [ ! -z "$$LATEST" ] && mv $$LATEST $@
 
 artifacts:
 	@mkdir -p artifacts
@@ -82,7 +82,7 @@ persistent: all
 	COMPOSE_FILE=docker-compose.yaml:docker-compose-persistent.yaml docker-compose up
 
 # jinja2 rule
-%.yaml: templates/%.yaml.in $(MAKEFILES)
+%.yaml: templates/%.yaml.in $(MAKEFILES) tools/jinja2-cli.py
 	ORG=$(ORG) CONSORTIUM=$(CONSORTIUM) DOMAIN=$(DOMAIN) tools/jinja2-cli.py < $< > $@ || (rm -f $@; false)
 
 .PHONY: clean distclean

@@ -7,19 +7,19 @@
 #
 ################################################################################
 Organizations:
-    - &{{env['ORG'] or "SomeOrg"}}
-        Name: {{env['ORG'] or "SomeOrg"}}
-        ID: hf.{{env['DOMAIN'] or "localhost"}}
+    - &{{env.ORG or "SomeOrg"}}
+        Name: {{env.ORG or "SomeOrg"}}
+        ID: hf.{{env.DOMAIN or "localhost"}}
         AdminPrincipal: Role.ADMIN
-        MSPDir: crypto-config/ordererOrganizations/hf.{{env['DOMAIN'] or "localhost"}}/msp
+        MSPDir: crypto-config/ordererOrganizations/hf.{{env.DOMAIN or "localhost"}}/msp
 
-    - &Org1{{env['ORG'] or "SomeOrg"}}
-        Name: {{env['ORG'] or "SomeOrg"}}Organization1
-        ID: org1.hf.{{env['DOMAIN'] or "localhost"}}
+    - &Org1{{env.ORG or "SomeOrg"}}
+        Name: {{env.ORG or "SomeOrg"}}Organization1
+        ID: org1.hf.{{env.DOMAIN or "localhost"}}
         AdminPrincipal: Role.ADMIN
-        MSPDir: crypto-config/peerOrganizations/org1.hf.{{env['DOMAIN'] or "localhost"}}/msp
+        MSPDir: crypto-config/peerOrganizations/org1.hf.{{env.DOMAIN or "localhost"}}/msp
         AnchorPeers:
-            - Host: peer0.org1.hf.{{env['DOMAIN'] or "localhost"}}
+            - Host: peer0.org1.hf.{{env.DOMAIN or "localhost"}}
               Port: 7051
 
 ################################################################################
@@ -33,7 +33,7 @@ Organizations:
 Orderer: &OrdererDefaults
     OrdererType: solo
     Addresses:
-        - orderer.hf.{{env['DOMAIN'] or "localhost"}}:7050
+        - orderer.hf.{{env.DOMAIN or "localhost"}}:7050
     BatchTimeout: 5s
     # Batch Size: Controls the number of messages batched into a block.
     BatchSize:
@@ -80,18 +80,18 @@ Application: &ApplicationDefaults
 #
 ################################################################################
 Profiles:
-    {{env['ORG'] or "SomeOrg"}}:
+    {{env.ORG or "SomeOrg"}}:
         Orderer:
             <<: *OrdererDefaults
             Organizations:
-                - *{{env['ORG'] or "SomeOrg"}}
+                - *{{env.ORG or "SomeOrg"}}
         Application:
             <<: *ApplicationDefaults
             Organizations:
-                - *Org1{{env['ORG'] or "SomeOrg"}}
-        Consortium: {{env['CONSORTIUM'] or "SomeConsortum"}}
+                - *Org1{{env.ORG or "SomeOrg"}}
+        Consortium: {{env.CONSORTIUM or "SomeConsortum"}}
         Consortiums:
-            {{env['CONSORTIUM'] or "SomeConsortum"}}:
+            {{env.CONSORTIUM or "SomeConsortum"}}:
                 Organizations:
-                    - *{{env['ORG'] or "SomeOrg"}}
-                    - *Org1{{env['ORG'] or "SomeOrg"}}
+                    - *{{env.ORG or "SomeOrg"}}
+                    - *Org1{{env.ORG or "SomeOrg"}}
