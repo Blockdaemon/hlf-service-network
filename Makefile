@@ -8,8 +8,9 @@ ifndef GOPATH
     export GOPATH
 endif
 
-MAKEFILES:=Makefile config.mk $(wildcard local.mk)	# only care about local.mk if it is there
+export FABRIC_CFG_PATH:=$(PWD)
 
+MAKEFILES:=Makefile config.mk $(wildcard local.mk)	# only care about local.mk if it is there
 UNAME:=$(shell uname -s)
 ARCH:=$(shell arch)
 
@@ -31,41 +32,44 @@ BINDIR:=$(TOOLDIR)/bin
 CRYPTO_DIR:=crypto-config/peerOrganizations/org1.hf.$(DOMAIN)
 
 .PHONY: all
-all: crypto-config genesis channel anchors .env
+all: genesis channel anchors .env
 
 $(BINDIR)/cryptogen $(BINDIR)/configtxgen: # $(MAKEFILES)
 	mkdir -p $(TOOLDIR)
 	curl -s $(TOOLURL) | tar xvz -C $(TOOLDIR) || (rm -rf $(BINDIR); false)
 	@touch $(BINDIR)/cryptogen $(BINDIR)/configtxgen	# tar will extract with the old date, which will be older than README
 
-.PHONY: crypto-config genesis channel anchors
-crypto-config: $(CRYPTO_DIR)/ca/current_sk
+.PHONY: crypto-ca genesis channel anchors
+crypto-ca: $(CRYPTO_DIR)/ca/current_sk
 
 $(CRYPTO_DIR)/ca/current_sk: $(BINDIR)/cryptogen $(MAKEFILES) crypto-config.yaml
-	@mkdir -p crypto-config
 	@rm -f $@
+	@rm -rf crypto-config # hack to get around configtxgen bug - make sure all certs are regenned
+	@mkdir -p crypto-config
 	$(BINDIR)/cryptogen generate --config=./crypto-config.yaml
 	LATEST=$$(ls -1t $(CRYPTO_DIR)/ca/*_sk | head -1); mv $$LATEST $@
 
 genesis: artifacts/orderer.genesis.block
 
-artifacts/orderer.genesis.block: $(BINDIR)/configtxgen $(MAKEFILES) configtx.yaml
+artifacts/orderer.genesis.block: $(BINDIR)/configtxgen $(MAKEFILES) configtx.yaml $(CRYPTO_DIR)/ca/current_sk
 	@mkdir -p artifacts
 	@rm -f $@
 	@# FIXME - 1.2.0 requires -channelID, but this breaks 1.1.0
-	FABRIC_CFG_PATH=$(PWD) $(BINDIR)/configtxgen -profile $(PROFILE) -outputBlock $@ # -channelID $(CHANNEL)
+	$(BINDIR)/configtxgen -profile $(PROFILE) -outputBlock $@ # -channelID $(CHANNEL)
 
 channel: artifacts/$(CHANNEL).channel.tx
 
-artifacts/$(CHANNEL).channel.tx: $(BINDIR)/configtxgen $(MAKEFILES) configtx.yaml
+artifacts/$(CHANNEL).channel.tx: $(BINDIR)/configtxgen $(MAKEFILES) configtx.yaml $(CRYPTO_DIR)/ca/current_sk
 	@mkdir -p artifacts
 	@rm -f $@
-	FABRIC_CFG_PATH=$(PWD) $(BINDIR)/configtxgen -profile $(PROFILE) -outputCreateChannelTx $@ -channelID $(CHANNEL)
+	$(BINDIR)/configtxgen -profile $(PROFILE) -outputCreateChannelTx $@ -channelID $(CHANNEL)
 
 anchors: artifacts/$(CHANNEL).anchors.tx
 
 artifacts/$(CHANNEL).anchors.tx: $(BINDIR)/configtxgen $(MAKEFILES) configtx.yaml
-	FABRIC_CFG_PATH=$(PWD) $(BINDIR)/configtxgen -profile $(PROFILE) -outputAnchorPeersUpdate $@ -channelID $(CHANNEL) -asOrg $(ORG)Organization1
+	@mkdir -p artifacts
+	@rm -f $@
+	$(BINDIR)/configtxgen -profile $(PROFILE) -outputAnchorPeersUpdate $@ -channelID $(CHANNEL) -asOrg $(ORG)Organization1
 
 # .env file for docker-compose
 .env: $(MAKEFILES)
