@@ -67,23 +67,5 @@ l/p: `cdbadmin`/`cdbadminpw`
   * 1.1.0 has `x86_64` and `amd64` tags
   * 1.2.0 only has `amd64` tags
 
-* The following sequence fails
-```
-make clean
-make
-touch Makefile
-make
-```
-with
-```
-[common/tools/configtxgen] main -> INFO 001 Loading configuration
-[common/tools/configtxgen] doOutputBlock -> INFO 002 Generating genesis block
-[common/tools/configtxgen] doOutputBlock -> INFO 003 Writing genesis block
-FABRIC_CFG_PATH=/Users/nyet/src/hlf-service-network tools/Darwin-i386/1.1.0/bin/configtxgen -profile Blockdaemon -outputCreateChannelTx artifacts/blockdaemon.channel.tx -channelID blockdaemon
-[common/tools/configtxgen] main -> INFO 001 Loading configuration
-[common/tools/configtxgen] doOutputChannelCreateTx -> INFO 002 Generating new channel configtx
-[common/tools/configtxgen] main -> CRIT 003 Error on outputChannelCreateTx: config update generation failure: could not parse application to application group: setting up the MSP manager failed: the supplied identity is not valid: x509: certificate signed by unknown authority (possibly because of "x509: ECDSA verification failure" while trying to verify candidate authority certificate "ca.org1.hf.blockdaemon.io")
-```
-
 # References
 See also [How to build your first Hyperledger fabric network](https://chainhero.io/2018/04/tutorial-hyperledger-fabric-how-to-build-your-first-network/)
