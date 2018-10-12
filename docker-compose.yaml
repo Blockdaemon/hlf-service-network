@@ -6,16 +6,16 @@ networks:
 
 services:
 
-  orderer.hf:
+  orderer0.hf:
     image: hyperledger/fabric-orderer:${HLF_ARCH}-${HLF_VERSION}
-    container_name: orderer.hf.${DOMAIN}
+    container_name: orderer0.hf.${DOMAIN}
     environment:
       - ORDERER_GENERAL_LOGLEVEL=debug
       - ORDERER_GENERAL_LISTENADDRESS=0.0.0.0
       - ORDERER_GENERAL_LISTENPORT=7050
       - ORDERER_GENERAL_GENESISPROFILE=${PROFILE}
       - ORDERER_GENERAL_GENESISMETHOD=file
-      - ORDERER_GENERAL_GENESISFILE=/var/hyperledger/orderer/orderer.genesis.block
+      - ORDERER_GENERAL_GENESISFILE=/var/hyperledger/orderer/orderer0.genesis.block
       - ORDERER_GENERAL_LOCALMSPID=hf.${DOMAIN}
       - ORDERER_GENERAL_LOCALMSPDIR=/var/hyperledger/orderer/msp
       - ORDERER_GENERAL_TLS_ENABLED=true
@@ -26,15 +26,15 @@ services:
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric
     command: orderer
     volumes:
-      - ./artifacts/orderer.genesis.block:/var/hyperledger/orderer/orderer.genesis.block
-      - ./crypto-config/ordererOrganizations/hf.${DOMAIN}/orderers/orderer.hf.${DOMAIN}/msp:/var/hyperledger/orderer/msp
-      - ./crypto-config/ordererOrganizations/hf.${DOMAIN}/orderers/orderer.hf.${DOMAIN}/tls:/var/hyperledger/orderer/tls
+      - ./artifacts/orderer0.genesis.block:/var/hyperledger/orderer/orderer0.genesis.block
+      - ./crypto-config/ordererOrganizations/hf.${DOMAIN}/orderers/orderer0.hf.${DOMAIN}/msp:/var/hyperledger/orderer/msp
+      - ./crypto-config/ordererOrganizations/hf.${DOMAIN}/orderers/orderer0.hf.${DOMAIN}/tls:/var/hyperledger/orderer/tls
     ports:
       - 7050:7050
     networks:
       default:
         aliases:
-          - orderer.hf.${DOMAIN}
+          - orderer0.hf.${DOMAIN}
 
   ca.org1.hf:
     image: hyperledger/fabric-ca:${HLF_ARCH}-${HLF_VERSION}
@@ -105,7 +105,7 @@ services:
       - 7051:7051
       - 7053:7053
     depends_on:
-      - orderer.hf
+      - orderer0.hf
       - couchdb0
     networks:
       default:
@@ -136,7 +136,7 @@ services:
       - 8051:7051
       - 8053:7053
     depends_on:
-      - orderer.hf
+      - orderer0.hf
       - couchdb1
     networks:
       default:

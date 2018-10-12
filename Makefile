@@ -47,21 +47,21 @@ $(CRYPTO_DIR)/ca/current_sk: $(BINDIR)/cryptogen crypto-config.yaml
 artifacts:
 	@mkdir -p artifacts
 
-genesis: artifacts/orderer.genesis.block
+genesis: artifacts/orderer0.genesis.block
 
-artifacts/orderer.genesis.block: $(BINDIR)/configtxgen artifacts configtx.yaml $(CRYPTO_DIR)/ca/current_sk
-	@# FIXME - 1.2.0 requires -channelID, but this breaks 1.1.0
-	$(BINDIR)/configtxgen -profile $(PROFILE) -outputBlock $@ # -channelID $(CHANNEL)
+artifacts/orderer0.genesis.block: $(BINDIR)/configtxgen artifacts configtx.yaml $(CRYPTO_DIR)/ca/current_sk
+	@# 1.2.0 requires -channelID for genesis block, but this breaks 1.1.0
+	$(BINDIR)/configtxgen -profile $(PROFILE)Solo -outputBlock $@ -channelID genesis-channel
 
 channel: artifacts/$(CHANNEL).channel.tx
 
 artifacts/$(CHANNEL).channel.tx: $(BINDIR)/configtxgen artifacts configtx.yaml $(CRYPTO_DIR)/ca/current_sk
-	$(BINDIR)/configtxgen -profile $(PROFILE) -outputCreateChannelTx $@ -channelID $(CHANNEL)
+	$(BINDIR)/configtxgen -profile $(PROFILE)Channel -outputCreateChannelTx $@ -channelID $(CHANNEL)
 
 anchors: artifacts/$(CHANNEL).anchors.tx
 
 artifacts/$(CHANNEL).anchors.tx: $(BINDIR)/configtxgen artifacts configtx.yaml
-	$(BINDIR)/configtxgen -profile $(PROFILE) -outputAnchorPeersUpdate $@ -channelID $(CHANNEL) -asOrg $(ORG)Organization1
+	$(BINDIR)/configtxgen -profile $(PROFILE)Channel -outputAnchorPeersUpdate $@ -channelID $(CHANNEL) -asOrg Org1$(ORG)
 
 # .env file for docker-compose
 .env: $(MAKEFILES)

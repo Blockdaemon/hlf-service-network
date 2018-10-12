@@ -1,14 +1,14 @@
 # "OrdererOrgs" - Definition of organizations managing orderer nodes
 OrdererOrgs:
-  - Name: {{env.ORG or "SomeOrg"}}
-    Domain: hf.{{env.DOMAIN or "localhost"}}
+  - Name: {{env.ORG}}
+    Domain: hf.{{env.DOMAIN}}
     # Specs is an array of Spec entries.  Each Spec entry consists of two fields : Hostname and CommonName
     Specs:
-      - Hostname: orderer
+      - Hostname: orderer0
 # "PeerOrgs" - Definition of organizations managing peer nodes
 PeerOrgs:
-  - Name: Org1{{env.ORG or "SomeOrg"}}
-    Domain: org1.hf.{{env.DOMAIN or "localhost"}}
+  - Name: Org1{{env.ORG}}
+    Domain: org1.hf.{{env.DOMAIN}}
     # Allows for the definition of 1 or more hosts that are created sequentially
     # from a template. By default, this looks like "peer%d" from 0 to Count-1.
     # You may override the number of nodes (Count), the starting index (Start)
