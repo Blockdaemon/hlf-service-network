@@ -3,11 +3,11 @@ version: '2'
 
 services:
 
-  orderer0.hf:
+  orderer0.hlf:
     volumes:
       - ./data/orderer:/var/hyperledger/production
 
-  #ca.org1.hf:
+  #ca.org1.hlf:
   #  volumes:
   #    - ./data/ca:/var/hyperledger/production
 
@@ -19,10 +19,10 @@ services:
     volumes:
       - ./data/couchdb1:/opt/couchdb/data
 
-  peer0.org1.hf:
+  peer0.org1.hlf:
     volumes:
       - ./data/peer0:/var/hyperledger/production
 
-  peer1.org1.hf:
+  peer1.org1.hlf:
     volumes:
       - ./data/peer1:/var/hyperledger/production
