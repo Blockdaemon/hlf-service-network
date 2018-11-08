@@ -53,63 +53,63 @@ Organizations:
 #   - &Org1
 #       Name: Organization1
 #       ID: Org1
-#       MSPDir: ./crypto-config/peerOrganizations/org1.hlf.{{env.DOMAIN}}/peers/peer0.org1.hlf.{{env.DOMAIN}}/msp
+#       MSPDir: ./crypto-config/peerOrganizations/org1.{{env.DOMAIN}}/peers/peer0.org1.{{env.DOMAIN}}/msp
 #       AdminPrincipal: Role.ADMIN
 #       AnchorPeers:
-#           - Host: peer0.org1.hlf.{{env.DOMAIN}}
+#           - Host: peer0.org1.{{env.DOMAIN}}
 #             Port: 7051
 
 #   - &Org2
 #       Name: Organization2
 #       ID: Org2
-#       MSPDir: ./crypto-config/peerOrganizations/org2.hlf.{{env.DOMAIN}}/peers/peer0.org2.hlf.{{env.DOMAIN}}/msp
+#       MSPDir: ./crypto-config/peerOrganizations/org2.{{env.DOMAIN}}/peers/peer0.org2.{{env.DOMAIN}}/msp
 #       AdminPrincipal: Role.MEMBER
 #       AnchorPeers:
-#           - Host: peer0.org2.hlf.{{env.DOMAIN}}
+#           - Host: peer0.org2.{{env.DOMAIN}}
 #             Port: 7051
 
     - &{{env.ORG}}
         Name: {{env.ORG}}
-        ID: hlf.{{env.DOMAIN}}
+        ID: {{env.DOMAIN}}
         AdminPrincipal: Role.ADMIN
-        MSPDir: ./crypto-config/ordererOrganizations/hlf.{{env.DOMAIN}}/msp
+        MSPDir: ./crypto-config/ordererOrganizations/{{env.DOMAIN}}/msp
         Policies:
             Readers:
                 Type: Signature
-                Rule: "OR('hlf.{{env.DOMAIN}}.member')"
+                Rule: "OR('{{env.DOMAIN}}.member')"
             Writers:
                 Type: Signature
-                Rule: "OR('hlf.{{env.DOMAIN}}.member')"
+                Rule: "OR('{{env.DOMAIN}}.member')"
             Admins:
                 Type: Signature
-                Rule: "OR('hlf.{{env.DOMAIN}}.admin')"
+                Rule: "OR('{{env.DOMAIN}}.admin')"
 
     - &Org1{{env.ORG}}
         Name: Org1{{env.ORG}}
-        ID: org1.hlf.{{env.DOMAIN}}
-        MSPDir: ./crypto-config/peerOrganizations/org1.hlf.{{env.DOMAIN}}/msp
+        ID: org1.{{env.DOMAIN}}
+        MSPDir: ./crypto-config/peerOrganizations/org1.{{env.DOMAIN}}/msp
         AdminPrincipal: Role.ADMIN
         AnchorPeers:
-            - Host: peer0.org1.hlf.{{env.DOMAIN}}
+            - Host: peer0.org1.{{env.DOMAIN}}
               Port: 7051
         Policies:
             Readers:
                 Type: Signature
-                Rule: "OR('org1.hlf.{{env.DOMAIN}}.member')"
+                Rule: "OR('org1.{{env.DOMAIN}}.member')"
             Writers:
                 Type: Signature
-                Rule: "OR('org1.hlf.{{env.DOMAIN}}.member')"
+                Rule: "OR('org1.{{env.DOMAIN}}.member')"
             Admins:
                 Type: Signature
-                Rule: "OR('org1.hlf.{{env.DOMAIN}}.admin')"
+                Rule: "OR('org1.{{env.DOMAIN}}.admin')"
 
 #   - &Org2{{env.ORG}}
 #       Name: Org2{{env.ORG}}
-#       ID: org2.hlf.{{env.DOMAIN}}
-#       MSPDir: ./crypto-config/peerOrganizations/org2.hlf.{{env.DOMAIN}}/msp
+#       ID: org2.{{env.DOMAIN}}
+#       MSPDir: ./crypto-config/peerOrganizations/org2.{{env.DOMAIN}}/msp
 #       AdminPrincipal: Role.ADMIN
 #       AnchorPeers:
-#           - Host: peer0.org2.hlf.{{env.DOMAIN}}
+#           - Host: peer0.org2.{{env.DOMAIN}}
 #             Port: 7051
 
 ################################################################################
@@ -127,7 +127,7 @@ Orderer: &OrdererDefaults
     OrdererType: solo
 
     Addresses:
-        - orderer0.hlf.{{env.DOMAIN}}:7050
+        - orderer0.{{env.DOMAIN}}:7050
 
     # Batch Timeout: The amount of time to wait before creating a batch.
     BatchTimeout: 2s
@@ -302,9 +302,9 @@ Profiles:
             <<: *OrdererDefaults
             OrdererType: kafka
             Addresses:
-                - orderer0.hlf.{{env.DOMAIN}}:7050
-#               - orderer1.hlf.{{env.DOMAIN}}:7050
-#               - orderer2.hlf.{{env.DOMAIN}}:7050
+                - orderer0.{{env.DOMAIN}}:7050
+#               - orderer1.{{env.DOMAIN}}:7050
+#               - orderer2.{{env.DOMAIN}}:7050
             Organizations:
                 - *{{env.ORG}}
             Capabilities:

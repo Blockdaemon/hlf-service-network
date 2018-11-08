@@ -6,9 +6,9 @@ networks:
 
 services:
 
-  orderer0.hlf:
+  orderer0:
     image: hyperledger/fabric-orderer:${HLF_ARCH}-${HLF_VERSION}
-    container_name: orderer0.hlf.${DOMAIN}
+    container_name: orderer0.${DOMAIN}
     environment:
       - ORDERER_GENERAL_LOGLEVEL=debug
       - ORDERER_GENERAL_LISTENADDRESS=0.0.0.0
@@ -16,7 +16,7 @@ services:
       - ORDERER_GENERAL_GENESISPROFILE=${PROFILE}
       - ORDERER_GENERAL_GENESISMETHOD=file
       - ORDERER_GENERAL_GENESISFILE=/var/hyperledger/orderer/orderer0.genesis.block
-      - ORDERER_GENERAL_LOCALMSPID=hlf.${DOMAIN}
+      - ORDERER_GENERAL_LOCALMSPID=${DOMAIN}
       - ORDERER_GENERAL_LOCALMSPDIR=/var/hyperledger/orderer/msp
       - ORDERER_GENERAL_TLS_ENABLED=true
       - ORDERER_GENERAL_TLS_PRIVATEKEY=/var/hyperledger/orderer/tls/server.key
@@ -27,38 +27,38 @@ services:
     command: orderer
     volumes:
       - ./artifacts/orderer0.genesis.block:/var/hyperledger/orderer/orderer0.genesis.block
-      - ./crypto-config/ordererOrganizations/hlf.${DOMAIN}/orderers/orderer0.hlf.${DOMAIN}/msp:/var/hyperledger/orderer/msp
-      - ./crypto-config/ordererOrganizations/hlf.${DOMAIN}/orderers/orderer0.hlf.${DOMAIN}/tls:/var/hyperledger/orderer/tls
+      - ./crypto-config/ordererOrganizations/${DOMAIN}/orderers/orderer0.${DOMAIN}/msp:/var/hyperledger/orderer/msp
+      - ./crypto-config/ordererOrganizations/${DOMAIN}/orderers/orderer0.${DOMAIN}/tls:/var/hyperledger/orderer/tls
     ports:
       - 7050:7050
     networks:
       default:
         aliases:
-          - orderer0.hlf.${DOMAIN}
+          - orderer0.${DOMAIN}
 
-  ca.org1.hlf:
+  ca.org1:
     image: hyperledger/fabric-ca:${HLF_ARCH}-${HLF_VERSION}
-    container_name: ca.org1.hlf.${DOMAIN}
+    container_name: ca.org1.${DOMAIN}
     environment:
       - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
-      - FABRIC_CA_SERVER_CA_NAME=ca.org1.hlf.${DOMAIN}
-      - FABRIC_CA_SERVER_CA_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.org1.hlf.${DOMAIN}-cert.pem
+      - FABRIC_CA_SERVER_CA_NAME=ca.org1.${DOMAIN}
+      - FABRIC_CA_SERVER_CA_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.org1.${DOMAIN}-cert.pem
       - FABRIC_CA_SERVER_CA_KEYFILE=/etc/hyperledger/fabric-ca-server-config/current_sk
       - FABRIC_CA_SERVER_TLS_ENABLED=true
-      - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.org1.hlf.${DOMAIN}-cert.pem
+      - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.org1.${DOMAIN}-cert.pem
       - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/current_sk
     ports:
       - 7054:7054
     command: sh -c 'fabric-ca-server start -b admin:adminpw -d'
     volumes:
-      - ./crypto-config/peerOrganizations/org1.hlf.${DOMAIN}/ca/:/etc/hyperledger/fabric-ca-server-config
+      - ./crypto-config/peerOrganizations/org1.${DOMAIN}/ca/:/etc/hyperledger/fabric-ca-server-config
     networks:
       default:
         aliases:
-          - ca.org1.hlf.${DOMAIN}
+          - ca.org1.${DOMAIN}
 
   couchdb0:
-    container_name: couchdb0.org1.hlf.${DOMAIN}
+    container_name: couchdb0.org1.${DOMAIN}
     image: hyperledger/fabric-couchdb
     env_file:
       - dc-envfiles/couch.env
@@ -67,10 +67,10 @@ services:
     networks:
       default:
         aliases:
-          - couchdb0.org1.hlf.${DOMAIN}
+          - couchdb0.org1.${DOMAIN}
 
   couchdb1:
-    container_name: couchdb1.org1.hlf.${DOMAIN}
+    container_name: couchdb1.org1.${DOMAIN}
     image: hyperledger/fabric-couchdb
     env_file:
       - dc-envfiles/couch.env
@@ -79,66 +79,68 @@ services:
     networks:
       default:
         aliases:
-          - couchdb1.org1.hlf.${DOMAIN}
+          - couchdb1.org1.${DOMAIN}
 
-  peer0.org1.hlf:
+  peer0.org1:
     image: hyperledger/fabric-peer:${HLF_ARCH}-${HLF_VERSION}
-    container_name: peer0.org1.hlf.${DOMAIN}
+    #build: ${GOPATH}/src/github.com/hyperledger/fabric/.build/image/peer
+    container_name: peer0.org1.${DOMAIN}
     env_file:
       - dc-envfiles/couch.env
       - dc-envfiles/peer.env
     environment:
-      - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb0.org1.hlf.${DOMAIN}:5984
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb0.org1.${DOMAIN}:5984
       - CORE_PEER_NETWORKID=${NETWORKID}
-      - CORE_PEER_ID=peer0.org1.hlf.${DOMAIN}
-      - CORE_PEER_ADDRESS=peer0.org1.hlf.${DOMAIN}:7051
-      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.org1.hlf.${DOMAIN}:7051
-      - CORE_PEER_LOCALMSPID=org1.hlf.${DOMAIN}
-      - CORE_PEER_TLS_SERVERHOSTOVERRIDE=peer0.org1.hlf.${DOMAIN}
+      - CORE_PEER_ID=peer0.org1.${DOMAIN}
+      - CORE_PEER_ADDRESS=peer0.org1.${DOMAIN}:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.org1.${DOMAIN}:7051
+      - CORE_PEER_LOCALMSPID=org1.${DOMAIN}
+      - CORE_PEER_TLS_SERVERHOSTOVERRIDE=peer0.org1.${DOMAIN}
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
     command: peer node start
     volumes:
       - /var/run/:/host/var/run/
-      - ./crypto-config/peerOrganizations/org1.hlf.${DOMAIN}/peers/peer0.org1.hlf.${DOMAIN}/msp:/var/hyperledger/msp
-      - ./crypto-config/peerOrganizations/org1.hlf.${DOMAIN}/peers/peer0.org1.hlf.${DOMAIN}/tls:/var/hyperledger/tls
+      - ./crypto-config/peerOrganizations/org1.${DOMAIN}/peers/peer0.org1.${DOMAIN}/msp:/var/hyperledger/msp
+      - ./crypto-config/peerOrganizations/org1.${DOMAIN}/peers/peer0.org1.${DOMAIN}/tls:/var/hyperledger/tls
     ports:
       - 7051:7051
       - 7053:7053
     depends_on:
-      - orderer0.hlf
+      - orderer0
       - couchdb0
     networks:
       default:
         aliases:
-          - peer0.org1.hlf.${DOMAIN}
+          - peer0.org1.${DOMAIN}
 
-  peer1.org1.hlf:
+  peer1.org1:
     image: hyperledger/fabric-peer:${HLF_ARCH}-${HLF_VERSION}
-    container_name: peer1.org1.hlf.${DOMAIN}
+    #build: ${GOPATH}/src/github.com/hyperledger/fabric/.build/image/peer
+    container_name: peer1.org1.${DOMAIN}
     env_file:
       - dc-envfiles/couch.env
       - dc-envfiles/peer.env
     environment:
-      - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb1.org1.hlf.${DOMAIN}:5984
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb1.org1.${DOMAIN}:5984
       - CORE_PEER_NETWORKID=${NETWORKID}
-      - CORE_PEER_ID=peer1.org1.hlf.${DOMAIN}
-      - CORE_PEER_ADDRESS=peer1.org1.hlf.${DOMAIN}:7051
-      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer1.org1.hlf.${DOMAIN}:7051
-      - CORE_PEER_LOCALMSPID=org1.hlf.${DOMAIN}
-      - CORE_PEER_TLS_SERVERHOSTOVERRIDE=peer1.org1.hlf.${DOMAIN}
+      - CORE_PEER_ID=peer1.org1.${DOMAIN}
+      - CORE_PEER_ADDRESS=peer1.org1.${DOMAIN}:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer1.org1.${DOMAIN}:7051
+      - CORE_PEER_LOCALMSPID=org1.${DOMAIN}
+      - CORE_PEER_TLS_SERVERHOSTOVERRIDE=peer1.org1.${DOMAIN}
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
     command: peer node start
     volumes:
       - /var/run/:/host/var/run/
-      - ./crypto-config/peerOrganizations/org1.hlf.${DOMAIN}/peers/peer1.org1.hlf.${DOMAIN}/msp:/var/hyperledger/msp
-      - ./crypto-config/peerOrganizations/org1.hlf.${DOMAIN}/peers/peer1.org1.hlf.${DOMAIN}/tls:/var/hyperledger/tls
+      - ./crypto-config/peerOrganizations/org1.${DOMAIN}/peers/peer1.org1.${DOMAIN}/msp:/var/hyperledger/msp
+      - ./crypto-config/peerOrganizations/org1.${DOMAIN}/peers/peer1.org1.${DOMAIN}/tls:/var/hyperledger/tls
     ports:
       - 8051:7051
       - 8053:7053
     depends_on:
-      - orderer0.hlf
+      - orderer0
       - couchdb1
     networks:
       default:
         aliases:
-          - peer1.org1.hlf.${DOMAIN}
+          - peer1.org1.${DOMAIN}

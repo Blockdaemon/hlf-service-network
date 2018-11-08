@@ -4,6 +4,6 @@ HLF_ARCH=amd64
 ORG=Blockdaemon
 PROFILE=SingleMSP
 CONSORTIUM=BDConsortium
-DOMAIN=blockdaemon.io
+DOMAIN=hlf.blockdaemon.io
 NETWORKID=blockdaemon
 CHANNEL=blockdaemon

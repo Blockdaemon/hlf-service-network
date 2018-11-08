@@ -25,7 +25,7 @@ TOOLURL:=https://nexus.hyperledger.org/content/repositories/releases/org/hyperle
 TOOLDIR:=tools/$(UNAME)-$(ARCH)/$(HLF_VERSION)
 BINDIR:=$(TOOLDIR)/bin
 
-CRYPTO_DIR:=crypto-config/peerOrganizations/org1.hlf.$(DOMAIN)
+CRYPTO_DIR:=crypto-config/peerOrganizations/org1.$(DOMAIN)
 
 .PHONY: all
 all: genesis channel anchors .env
