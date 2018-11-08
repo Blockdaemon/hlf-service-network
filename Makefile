@@ -8,7 +8,7 @@ ifndef GOPATH
     export GOPATH
 endif
 
-export FABRIC_CFG_PATH:=$(PWD)
+export FABRIC_CFG_PATH:=$(shell pwd)
 
 MAKEFILES:=Makefile config.mk $(wildcard local.mk)	# only care about local.mk if it is there
 UNAME:=$(shell uname -s)
