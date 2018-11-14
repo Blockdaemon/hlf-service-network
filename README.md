@@ -1,11 +1,11 @@
 # hlf-service-network
 Skeleton for building a simple Hyperledger Fabric service network
+* Docker containers for one ca server, one orderer and two peers
 * Self signed Org CA
-* Certs and containers for one orderer and two peers
-* Peer anchor
-* Certs for one admin and two users
+* MSP certs for one orderer and two peers
+* MSP certs for one admin and two users
 * Orderer genesis block
-* One channel
+* One channel genesis block and an anchor peers update for it
 
 # Prerequisites
 * Docker
