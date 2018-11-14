@@ -10,7 +10,7 @@ endif
 
 export FABRIC_CFG_PATH:=$(shell pwd)
 
-MAKEFILES:=Makefile config.mk $(wildcard local.mk)	# only care about local.mk if it is there
+MKFILES:=Makefile config.mk $(wildcard local.mk)	# only care about local.mk if it is there
 UNAME:=$(shell uname -s)
 ARCH:=$(shell arch)
 
@@ -63,7 +63,7 @@ artifacts/$(CHANNEL).anchor-peers.tx: $(BINDIR)/configtxgen artifacts configtx.y
 	$(BINDIR)/configtxgen -profile $(PROFILE)Channel -outputAnchorPeersUpdate $@ -channelID $(CHANNEL) -asOrg Org1$(ORG)
 
 # .env file for docker-compose
-.env: $(MAKEFILES)
+.env: $(MKFILES)
 	@echo "HLF_ARCH=$(HLF_ARCH)" > $@
 	@echo "HLF_VERSION=$(HLF_VERSION)" >> $@
 	@echo "PROFILE=$(PROFILE)" >> $@
@@ -81,7 +81,7 @@ persistent: .env artifacts/orderer0.genesis.block
 	COMPOSE_FILE=docker-compose.yaml:docker-compose-persistent.yaml docker-compose up -d && docker-compose logs -f
 
 # jinja2 rule
-%.yaml: templates/%.yaml.in $(MAKEFILES) tools/jinja2-cli.py
+%.yaml: templates/%.yaml.in $(MKFILES) tools/jinja2-cli.py
 	ORG=$(ORG) CONSORTIUM=$(CONSORTIUM) DOMAIN=$(DOMAIN) tools/jinja2-cli.py < $< > $@ || (rm -f $@; false)
 
 .PHONY: clean distclean
