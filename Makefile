@@ -74,10 +74,10 @@ artifacts/$(CHANNEL).anchor-peers.tx: $(BINDIR)/configtxgen artifacts configtx.y
 .PHONY: up down persistent
 up: .env artifacts/orderer0.genesis.block
 	docker-compose up -d && docker-compose logs -f
-down:
+down: .env
 	docker-compose down
 
-persistent: genesis
+persistent: .env artifacts/orderer0.genesis.block
 	COMPOSE_FILE=docker-compose.yaml:docker-compose-persistent.yaml docker-compose up -d && docker-compose logs -f
 
 # jinja2 rule
