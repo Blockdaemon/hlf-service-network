@@ -16,6 +16,7 @@ ARCH:=$(shell arch)
 
 ARCHURL_Darwin-i386:=darwin-amd64
 ARCHURL_Linux-x86_64:=linux-amd64
+ARCHURL_CYGWIN_NT-10.0-x86_64:=windows-amd64
 URLPATH:=$(ARCHURL_$(UNAME)-$(ARCH))
 ifndef URLPATH
 $(error Do not know how to handle $(UNAME)-$(ARCH))

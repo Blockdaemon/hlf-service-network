@@ -1,18 +1,19 @@
-.env
+/.env
 
-local.mk
+/local.mk
 
-__pycache__
-artifacts
-crypto-config
+/__pycache__
+/artifacts
+/crypto-config
 
-configtx.yaml
-crypto-config.yaml
+/configtx.yaml
+/crypto-config.yaml
 
-tools/Linux-x86_64
-tools/Darwin-i386
+/tools/Linux-x86_64
+/tools/Darwin-i386
+/tools/CYGWIN_NT-10.0-x86_64/
 
 # persistent storage
-data
+/data
 
 .*.swp
