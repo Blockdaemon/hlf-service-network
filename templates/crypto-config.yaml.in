@@ -2,6 +2,10 @@
 OrdererOrgs:
   - Name: {{env.ORG}}
     Domain: {{env.DOMAIN}}
+    CA:
+      Country: US
+      Province: California
+      Locality: Los Angeles
     # Specs is an array of Spec entries.  Each Spec entry consists of two fields : Hostname and CommonName
     Specs:
       - Hostname: orderer0
@@ -9,6 +13,10 @@ OrdererOrgs:
 PeerOrgs:
   - Name: Org1{{env.ORG}}
     Domain: org1.{{env.DOMAIN}}
+    CA:
+      Country: US
+      Province: California
+      Locality: Los Angeles
     # Allows for the definition of 1 or more hosts that are created sequentially
     # from a template. By default, this looks like "peer%d" from 0 to Count-1.
     # You may override the number of nodes (Count), the starting index (Start)
