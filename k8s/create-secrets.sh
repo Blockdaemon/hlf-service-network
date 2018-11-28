@@ -7,7 +7,7 @@ CRYPTO_CONFIG=$HSN_HOME/crypto-config
 
 # ca-server
 CA_TLS_DIR=$CRYPTO_CONFIG/peerOrganizations/org1.$DOMAIN/ca
-kubectl create secret generic ca-tls --from-file=$CA_TLS_DIR/ca.org1.$DOMAIN-cert.pem --from-file=$CA_TLS_DIR/current_sk
+kubectl create secret generic ca --from-file=$CA_TLS_DIR/ca.org1.$DOMAIN-cert.pem --from-file=$CA_TLS_DIR/current_sk
 
 # orderer
 ORDERER_DIR=$CRYPTO_CONFIG/ordererOrganizations/$DOMAIN/orderers/orderer0.$DOMAIN
