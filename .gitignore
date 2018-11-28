@@ -16,4 +16,6 @@
 # persistent storage
 /data
 
+/k8s/ca-deployment.yaml
+
 .*.swp

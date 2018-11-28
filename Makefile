@@ -69,6 +69,8 @@ artifacts/$(CHANNEL).anchor-peers.tx: $(BINDIR)/configtxgen artifacts configtx.y
 	@echo "HLF_VERSION=$(HLF_VERSION)" >> $@
 	@echo "PROFILE=$(PROFILE)" >> $@
 	@echo "DOMAIN=$(DOMAIN)" >> $@
+	@echo "CONSORTIUM=$(CONSORTIUM)" >> $@
+	@echo "ORG=$(ORG)" >> $@
 	@echo "NETWORKID=$(NETWORKID)" >> $@
 	@echo "GOPATH=$(GOPATH)" >> $@
 

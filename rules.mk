@@ -4,5 +4,5 @@
 _GENFILES = $(basename $(TEMPLATES))
 GENFILES = $(_GENFILES:templates/%=%)
 
-$(GENFILES): %: templates/%.in $(MKFILES) tools/jinja2-cli.py
-	ORG=$(ORG) CONSORTIUM=$(CONSORTIUM) DOMAIN=$(DOMAIN) tools/jinja2-cli.py < $< > $@ || (rm -f $@; false)
+$(GENFILES): %: templates/%.in $(MKFILES) tools/jinja2-cli.py .env
+	env $$(cat .env | xargs) tools/jinja2-cli.py < $< > $@ || (rm -f $@; false)
