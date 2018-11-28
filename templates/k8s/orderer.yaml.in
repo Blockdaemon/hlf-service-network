@@ -1,0 +1,74 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fabric-orderer-deployment
+  labels:
+    app: fabric-orderer
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fabric-orderer
+  template:
+    metadata:
+      labels:
+        app: fabric-orderer
+    spec:
+      volumes:
+        - name: orderer-fabric-secrets-genesis-block
+          secret:
+            secretName: orderer-genesis-block
+        - name: orderer-fabric-secrets-tls
+          secret:
+            secretName: orderer-tls
+        - name: orderer-fabric-secrets-msp-keystore
+          secret:
+            secretName: orderer-msp-keystore
+        - name: orderer-msp
+          hostPath:
+            # Note: must use kubectl mount on some OS's
+            path: "/crypto-config/ordererOrganizations/{{env.DOMAIN}}/orderers/orderer0.{{env.DOMAIN}}/msp/"
+            type: Directory
+      containers:
+        - name: fabric-container
+          image: hyperledger/fabric-orderer:{{env.HLF_ARCH}}-{{env.HLF_VERSION}}
+          command: ['orderer']
+          #command: ['sleep', '6000000000000']
+          env:
+            - name: ORDERER_GENERAL_LOGLEVEL
+              value: "debug"
+            - name: ORDERER_GENERAL_LISTENADDRESS
+              value: "0.0.0.0"
+            - name: ORDERER_GENERAL_LISTENPORT
+              value: "7050"
+            - name: ORDERER_GENERAL_GENESISPROFILE
+              value: "{{env.PROFILE}}"
+            - name: ORDERER_GENERAL_GENESISMETHOD
+              value: "file"
+            - name: ORDERER_GENERAL_GENESISFILE
+              value: "/var/hyperledger/fabric/orderer0.genesis.block"
+            - name: ORDERER_GENERAL_LOCALMSPID
+              value: "{{env.DOMAIN}}"
+            - name: ORDERER_GENERAL_LOCALMSPDIR
+              value: "/var/hyperledger/fabric/msp"
+            - name: ORDERER_GENERAL_TLS_ENABLED
+              value: "true"
+            - name: ORDERER_GENERAL_TLS_CERTIFICATE
+              value: "/var/hyperledger/fabric/tls/server.crt"
+            - name: ORDERER_GENERAL_TLS_PRIVATEKEY
+              value: "/var/hyperledger/fabric/tls/server.key"
+            - name: ORDERER_GENERAL_TLS_ROOTCAS
+              value: "[/var/hyperledger/fabric/tls/ca.crt]"
+          ports:
+            - containerPort: 7054
+          volumeMounts:
+            - name: orderer-fabric-secrets-genesis-block
+              mountPath: /var/hyperledger/fabric
+            - name: orderer-fabric-secrets-tls
+              mountPath: /var/hyperledger/fabric/tls
+            - name: orderer-msp
+              mountPath: /var/hyperledger/fabric/msp
+            - name: orderer-fabric-secrets-msp-keystore
+              mountPath: /var/hyperledger/fabric/msp/keystore
+
+# vim: sw=2:expandtab

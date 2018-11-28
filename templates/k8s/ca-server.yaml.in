@@ -18,33 +18,33 @@ spec:
         - name: ca-fabric-secrets
           secret:
             secretName: ca
-        - name: ca-fabric-data
+        - name: ca-data
       containers:
-        - name: ca-fabric
+        - name: fabric-container
           image: hyperledger/fabric-ca:{{env.HLF_ARCH}}-{{env.HLF_VERSION}}
           command: ['fabric-ca-server']
           args: ['start', '-b', 'admin:adminpw', '-d']
           env:
             - name:  FABRIC_CA_HOME
-              value: /data
+              value: "/data"
             - name:  FABRIC_CA_SERVER_CA_NAME
-              value: ca.org1.{{env.DOMAIN}}
+              value: "ca.org1.{{env.DOMAIN}}"
             - name:  FABRIC_CA_SERVER_CA_CERTFILE
-              value: /secrets/ca.org1.{{env.DOMAIN}}-cert.pem
+              value: "/secrets/ca.org1.{{env.DOMAIN}}-cert.pem"
             - name:  FABRIC_CA_SERVER_CA_KEYFILE
-              value: /secrets/current_sk
+              value: "/secrets/current_sk"
             - name:  FABRIC_CA_SERVER_TLS_ENABLED
               value: "true"
             - name:  FABRIC_CA_SERVER_TLS_CERTFILE
-              value: /secrets/ca.org1.{{env.DOMAIN}}-cert.pem
+              value: "/secrets/ca.org1.{{env.DOMAIN}}-cert.pem"
             - name:  FABRIC_CA_SERVER_TLS_KEYFILE
-              value: /secrets/current_sk
+              value: "/secrets/current_sk"
           ports:
             - containerPort: 7054
           volumeMounts:
             - name: ca-fabric-secrets
               mountPath: /secrets
-            - name: ca-fabric-data
+            - name: ca-data
               mountPath: /data
 
-# --env="FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server" --env="FABRIC_CA_SERVER_CA_NAME=ca.org1.bd" --env="FABRIC_CA_SERVER_CA_CERTFILE==/etc/hyperledger/fabric-ca-server-config/ca.org1.bd-cert.pem" --env="FABRIC_CA_SERVER_CA_KEYFILE=/etc/hyperledger/fabric-ca-server-config/current_sk" --env="FABRIC_CA_SERVER_TLS_ENABLED=true" --env="FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.org1.bd-cert.pem" --env="FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/current_sk" --port="7054"
+# vim: sw=2:expandtab
