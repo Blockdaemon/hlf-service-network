@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fabric-ca-deployment
+spec:
+  replicas: 1
+  template:
+    spec:
+      volumes:
+        - name: ca-fabric-secrets
+          secret:
+            secretName: ca
+        - name: ca-fabric-data
+      containers:
+        - name: ca-fabric
+          image: hyperledger/fabric-ca:${HLF_ARCH}-${HLF_VERSION}
+          command: ['sh', '-c', 'fabric-ca-server', 'start', '-b', 'admin:adminpw', '-d']
+          env:
+            - FABRIC_CA_HOME=/data
+            - FABRIC_CA_SERVER_CA_NAME=ca.org1.${DOMAIN}
+            - FABRIC_CA_SERVER_CA_CERTFILE=/secrets/ca.org1.${DOMAIN}-cert.pem
+            - FABRIC_CA_SERVER_CA_KEYFILE=/secrets/current_sk
+            - FABRIC_CA_SERVER_TLS_ENABLED=true
+            - FABRIC_CA_SERVER_TLS_CERTFILE=/secrets/ca.org1.${DOMAIN}-cert.pem
+            - FABRIC_CA_SERVER_TLS_KEYFILE=/secrets/current_sk
+          ports:
+            - containerPort: 7054
+          volumeMounts:
+            - name: ca-fabric-secrets
+              mountPath: /secrets
+            - name: ca-fabric-data
+              mountPath: /data
+
+# --env="FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server" --env="FABRIC_CA_SERVER_CA_NAME=ca.org1.bd" --env="FABRIC_CA_SERVER_CA_CERTFILE==/etc/hyperledger/fabric-ca-server-config/ca.org1.bd-cert.pem" --env="FABRIC_CA_SERVER_CA_KEYFILE=/etc/hyperledger/fabric-ca-server-config/current_sk" --env="FABRIC_CA_SERVER_TLS_ENABLED=true" --env="FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.org1.bd-cert.pem" --env="FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/current_sk" --port="7054"
