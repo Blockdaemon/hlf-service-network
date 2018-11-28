@@ -27,8 +27,7 @@ pip3 install jinja2
 * [Install docker](https://docs.docker.com/install/linux/docker-ce/ubuntu/#install-using-the-repository)
 * Install other stuff:
 ```
-apt-get install make curl
-apt-get install python3-jinja2
+apt install make curl python3-jinja2
 ```
 
 # QUICKSTART
