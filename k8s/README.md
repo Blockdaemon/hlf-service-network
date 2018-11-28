@@ -30,3 +30,17 @@ curl -LO https://storage.googleapis.com/minikube/releases/latest/docker-machine-
 kubectl proxy
 ```
 Frontend will be on http://127.0.0.1:8001/api/v1/namespaces/kube-system/services/kubernetes-dashboard/proxy
+
+# Accessing the fabric-ca API for troubleshooting
+
+Figure out which pod is running:
+
+    kubectl get all
+
+Forward the port
+
+    kubectl port-forward fabric-ca-deployment-fcc7c779f-nbdwx  7054:7054
+
+Send a request
+
+    curl https://127.0.0.1:7054/api/v1/cainfo -vk
