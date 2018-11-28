@@ -13,16 +13,23 @@ spec:
         - name: ca-fabric-data
       containers:
         - name: ca-fabric
-          image: hyperledger/fabric-ca:${HLF_ARCH}-${HLF_VERSION}
+          image: hyperledger/fabric-ca:{{env.HLF_ARCH}}-{{env.HLF_VERSION}}
           command: ['sh', '-c', 'fabric-ca-server', 'start', '-b', 'admin:adminpw', '-d']
           env:
-            - FABRIC_CA_HOME=/data
-            - FABRIC_CA_SERVER_CA_NAME=ca.org1.${DOMAIN}
-            - FABRIC_CA_SERVER_CA_CERTFILE=/secrets/ca.org1.${DOMAIN}-cert.pem
-            - FABRIC_CA_SERVER_CA_KEYFILE=/secrets/current_sk
-            - FABRIC_CA_SERVER_TLS_ENABLED=true
-            - FABRIC_CA_SERVER_TLS_CERTFILE=/secrets/ca.org1.${DOMAIN}-cert.pem
-            - FABRIC_CA_SERVER_TLS_KEYFILE=/secrets/current_sk
+            - name:  FABRIC_CA_HOME
+              value: /data
+            - name:  FABRIC_CA_SERVER_CA_NAME
+              value: ca.org1.{{env.DOMAIN}}
+            - name:  FABRIC_CA_SERVER_CA_CERTFILE
+              value: /secrets/ca.org1.{{env.DOMAIN}}-cert.pem
+            - name:  FABRIC_CA_SERVER_CA_KEYFILE
+              value: /secrets/current_sk
+            - name:  FABRIC_CA_SERVER_TLS_ENABLED
+              value: true
+            - name:  FABRIC_CA_SERVER_TLS_CERTFILE
+              value: /secrets/ca.org1.{{env.DOMAIN}}-cert.pem
+            - name:  FABRIC_CA_SERVER_TLS_KEYFILE
+              value: /secrets/current_sk
           ports:
             - containerPort: 7054
           volumeMounts:
