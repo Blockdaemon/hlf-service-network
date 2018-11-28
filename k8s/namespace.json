@@ -1,0 +1,10 @@
+{
+  "kind": "Namespace",
+  "apiVersion": "v1",
+  "metadata": {
+    "name": "hlf-service-network",
+    "labels": {
+      "env": "development"
+    }
+  }
+}
