@@ -2,9 +2,17 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: fabric-ca-deployment
+  labels:
+    app: fabric-ca
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      app: fabric-ca
   template:
+    metadata:
+      labels:
+        app: fabric-ca
     spec:
       volumes:
         - name: ca-fabric-secrets
@@ -25,7 +33,7 @@ spec:
             - name:  FABRIC_CA_SERVER_CA_KEYFILE
               value: /secrets/current_sk
             - name:  FABRIC_CA_SERVER_TLS_ENABLED
-              value: true
+              value: "true"
             - name:  FABRIC_CA_SERVER_TLS_CERTFILE
               value: /secrets/ca.org1.{{env.DOMAIN}}-cert.pem
             - name:  FABRIC_CA_SERVER_TLS_KEYFILE
