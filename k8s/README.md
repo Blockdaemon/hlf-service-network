@@ -1,4 +1,5 @@
-#MacOS
+# Install prerequisites
+## MacOS
 
 ```
 brew install kubectl
@@ -11,7 +12,7 @@ minikube start --vm-driver=hyperkit
 brew install coreutils
 ```
 
-#Debian/Ubuntu
+## Debian/Ubuntu
 ```
 sudo apt install qemu-kvm libvirt-clients libvirt-daemon-system
 sudo adduser $USER libvirt
@@ -23,3 +24,9 @@ sudo dpkg -i minikube_0.30-0.deb
 curl -LO https://storage.googleapis.com/minikube/releases/latest/docker-machine-driver-kvm2
  && chmod +x docker-machine-driver-kvm2 && sudo mv docker-machine-driver-kvm2 /usr/local/bin
 ```
+
+# Start web proxy
+```
+kubectl proxy
+```
+Frontend will be on http://127.0.0.1:8001/api/v1/namespaces/kube-system/services/kubernetes-dashboard/proxy
