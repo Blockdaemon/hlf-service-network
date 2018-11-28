@@ -22,7 +22,8 @@ spec:
       containers:
         - name: ca-fabric
           image: hyperledger/fabric-ca:{{env.HLF_ARCH}}-{{env.HLF_VERSION}}
-          command: ['sh', '-c', 'fabric-ca-server', 'start', '-b', 'admin:adminpw', '-d']
+          command: ['fabric-ca-server']
+          args: ['start', '-b', 'admin:adminpw', '-d']
           env:
             - name:  FABRIC_CA_HOME
               value: /data
