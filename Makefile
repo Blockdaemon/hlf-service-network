@@ -81,9 +81,7 @@ down: .env
 persistent: .env artifacts/orderer0.genesis.block
 	COMPOSE_FILE=docker-compose.yaml:docker-compose-persistent.yaml docker-compose up -d && docker-compose logs -f
 
-# jinja2 rule
-%.yaml: templates/%.yaml.in $(MKFILES) tools/jinja2-cli.py
-	ORG=$(ORG) CONSORTIUM=$(CONSORTIUM) DOMAIN=$(DOMAIN) tools/jinja2-cli.py < $< > $@ || (rm -f $@; false)
+TEMPLATES = $(wildcard templates/*.in)
 
 .PHONY: clean distclean
 clean:
@@ -94,5 +92,10 @@ distclean: clean
 	rm -rf __pycache__
 	rm -rf data
 	rm -rf tools/*/*
+env:
+	@echo GENFILES=\"$(GENFILES)\"
 
 .PHONY: FORCE
+
+include k8s/k8s.mk
+include rules.mk
