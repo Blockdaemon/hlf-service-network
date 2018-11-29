@@ -1,0 +1,15 @@
+#!/bin/bash
+
+function find-pod() {
+    if [ -z "$1" -o -z "$2" ]; then
+	echo "usage: findpod <retvar> <pod>"
+	return
+    fi
+    local  __resultvar=$1
+    local  ret=$(kubectl get pods -o=name | cut -f 2 -d / | grep $2 | head -1)
+    eval $__resultvar="'$ret'"
+}
+
+function list-pods() {
+    kubectl get pods -o=name | cut -f 2 -d /
+}
