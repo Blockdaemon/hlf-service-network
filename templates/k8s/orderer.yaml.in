@@ -26,9 +26,9 @@ spec:
             secretName: orderer-msp-keystore
         - name: orderer-msp
           hostPath:
-            # Note: minikube hostPath requires
-            # "minikube mount (...)/hlf-service-network/crypto-config:/crypto-config"
-            # todo: Dockerfile copy?
+            # Note: hostPath when using minicube requires
+            # "minikube mount $HSN_HOME/crypto-config:/crypto-config"
+            # FIXME: Dockerfile copy?
             path: "/crypto-config/ordererOrganizations/{{env.DOMAIN}}/orderers/orderer0.{{env.DOMAIN}}/msp/"
             type: Directory
       containers:

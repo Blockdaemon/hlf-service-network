@@ -1,6 +1,5 @@
 #!/bin/bash
-if [ -z "$GOPATH" ]; then
-	GOPATH=~/go
-fi
 
-exec minikube mount $GOPATH/src/github.com/Blockdaemon/hlf-service-network/crypto-config:/crypto-config
+. functions
+
+exec minikube mount $HSN_HOME/crypto-config:/crypto-config

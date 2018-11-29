@@ -1,6 +1,7 @@
 #!/bin/bash
-HSN_HOME=$(realpath $(dirname $0))/..
-. $HSN_HOME/.env
+ 
+. functions
+read-env
 
 ARTIFACTS=$HSN_HOME/artifacts
 CRYPTO_CONFIG=$HSN_HOME/crypto-config

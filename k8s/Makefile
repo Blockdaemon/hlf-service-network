@@ -4,8 +4,7 @@ all:
 
 .PHONY: init apply delete-all
 init:
-	./00-setup-namespace.sh
-	./01-set-secrets.sh
+	@for i in init.d/*.sh; do ./$$i; done
 
 apply:
 	@for i in *.yaml; do kubectl apply -f $$i; done
