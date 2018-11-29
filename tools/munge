@@ -1,1 +1,2 @@
-grep = docker-compose.yaml | gsed -r 's/[^-]*- ([^=]+)=(.*)$/        - name: \1\n          value: "\2"/; s/\$\{(.+)\}/{{env.\1}}/'
+#!/bin/bash
+grep = $1 | gsed -r 's/[ ^-]*([^=]+)=(.*)$/        - name: \1\n          value: "\2"/; s/\$\{(.+)\}/{{env.\1}}/'
