@@ -3,4 +3,7 @@ import os
 import sys
 from jinja2 import Environment, FileSystemLoader
 
-sys.stdout.write(Environment(loader=FileSystemLoader('templates/')).from_string(sys.stdin.read()).render(env=os.environ) + "\n")
+l = FileSystemLoader('templates/')
+e = Environment(loader=l, trim_blocks=True, lstrip_blocks=True)
+
+sys.stdout.write(e.from_string(sys.stdin.read()).render(env=os.environ) + "\n")

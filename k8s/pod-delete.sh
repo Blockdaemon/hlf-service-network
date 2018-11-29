@@ -3,6 +3,8 @@
 . functions
 if [ -z "$1" ]; then
     echo "usage: $0 <pod>"
+    echo "Pods:"
+    list-pods
     exit 1
 fi
 

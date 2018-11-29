@@ -15,4 +15,5 @@ if [ -z "$POD" ]; then
     exit 1
 fi
 
-exec kubectl exec -ti $POD /bin/bash
+echo logging "$POD"
+exec kubectl logs -f $POD

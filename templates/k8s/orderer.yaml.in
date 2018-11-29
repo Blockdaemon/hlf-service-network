@@ -32,7 +32,7 @@ spec:
             path: "/crypto-config/ordererOrganizations/{{env.DOMAIN}}/orderers/orderer0.{{env.DOMAIN}}/msp/"
             type: Directory
       containers:
-        - name: fabric-container
+        - name: fabric-orderer-container
           image: hyperledger/fabric-orderer:{{env.HLF_ARCH}}-{{env.HLF_VERSION}}
           command: ['orderer']
           #command: [ "/bin/bash", "-c", "--" ]

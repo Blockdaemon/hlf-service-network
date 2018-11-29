@@ -1,0 +1,67 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fabric-peer-deployment
+  labels:
+    app: fabric-peers
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fabric-peers
+  template:
+    metadata:
+      labels:
+        app: fabric-peers
+    spec:
+      volumes:
+        {% for PEER in [0, 1] %}
+        - name: peer{{PEER}}-fabric-secrets-tls
+          secret:
+            secretName: peer{{PEER}}-tls
+        - name: peer{{PEER}}-fabric-secrets-msp-keystore
+          secret:
+            secretName: peer{{PEER}}-msp-keystore
+        - name: peer{{PEER}}-msp
+          hostPath:
+            # Note: hostPath when using minicube requires
+            # "minikube mount $HSN_HOME/crypto-config:/crypto-config"
+            # FIXME: Use configMap
+            path: "/crypto-config/peerOrganizations/org1.{{env.DOMAIN}}/peers/peer{{PEER}}.org1.{{env.DOMAIN}}/msp/"
+            type: Directory
+        {% endfor %}
+      containers:
+        {% for PEER in [0, 1] %}
+        #####################################################################
+        # BEGIN peer{{PEER}}
+        - name: fabric-peer{{PEER}}-container
+          image: hyperledger/fabric-peer:{{env.HLF_ARCH}}-{{env.HLF_VERSION}}
+          command: ['peer', 'node', 'start']
+          #command: [ "/bin/bash", "-c", "--" ]
+          #args: [ "while true; do sleep 30; done;" ]
+          {% include 'k8s/peer-env.yaml' %}
+
+          ports:
+            - containerPort: 7054
+          volumeMounts:
+            - name: peer{{PEER}}-fabric-secrets-tls
+              mountPath: /var/hyperledger/tls
+            - name: peer{{PEER}}-msp
+              mountPath: /var/hyperledger/msp
+            - name: peer{{PEER}}-fabric-secrets-msp-keystore
+              mountPath: /var/hyperledger/msp/keystore
+        # CouchDB for peer{{PEER}}
+        - name: fabric-couch{{PEER}}-container
+          image: hyperledger/fabric-couchdb
+          env:
+            - name: COUCHDB_USER
+              value: "cdbadmin"
+            - name: COUCHDB_PASSWORD
+              value: "cdbadminpw"
+          ports:
+            - containerPort: 5984
+        # END peer{{PEER}}
+        #####################################################################
+        {% endfor %}
+
+# vim: sw=2:expandtab
