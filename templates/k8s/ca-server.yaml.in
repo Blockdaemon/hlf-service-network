@@ -24,6 +24,8 @@ spec:
           image: hyperledger/fabric-ca:{{env.HLF_ARCH}}-{{env.HLF_VERSION}}
           command: ['fabric-ca-server']
           args: ['start', '-b', 'admin:adminpw', '-d']
+          #command: [ "/bin/bash", "-c", "--" ]
+          #args: [ "while true; do sleep 30; done;" ]
           env:
             - name:  FABRIC_CA_HOME
               value: "/data"

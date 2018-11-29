@@ -35,7 +35,8 @@ spec:
         - name: fabric-container
           image: hyperledger/fabric-orderer:{{env.HLF_ARCH}}-{{env.HLF_VERSION}}
           command: ['orderer']
-          #command: ['sleep', '6000000000000']
+          #command: [ "/bin/bash", "-c", "--" ]
+          #args: [ "while true; do sleep 30; done;" ]
           env:
             - name: ORDERER_GENERAL_LOGLEVEL
               value: "debug"
