@@ -1,5 +1,5 @@
 #!/bin/bash
- 
+
 . functions
 read-env
 
@@ -25,4 +25,13 @@ for peer in 0 1; do
     PEER_DIR=$CRYPTO_CONFIG/peerOrganizations/org1.$DOMAIN/peers/peer${peer}.org1.$DOMAIN
     set-secret peer${peer}-tls --from-file=$PEER_DIR/tls
     set-secret peer${peer}-msp-keystore --from-file=$PEER_DIR/msp/keystore
+
+    MSP_PATH="${HSN_HOME}/crypto-config/peerOrganizations/org1.${DOMAIN}/peers/peer${peer}.org1.${DOMAIN}/msp"
+
+    exec kubectl create configmap peer${peer} \
+        --from-file="ca-cert.pem"="${MSP_PATH}/cacerts/ca.org1.hlf.blockdaemon.io-cert.pem" \
+        --from-file="admin-cert.pem"="${MSP_PATH}/admincerts/Admin@org1.hlf.blockdaemon.io-cert.pem" \
+        --from-file="peer-cert.pem"="${MSP_PATH}/signcerts/peer${peer}.org1.hlf.blockdaemon.io-cert.pem" \
+        --from-file="tlsca-cert.pem"="${MSP_PATH}/tlscacerts/tlsca.org1.hlf.blockdaemon.io-cert.pem" \
+        --dry-run -o json | kubectl apply -f -
 done
