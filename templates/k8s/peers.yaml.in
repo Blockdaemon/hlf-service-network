@@ -1,67 +1,69 @@
+{% for PEER in [0, 1] %}
+---
+#####################################################################
+# BEGIN peer{{PEER}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: fabric-peer-deployment
+  name: fabric-peer{{PEER}}-deployment
   labels:
-    app: fabric-peers
+    app: fabric-peer{{PEER}}
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: fabric-peers
+      app: fabric-peer{{PEER}}
   template:
     metadata:
       labels:
-        app: fabric-peers
+        app: fabric-peer{{PEER}}
     spec:
       volumes:
-        {% for PEER in [0, 1] %}
-        - name: peer{{PEER}}-fabric-secrets-tls
+        - name: peer{{PEER}}-tls-secrets
           secret:
             secretName: peer{{PEER}}-tls
-        - name: peer{{PEER}}-fabric-secrets-msp-keystore
+        - name: peer{{PEER}}-msp-volume
+          configMap:
+            name: peer{{PEER}}-msp
+            items:
+              {% for msp in ['ca','tlsca','admin','sign'] %}
+              - key: {{msp}}-cert.pem
+                path: {{msp}}certs/{{msp}}-cert.pem
+              {% endfor %}
+        - name: peer{{PEER}}-msp-keystore-secrets
           secret:
             secretName: peer{{PEER}}-msp-keystore
-        - name: peer{{PEER}}-msp
-          hostPath:
-            # Note: hostPath when using minicube requires
-            # "minikube mount $HSN_HOME/crypto-config:/crypto-config"
-            # FIXME: Use configMap
-            path: "/crypto-config/peerOrganizations/org1.{{env.DOMAIN}}/peers/peer{{PEER}}.org1.{{env.DOMAIN}}/msp/"
-            type: Directory
-        {% endfor %}
       containers:
-        {% for PEER in [0, 1] %}
-        #####################################################################
-        # BEGIN peer{{PEER}}
-        - name: fabric-peer{{PEER}}-container
+        # peer{{PEER}}.org1.{{env.DOMAIN}}
+        - name: peer{{PEER}}-container
           image: hyperledger/fabric-peer:{{env.HLF_ARCH}}-{{env.HLF_VERSION}}
           command: ['peer', 'node', 'start']
           #command: [ "/bin/bash", "-c", "--" ]
           #args: [ "while true; do sleep 30; done;" ]
-          {% include 'k8s/peer-env.yaml' %}
-
+          {% include 'k8s/peer-env.yaml' %}{{ '' }}
           ports:
             - containerPort: 7054
           volumeMounts:
-            - name: peer{{PEER}}-fabric-secrets-tls
+            - name: peer{{PEER}}-tls-secrets
               mountPath: /var/hyperledger/tls
-            - name: peer{{PEER}}-msp
+            - name: peer{{PEER}}-msp-volume
               mountPath: /var/hyperledger/msp
-            - name: peer{{PEER}}-fabric-secrets-msp-keystore
+            - name: peer{{PEER}}-msp-keystore-secrets
               mountPath: /var/hyperledger/msp/keystore
         # CouchDB for peer{{PEER}}
-        - name: fabric-couch{{PEER}}-container
+        # couch{{PEER}}-org1.{{env.DOMAIN}}
+        - name: couch{{PEER}}-container
           image: hyperledger/fabric-couchdb
           env:
+            # FIXME, use secret
             - name: COUCHDB_USER
               value: "cdbadmin"
             - name: COUCHDB_PASSWORD
               value: "cdbadminpw"
           ports:
             - containerPort: 5984
-        # END peer{{PEER}}
-        #####################################################################
-        {% endfor %}
+# END peer{{PEER}}
+#####################################################################
+{% endfor %}
 
 # vim: sw=2:expandtab

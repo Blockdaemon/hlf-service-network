@@ -15,24 +15,26 @@ spec:
         app: fabric-orderer
     spec:
       volumes:
-        - name: orderer-fabric-secrets-genesis-block
+        - name: orderer-genesis-block-secrets
           secret:
             secretName: orderer-genesis-block
-        - name: orderer-fabric-secrets-tls
+        - name: orderer-tls-secrets
           secret:
             secretName: orderer-tls
-        - name: orderer-fabric-secrets-msp-keystore
+        - name: orderer-msp-volume
+          configMap:
+            name: orderer-msp
+            items:
+              {% for msp in ['ca','tlsca','admin','sign'] %}
+              - key: {{msp}}-cert.pem
+                path: {{msp}}certs/{{msp}}-cert.pem
+              {% endfor %}
+        - name: orderer-msp-keystore-secrets
           secret:
             secretName: orderer-msp-keystore
-        - name: orderer-msp
-          hostPath:
-            # Note: hostPath when using minicube requires
-            # "minikube mount $HSN_HOME/crypto-config:/crypto-config"
-            # FIXME: Dockerfile copy?
-            path: "/crypto-config/ordererOrganizations/{{env.DOMAIN}}/orderers/orderer0.{{env.DOMAIN}}/msp/"
-            type: Directory
       containers:
-        - name: fabric-orderer-container
+        # orderer0.org1.{{env.DOMAIN}}
+        - name: orderer-container
           image: hyperledger/fabric-orderer:{{env.HLF_ARCH}}-{{env.HLF_VERSION}}
           command: ['orderer']
           #command: [ "/bin/bash", "-c", "--" ]
@@ -49,29 +51,30 @@ spec:
             - name: ORDERER_GENERAL_GENESISMETHOD
               value: "file"
             - name: ORDERER_GENERAL_GENESISFILE
-              value: "/var/hyperledger/fabric/orderer0.genesis.block"
+              value: "/var/hyperledger/orderer/orderer0.genesis.block"
             - name: ORDERER_GENERAL_LOCALMSPID
               value: "{{env.DOMAIN}}"
             - name: ORDERER_GENERAL_LOCALMSPDIR
-              value: "/var/hyperledger/fabric/msp"
+              value: "/var/hyperledger/msp"
             - name: ORDERER_GENERAL_TLS_ENABLED
               value: "true"
             - name: ORDERER_GENERAL_TLS_CERTIFICATE
-              value: "/var/hyperledger/fabric/tls/server.crt"
+              value: "/var/hyperledger/tls/server.crt"
             - name: ORDERER_GENERAL_TLS_PRIVATEKEY
-              value: "/var/hyperledger/fabric/tls/server.key"
+              value: "/var/hyperledger/tls/server.key"
             - name: ORDERER_GENERAL_TLS_ROOTCAS
-              value: "[/var/hyperledger/fabric/tls/ca.crt]"
+              value: "[/var/hyperledger/tls/ca.crt]"
           ports:
             - containerPort: 7054
           volumeMounts:
-            - name: orderer-fabric-secrets-genesis-block
-              mountPath: /var/hyperledger/fabric
-            - name: orderer-fabric-secrets-tls
-              mountPath: /var/hyperledger/fabric/tls
-            - name: orderer-msp
-              mountPath: /var/hyperledger/fabric/msp
-            - name: orderer-fabric-secrets-msp-keystore
-              mountPath: /var/hyperledger/fabric/msp/keystore
+            # FIXME: put in configMap?
+            - name: orderer-genesis-block-secrets
+              mountPath: /var/hyperledger/orderer
+            - name: orderer-tls-secrets
+              mountPath: /var/hyperledger/tls
+            - name: orderer-msp-volume
+              mountPath: /var/hyperledger/msp
+            - name: orderer-msp-keystore-secrets
+              mountPath: /var/hyperledger/msp/keystore
 
 # vim: sw=2:expandtab
