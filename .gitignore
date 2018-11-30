@@ -16,6 +16,8 @@
 # persistent storage
 /data
 
-/k8s/*.yaml
+/k8s/ca-server.yaml
+/k8s/orderer.yaml
+/k8s/peers.yaml
 
 .*.swp

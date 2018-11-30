@@ -5,7 +5,6 @@
 brew install kubectl
 brew cask install minikube
 curl -LO https://storage.googleapis.com/minikube/releases/latest/docker-machine-driver-hyperkit && sudo install -o root -g wheel -m 4755 docker-machine-driver-hyperkit /usr/local/bin/
-minikube start --vm-driver=hyperkit
 ```
 
 ```
@@ -23,6 +22,17 @@ wget https://github.com/kubernetes/minikube/releases/download/v0.30.0/minikube_0
 sudo dpkg -i minikube_0.30-0.deb
 curl -LO https://storage.googleapis.com/minikube/releases/latest/docker-machine-driver-kvm2
  && chmod +x docker-machine-driver-kvm2 && sudo mv docker-machine-driver-kvm2 /usr/local/bin
+```
+
+# Start minikube
+```
+minikube start --vm-driver=hyperkit
+```
+
+## Blow away kube-dns
+https://github.com/kubernetes/minikube/issues/3233#issuecomment-429787213
+```
+kubectl delete deployment kube-dns --namespace kube-system
 ```
 
 # Start web proxy

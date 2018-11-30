@@ -2,7 +2,7 @@
 
 . functions
 if [ -z "$1" ]; then
-    echo "usage: $0 <pod>"
+    echo "usage: $0 <pod> [command]"
     echo "Pods:"
     list-pods
     exit 1
@@ -15,4 +15,14 @@ if [ -z "$POD" ]; then
     exit 1
 fi
 
-exec kubectl exec -ti $POD /bin/bash
+if [ "$POD" = "busybox" ] ; then
+    CMD=/bin/sh
+else
+    CMD=/bin/bash
+fi
+
+if [ ! -z "$2" ];  then
+    CMD=$2
+fi
+
+exec kubectl exec -ti $POD $CMD

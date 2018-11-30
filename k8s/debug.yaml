@@ -1,0 +1,28 @@
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: busybox
+  namespace: hlf-service-network
+spec:
+  containers:
+  - image: busybox
+    command: [ "/bin/sh", "-c", "--" ]
+    args: [ "while true; do sleep 30; done;" ]
+    imagePullPolicy: IfNotPresent
+    name: busybox
+  restartPolicy: Always
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: alpine
+  namespace: hlf-service-network
+spec:
+  containers:
+  - image: alpine
+    command: [ "/bin/sh", "-c", "--" ]
+    args: [ "while true; do sleep 30; done;" ]
+    imagePullPolicy: IfNotPresent
+    name: busybox
+  restartPolicy: Always
