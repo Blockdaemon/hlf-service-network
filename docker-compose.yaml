@@ -86,7 +86,6 @@ services:
     #build: ${GOPATH}/src/github.com/hyperledger/fabric/.build/image/peer
     container_name: peer0.org1.${DOMAIN}
     env_file:
-      - dc-envfiles/couch.env
       - dc-envfiles/peer.env
     environment:
       - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb0.org1.${DOMAIN}:5984
@@ -99,7 +98,7 @@ services:
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
     command: peer node start
     volumes:
-      - /var/run/:/host/var/run/
+      - /var/run/docker.sock:/host/var/run/docker.sock
       - ./crypto-config/peerOrganizations/org1.${DOMAIN}/peers/peer0.org1.${DOMAIN}/msp:/var/hyperledger/msp
       - ./crypto-config/peerOrganizations/org1.${DOMAIN}/peers/peer0.org1.${DOMAIN}/tls:/var/hyperledger/tls
       # Hack for `peer node status` command inside container
@@ -120,7 +119,6 @@ services:
     #build: ${GOPATH}/src/github.com/hyperledger/fabric/.build/image/peer
     container_name: peer1.org1.${DOMAIN}
     env_file:
-      - dc-envfiles/couch.env
       - dc-envfiles/peer.env
     environment:
       - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb1.org1.${DOMAIN}:5984
@@ -133,7 +131,7 @@ services:
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
     command: peer node start
     volumes:
-      - /var/run/:/host/var/run/
+      - /var/run/docker.sock:/host/var/run/docker.sock
       - ./crypto-config/peerOrganizations/org1.${DOMAIN}/peers/peer1.org1.${DOMAIN}/msp:/var/hyperledger/msp
       - ./crypto-config/peerOrganizations/org1.${DOMAIN}/peers/peer1.org1.${DOMAIN}/tls:/var/hyperledger/tls
       # Hack for `peer node status` command inside container
