@@ -42,7 +42,8 @@ spec:
           #args: [ "while true; do sleep 30; done;" ]
           {% include 'k8s/peer-env.yaml' %}{{ '' }}
           ports:
-            - containerPort: 7054
+            - containerPort: 7051
+            - containerPort: 7053
           volumeMounts:
             - name: peer{{PEER}}-tls-secrets
               mountPath: /var/hyperledger/tls

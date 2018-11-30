@@ -65,7 +65,7 @@ spec:
             - name: ORDERER_GENERAL_TLS_ROOTCAS
               value: "[/var/hyperledger/tls/ca.crt]"
           ports:
-            - containerPort: 7054
+            - containerPort: 7050
           volumeMounts:
             # FIXME: put in configMap?
             - name: orderer-genesis-block-secrets
