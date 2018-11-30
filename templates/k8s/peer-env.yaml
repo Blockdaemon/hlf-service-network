@@ -27,9 +27,9 @@
             - name: CORE_PEER_NETWORKID
               value: "{{env.NETWORKID}}"
             - name: CORE_PEER_ID
-              value: "{{PEER}}.org1.{{env.DOMAIN}}"
+              value: "peer{{PEER}}.org1.{{env.DOMAIN}}"
             - name: CORE_PEER_ADDRESS
-              value: "{{PEER}}.org1.{{env.DOMAIN}}:7051"
+              value: "peer{{PEER}}.org1.{{env.DOMAIN}}:7051"
             # Gossip
             - name: CORE_PEER_GOSSIP_USELEADERELECTION
               value: "true"
@@ -38,12 +38,12 @@
             - name: CORE_PEER_GOSSIP_SKIPHANDSHAKE
               value: "true"
             - name: CORE_PEER_GOSSIP_EXTERNALENDPOINT
-              value: "{{PEER}}.org1.{{env.DOMAIN}}:7051"
+              value: "peer{{PEER}}.org1.{{env.DOMAIN}}:7051"
             # TLS and MSP
             - name: CORE_PEER_TLS_ENABLED
               value: "true"
             - name: CORE_PEER_TLS_SERVERHOSTOVERRIDE
-              value: "{{PEER}}.org1.{{env.DOMAIN}}"
+              value: "peer{{PEER}}.org1.{{env.DOMAIN}}"
             - name: CORE_PEER_TLS_CERT_FILE
               value: "/var/hyperledger/tls/server.crt"
             - name: CORE_PEER_TLS_KEY_FILE
