@@ -4,6 +4,9 @@ kind: Pod
 metadata:
   name: busybox
   namespace: hlf-service-network
+  labels:
+    app: busybox
+    role: debug
 spec:
   containers:
   - image: busybox
@@ -18,6 +21,9 @@ kind: Pod
 metadata:
   name: alpine
   namespace: hlf-service-network
+  labels:
+    app: alpine
+    role: debug
 spec:
   containers:
   - image: alpine

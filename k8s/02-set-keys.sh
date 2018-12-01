@@ -1,5 +1,7 @@
 #!/bin/bash
 
+make
+
 . functions
 read-env
 

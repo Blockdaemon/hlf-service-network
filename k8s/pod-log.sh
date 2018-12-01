@@ -2,8 +2,7 @@
 
 . functions
 if [ -z "$1" ]; then
-    echo "usage: $0 <pod>"
-    echo "Pods:"
+    echo "usage: $0 <pod> [container]"
     list-pods
     exit 1
 fi
@@ -15,5 +14,7 @@ if [ -z "$POD" ]; then
     exit 1
 fi
 
+shift
+
 echo logging "$POD"
-exec kubectl logs -f $POD
+exec kubectl logs -f $POD $@

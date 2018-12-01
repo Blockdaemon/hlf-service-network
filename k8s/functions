@@ -12,16 +12,45 @@ function read-env() {
     set +a
 }
 
-function find-pod() {
+function find-deployment() {
     if [ -z "$1" -o -z "$2" ]; then
-	echo "usage: findpod <retvar> <pod>"
+	echo "usage: find-deployment <retvar> <app>"
 	return
     fi
     local  __resultvar=$1
-    local  ret=$(kubectl get pods -o=name | cut -f 2 -d / | grep $2 | head -1)
+    local  ret=$(kubectl get deployments -l "app=$2" -o=name | cut -f 2 -d '/')
+    eval $__resultvar="'$ret'"
+}
+
+function find-pod() {
+    if [ -z "$1" -o -z "$2" ]; then
+	echo "usage: find-pod <retvar> <app>"
+	return
+    fi
+    local  __resultvar=$1
+    local  ret=$(kubectl get pods -l "app=$2" -o=name | cut -f 2 -d '/')
     eval $__resultvar="'$ret'"
 }
 
 function list-pods() {
+    echo "-----------------"
+    echo "Pods by app label"
+    echo "-----------------"
+    list-pod-apps
+}
+
+function list-pod-names() {
     kubectl get pods -o=name | cut -f 2 -d /
+}
+
+function list-pod-apps() {
+    kubectl get pods -o jsonpath='{range .items[*]}{.metadata.labels.app}{"\n"}{end}'
+}
+
+function list-deployment-names() {
+    kubectl get deployments -o=name | cut -f 2 -d /
+}
+
+function list-deployment-apps() {
+    kubectl get deployments -o jsonpath='{range .items[*]}{.metadata.labels.app}{"\n"}{end}'
 }
