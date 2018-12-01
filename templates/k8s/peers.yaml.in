@@ -8,6 +8,8 @@ metadata:
   name: fabric-peer{{PEER}}-deployment
   labels:
     app: fabric-peer{{PEER}}
+    org: org1.{{env.DOMAIN}}
+    role: peer
 spec:
   replicas: 1
   selector:
@@ -17,6 +19,8 @@ spec:
     metadata:
       labels:
         app: fabric-peer{{PEER}}
+        org: org1.{{env.DOMAIN}}
+        role: peer
     spec:
       volumes:
         - name: peer{{PEER}}-tls-secrets
@@ -33,8 +37,9 @@ spec:
         - name: peer{{PEER}}-msp-keystore-secrets
           secret:
             secretName: peer{{PEER}}-msp-keystore
+      hostname: peer{{PEER}}
+      subdomain: org1
       containers:
-        # peer{{PEER}}.org1.{{env.DOMAIN}}
         - name: peer{{PEER}}-container
           image: hyperledger/fabric-peer:{{env.HLF_ARCH}}-{{env.HLF_VERSION}}
           command: ['peer', 'node', 'start']

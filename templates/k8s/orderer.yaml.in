@@ -4,6 +4,8 @@ metadata:
   name: fabric-orderer-deployment
   labels:
     app: fabric-orderer
+    org: {{env.DOMAIN}}
+    role: orderer
 spec:
   replicas: 1
   selector:
@@ -13,6 +15,8 @@ spec:
     metadata:
       labels:
         app: fabric-orderer
+        org: {{env.DOMAIN}}
+        role: orderer
     spec:
       volumes:
         - name: orderer-genesis-block-secrets
@@ -32,9 +36,9 @@ spec:
         - name: orderer-msp-keystore-secrets
           secret:
             secretName: orderer-msp-keystore
+      hostname: orderer0
       containers:
-        # orderer0.org1.{{env.DOMAIN}}
-        - name: orderer-container
+        - name: orderer0-container
           image: hyperledger/fabric-orderer:{{env.HLF_ARCH}}-{{env.HLF_VERSION}}
           command: ['orderer']
           #command: [ "/bin/bash", "-c", "--" ]

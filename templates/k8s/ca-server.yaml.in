@@ -4,6 +4,8 @@ metadata:
   name: fabric-ca-deployment
   labels:
     app: fabric-ca
+    org: org1.{{env.DOMAIN}}
+    role: ca-server
 spec:
   replicas: 1
   selector:
@@ -13,14 +15,17 @@ spec:
     metadata:
       labels:
         app: fabric-ca
+        org: org1.{{env.DOMAIN}}
+        role: ca-server
     spec:
       volumes:
         - name: ca-fabric-secrets
           secret:
             secretName: ca
         - name: ca-data
+      hostname: ca
+      subdomain: org1
       containers:
-        # ca.org1.{{env.DOMAIN}}
         - name: ca-container
           image: hyperledger/fabric-ca:{{env.HLF_ARCH}}-{{env.HLF_VERSION}}
           command: ['fabric-ca-server']
