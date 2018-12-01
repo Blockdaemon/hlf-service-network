@@ -12,9 +12,15 @@
             - name: CORE_LEDGER_STATE_STATEDATABASE
               value: "CouchDB"
             - name: CORE_LEDGER_STATE_COUCHDBCONFIG_USERNAME
-              value: "cdbadmin"
+              valueFrom:
+                secretKeyRef:
+                  name: couchdb{{PEER}}-creds
+                  key: user
             - name: CORE_LEDGER_STATE_COUCHDBCONFIG_PASSWORD
-              value: "cdbadminpw"
+              valueFrom:
+                secretKeyRef:
+                  name: couchdb{{PEER}}-creds
+                  key: password
             - name: CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS
               # In k8s, co-containers are on localhost
               #value: "couchdb0.org1.{{env.DOMAIN}}:5984"

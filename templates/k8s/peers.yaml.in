@@ -56,11 +56,16 @@ spec:
         - name: couch{{PEER}}-container
           image: hyperledger/fabric-couchdb
           env:
-            # FIXME, use secret
             - name: COUCHDB_USER
-              value: "cdbadmin"
+              valueFrom:
+                secretKeyRef:
+                  name: couchdb{{PEER}}-creds
+                  key: user
             - name: COUCHDB_PASSWORD
-              value: "cdbadminpw"
+              valueFrom:
+                secretKeyRef:
+                  name: couchdb{{PEER}}-creds
+                  key: password
           ports:
             - containerPort: 5984
 # END peer{{PEER}}
