@@ -1,0 +1,1 @@
+kubectl delete pods -l k8s-app=kube-dns --namespace kube-system

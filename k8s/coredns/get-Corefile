@@ -1,0 +1,1 @@
+kubectl get configmap coredns --namespace kube-system -o jsonpath={.data.Corefile} > Corefile

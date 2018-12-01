@@ -1,0 +1,2 @@
+kubectl create configmap coredns --namespace kube-system --from-file=Corefile=Corefile --dry-run --save-config -o json | kubectl apply -f -
+. kill-core

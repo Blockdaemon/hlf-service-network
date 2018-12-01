@@ -8,3 +8,9 @@
 helm install stable/nginx-ingress --namespace kube-system \
 --set controller.hostNetwork=true,controller.kind=DaemonSet,rbac.create=true
 ```
+* Automatically `apk add bash curl bind-tools` to alpine container
+* Add real DNS entries to coredns per service added
+  * https://coredns.io/2017/05/08/custom-dns-entries-for-kubernetes/
+  * https://github.com/coredns/coredns/tree/master/plugin/rewrite
+  * Corefile.diff has hardcoded domain in it. Can't make it work because it has to escape \.
+  * 03-patch-coredns.sh is a big honking mess
