@@ -62,3 +62,6 @@
               value: "/var/hyperledger/msp"
           # end peer-env.yaml for peer{{PEER}}
           ###############################################
+{# DO NOT REMOVE, we need it to prevent line concat in the % include also
+ # vim: sw=2:expandtab:
+ #}

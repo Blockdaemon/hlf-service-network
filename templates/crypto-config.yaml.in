@@ -26,3 +26,5 @@ PeerOrgs:
     Users:
       # The number of user accounts _in addition_ to Admin
       Count: 2
+
+# vim:expandtab

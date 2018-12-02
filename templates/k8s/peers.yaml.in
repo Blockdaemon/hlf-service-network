@@ -45,7 +45,6 @@ spec:
           command: ['peer', 'node', 'start']
           #command: [ "/bin/bash", "-c", "--" ]
           #args: [ "while true; do sleep 30; done;" ]
-          {% include 'k8s/peer-env.yaml' %}{{ '' }}
           ports:
             - containerPort: 7051
             - containerPort: 7053
@@ -56,6 +55,7 @@ spec:
               mountPath: /var/hyperledger/msp
             - name: peer{{PEER}}-msp-keystore-secrets
               mountPath: /var/hyperledger/msp/keystore
+          {% include 'k8s/peer-env.yaml' %}
         # CouchDB for peer{{PEER}}
         # couch{{PEER}}-org1.{{env.DOMAIN}}
         - name: couch{{PEER}}-container
