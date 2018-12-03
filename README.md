@@ -1,5 +1,7 @@
 # hlf-service-network
+
 Skeleton for building a simple Hyperledger Fabric service network
+
 * Docker containers for one ca server, one orderer and two peers
 * Self signed Org CA
 * MSP certs for one orderer and two peers
@@ -7,7 +9,8 @@ Skeleton for building a simple Hyperledger Fabric service network
 * Orderer genesis block
 * One channel genesis block and an anchor peers update for it
 
-# Prerequisites
+## Prerequisites
+
 * Docker
 * docker-compose
 * GNU make
@@ -15,49 +18,56 @@ Skeleton for building a simple Hyperledger Fabric service network
 * Python3
 * Python3 jinja2
 
-## MacOS
+### MacOS
+
 * [Install docker](https://store.docker.com/editions/community/docker-ce-desktop-mac)
 * Install other stuff:
-```
+
+```bash
 brew install python3
 pip3 install jinja2
 ```
 
-## Ubuntu/Debian
+### Ubuntu/Debian
+
 * [Install docker](https://docs.docker.com/install/linux/docker-ce/ubuntu/#install-using-the-repository)
 * Install other stuff:
-```
+
+```bash
 apt install make curl python3-jinja2
 ```
 
-# QUICKSTART
-```
+## QUICKSTART
+
+```bash
 make
 make up
 ```
 
-# To clean up
-```
+## To clean up
+
+```bash
 make clean
 ```
 
-# Start up with persistent storage
-```
+## Start up with persistent storage
+
+```bash
 make persistent
 ```
 
-# Overriding default config.mk
+## Overriding default config.mk
 
 You can put overrides in local.mk
 
-# couchdb access
+## couchdb access
 
 * db0 [http://localhost:5984](http://localhost:5984)
 * db1 [http://localhost:6984](http://localhost:6984)
 
 l/p: `cdbadmin`/`cdbadminpw`
 
-# Bugs
+## Bugs
 
 * Artifacts may not be compatible across versions. Do a `make clean` if you change `HLF_VERSION`!
 
@@ -66,5 +76,6 @@ l/p: `cdbadmin`/`cdbadminpw`
   * 1.1.0 has `x86_64` and `amd64` tags
   * 1.2.0 only has `amd64` tags
 
-# References
+## References
+
 See also [How to build your first Hyperledger fabric network](https://chainhero.io/2018/04/tutorial-hyperledger-fabric-how-to-build-your-first-network/)

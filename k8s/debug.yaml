@@ -32,3 +32,5 @@ spec:
     imagePullPolicy: IfNotPresent
     name: busybox
   restartPolicy: Always
+
+# vim: sw=2:expandtab

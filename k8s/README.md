@@ -1,27 +1,32 @@
-# Install prerequisites
-## MacOS
-### Install `kubectl` and `minikube`
-```
+# Kubernetes Instructions
+
+## Install prerequisites
+
+### MacOS
+
+#### Install `kubectl`, `minikube`, and `vmware-fusion`
+
+```bash
 brew install kubectl
 brew cask install minikube
-curl -LO https://storage.googleapis.com/minikube/releases/latest/docker-machine-driver-hyperkit && sudo install -o root -g wheel -m 4755 docker-machine-driver-hyperkit /usr/local/bin/
 ```
 
-### Install `helm`
-```
-brew install kubernetes-helm
-```
+* Install vmware (TODO: add instructions)
 
-### Misc
+#### Misc
+
 We need `gsed -r` because BSD `sed -E` is a POS.
-```
-brew install coreutils
+
+```bash
+brew install coreutils ipcalc
 ```
 
-## Debian/Ubuntu
-### Install `kubectl` and `minikube`
-```
-sudo apt install qemu-kvm libvirt-clients libvirt-daemon-system
+### Debian/Ubuntu
+
+#### Install `kubectl`, `minikube`, and `kvm2` driver
+
+```bash
+sudo apt install ipcalc qemu-kvm libvirt-clients libvirt-daemon-system
 sudo adduser $USER libvirt
 curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
 echo "deb http://apt.kubernetes.io/ kubernetes-stretch main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
@@ -31,44 +36,24 @@ sudo dpkg -i minikube_0.30-0.deb
 curl -LO https://storage.googleapis.com/minikube/releases/latest/docker-machine-driver-kvm2 && chmod +x docker-machine-driver-kvm2 && sudo mv docker-machine-driver-kvm2 /usr/local/bin
 ```
 
-### Install `helm`
-```
-curl https://raw.githubusercontent.com/helm/helm/master/scripts/get | bash
-helm init
-```
+## Start minikube and web proxy
 
-# Start minikube and web proxy
-```
-minikube start --vm-driver=hyperkit
-kubectl proxy
-```
-or just
-```
+```bash
 00-init.sh
 ```
-Frontend will be on http://127.0.0.1:8001/api/v1/namespaces/kube-system/services/kubernetes-dashboard/proxy
+
+This might take a LONG time to start up
+Frontend will *eventually* be on <http://127.0.0.1:8001/api/v1/namespaces/kube-system/services/kubernetes-dashboard/proxy>
 
 Leave this little guy running in a shell.
 
-# Blow away kube-dns
-By default, both `kube-dns` and `coredns` are often installed. They like to fight.
-We need `coredns` more than `kube-dns`.
+## Getting stuff running
 
-https://github.com/kubernetes/minikube/issues/3233#issuecomment-429787213
-```
-kubectl delete deployment kube-dns --namespace kube-system
-```
+Run the various `01-...sh` scripts
 
-# Getting stuff running
+## Misc stuff
 
-Run the various `01-...sh` scripts, then
-
-```
-./deploy.sh
-./services.sh
-```
-
-# Accessing the fabric-ca API for troubleshooting
+### Accessing the fabric-ca API for troubleshooting
 
 Start the forwarder:
 
