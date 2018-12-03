@@ -4,29 +4,24 @@
 
 ### MacOS
 
-#### Install `kubectl`, `minikube`, and `vmware-fusion`
+#### Install utils and `kubectl`, `minikube`, and `vmware-fusion`
 
 ```bash
-brew install kubectl
+brew install coreutils ipcalc kubectl
 brew cask install minikube
 ```
 
-* Install vmware (TODO: add instructions)
+We need `gsed -r` from coreutils because BSD `sed -E` is a POS.
 
-#### Misc
-
-We need `gsed -r` because BSD `sed -E` is a POS.
-
-```bash
-brew install coreutils ipcalc
-```
+* Install VMWare Fusion (TODO: add instructions)
 
 ### Debian/Ubuntu
 
-#### Install `kubectl`, `minikube`, and `kvm2` driver
+#### Install utils and `kubectl`, `minikube`, and `kvm2` driver
 
 ```bash
-sudo apt install ipcalc qemu-kvm libvirt-clients libvirt-daemon-system
+sudo apt install ipcalc screen
+sudp apt install qemu-kvm libvirt-clients libvirt-daemon-system
 sudo adduser $USER libvirt
 curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
 echo "deb http://apt.kubernetes.io/ kubernetes-stretch main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
@@ -42,23 +37,27 @@ curl -LO https://storage.googleapis.com/minikube/releases/latest/docker-machine-
 00-init.sh
 ```
 
-This might take a LONG time to start up
+This might take a LONG time to start up.
+
 Frontend will *eventually* be on <http://127.0.0.1:8001/api/v1/namespaces/kube-system/services/kubernetes-dashboard/proxy>
 
 Leave this little guy running in a shell.
 
 ## Getting stuff running
 
-Run the various `01-...sh` scripts
+* Run the various `01-...sh` scripts
 
 ## Misc stuff
 
+* `pod-log.sh <pod>`: Follow the log of a pod by appname (e.g. `./pod-log.sh fabric-ca`)
+* `pod-shell.sh [cmd]`: Execute `cmd` in a pod. `/bin/bash` is the default (`/bin/sh` for busybox)
+* `pod-delete.sh <pod>`: Delete a pod by app name (it will be restarted if in a deployment)
+* `make delete-deps`: Remove all deployments in `hlf-service-network` namespace
+* `make delete-pods`: Remove all pods in `hlf-service-network` (they will be restarted if in a deployment)
+* `make stop`: Stop minikube
+* `make nuke`: Kill everything minikube related. Use if you change vm driver
+* `./forwarding.sh stop`: Stop the port forwarders
+
 ### Accessing the fabric-ca API for troubleshooting
-
-Start the forwarder:
-
-    kubectl port-forward svc/ca-org1 7054:7054
-
-Send a request
 
     curl https://127.0.0.1:7054/api/v1/cainfo -vk

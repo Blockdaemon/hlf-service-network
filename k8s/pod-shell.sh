@@ -21,7 +21,8 @@ else
 fi
 
 if [ ! -z "$2" ];  then
-    CMD=$2
+    shift
+    exec kubectl exec -ti $POD -- "$@"
+else
+    exec kubectl exec -ti $POD -- $CMD
 fi
-
-exec kubectl exec -ti $POD $CMD

@@ -28,6 +28,7 @@ start:
 	@if [ ! -e ${PIDFILE} ]; then minikube start --vm-driver=${DRIVER}; fi
 
 stop:
+	@./forwarding.sh stop
 	@if [ -e ${PIDFILE} ]; then minikube stop; fi
 
 nuke:	stop

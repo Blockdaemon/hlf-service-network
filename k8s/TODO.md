@@ -3,7 +3,7 @@
 * Put orderer genesis block in `configMap`?
 * Make `org1` white-boxable
 * Put more scripts into `Makefile`? We can automatically know if a yaml changed, why not apply?
-* Automatically `apk add bash curl bind-tools` to alpine container
+* Automatically `apk add bash curl bind-tools` to alpine container via something sane
 * 03-patch-coredns.sh is a big honking mess
   * <https://coredns.io/2017/05/08/custom-dns-entries-for-kubernetes/>
   * <https://github.com/coredns/coredns/tree/master/plugin/rewrite>
