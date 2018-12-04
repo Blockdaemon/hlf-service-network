@@ -10,6 +10,8 @@
   * Corefile.diff has hardcoded domain in it. Can't make it work because it has to escape \.
   * `coredns` is tied to minicube - we likely need to write a stub that will do CNAMEs for us that is provider independent
   * Possibly back up old versions in configMap?
+* Figure out what's secret about secrets. E.g. can peers access the root ca key (which would be really bad)
+* Solve split horizon problem (internal/external DNS)
 
 ## Misc junk
 

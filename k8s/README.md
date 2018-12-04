@@ -71,3 +71,19 @@ Frontend will *eventually* be on <http://127.0.0.1:8001/api/v1/namespaces/kube-s
 ### Accessing the fabric-ca API for troubleshooting
 
     curl https://127.0.0.1:7054/api/v1/cainfo -vk
+
+## Troubleshooting
+
+### Peers
+
+Get the pod's name:
+
+    kubectl get pods
+
+Print logs of peer container inside the pod:
+
+    kubectl logs -f pod/<POD-NAME> peer0-container
+
+SSH into pod:
+
+    kubectl exec -ti <POD-NAME> -- /bin/bash
