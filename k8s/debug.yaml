@@ -9,7 +9,7 @@ metadata:
     role: debug
 spec:
   containers:
-  - image: busybox
+  - image: docker.io/busybox
     command: [ "/bin/sh", "-c", "--" ]
     args: [ "while true; do sleep 30; done;" ]
     imagePullPolicy: IfNotPresent
@@ -26,7 +26,7 @@ metadata:
     role: debug
 spec:
   containers:
-  - image: alpine
+  - image: docker.io/alpine
     command: [ "/bin/sh", "-c", "--" ]
     args: [ "while true; do sleep 30; done;" ]
     imagePullPolicy: IfNotPresent
