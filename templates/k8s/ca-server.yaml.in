@@ -23,8 +23,10 @@ spec:
           secret:
             secretName: ca
         - name: ca-data
-      hostname: ca
-      subdomain: org1
+      hostname: ca-org1
+      # k8s sucks
+      #hostname: ca
+      #subdomain: org1
       containers:
         - name: ca-container
           image: hyperledger/fabric-ca:{{env.HLF_ARCH}}-{{env.HLF_VERSION}}

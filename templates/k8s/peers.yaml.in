@@ -37,8 +37,10 @@ spec:
         - name: peer{{PEER}}-msp-keystore-secrets
           secret:
             secretName: peer{{PEER}}-msp-keystore
-      hostname: peer{{PEER}}
-      subdomain: org1
+      hostname: peer{{PEER}}-org1
+      # k8s sucks
+      #hostname: peer{{PEER}}
+      #subdomain: org1
       containers:
         - name: peer{{PEER}}-container
           image: hyperledger/fabric-peer:{{env.HLF_ARCH}}-{{env.HLF_VERSION}}
