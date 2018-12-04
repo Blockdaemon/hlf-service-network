@@ -13,10 +13,11 @@ brew install coreutils ipcalc kubectl
 brew cask install minikube
 ```
 
-### Install VMWare Fusion
+### hyperkit driver
 
-* Download from <https://www.vmware.com/products/fusion/fusion-evaluation.html>
-* Get key from 1Password -> Vault: Development -> VMware Fusion Pro 11
+```bash
+curl -LO https://storage.googleapis.com/minikube/releases/latest/docker-machine-driver-hyperkit && sudo install -o root -g wheel -m 4755 docker-machine-driver-hyperkit /usr/local/bin/
+```
 
 ### Debian/Ubuntu
 

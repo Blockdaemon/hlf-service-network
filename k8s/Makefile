@@ -1,5 +1,5 @@
-#DRIVER_Darwin:=hyperkit
-DRIVER_Darwin:=vmwarefusion
+DRIVER_Darwin:=hyperkit
+#DRIVER_Darwin:=vmwarefusion
 DRIVER_Linux:=kvm2
 DRIVER:=${DRIVER_$(shell uname -s)}
 
