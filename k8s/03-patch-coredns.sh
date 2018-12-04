@@ -1,4 +1,6 @@
 #!/bin/bash
+# temp disable pending rewrite
+exit
 REV=1 # bump if we need to
 
 # SIGH
