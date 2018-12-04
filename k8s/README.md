@@ -6,14 +6,15 @@
 
 #### Install utils and `kubectl`, `minikube`, and `vmware-fusion`
 
+Note: *We need `gsed -r` from coreutils because BSD `sed -E` is a POS.*
+
 ```bash
 brew install coreutils ipcalc kubectl
 brew cask install minikube
 ```
 
-We need `gsed -r` from coreutils because BSD `sed -E` is a POS.
-
 * Install VMWare Fusion (TODO: add instructions)
+
 
 ### Debian/Ubuntu
 
@@ -46,6 +47,10 @@ Frontend will *eventually* be on <http://127.0.0.1:8001/api/v1/namespaces/kube-s
 * Run the various `01-...sh` scripts
 
 ## Misc stuff
+
+### Changing `minikube` driver:
+
+* Change the `Makefile` `DRIVER_xxxx` variable
 
 ### Scripts:
 

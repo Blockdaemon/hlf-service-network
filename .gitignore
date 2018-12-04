@@ -19,5 +19,6 @@
 /k8s/ca-server.yaml
 /k8s/orderer.yaml
 /k8s/peers.yaml
+/k8s/coredns/tmp
 
 .*.swp
