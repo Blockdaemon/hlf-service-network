@@ -31,17 +31,15 @@ sudo dpkg -i minikube_0.30-0.deb
 curl -LO https://storage.googleapis.com/minikube/releases/latest/docker-machine-driver-kvm2 && chmod +x docker-machine-driver-kvm2 && sudo mv docker-machine-driver-kvm2 /usr/local/bin
 ```
 
-## Start minikube and web proxy
+## Start `minikube` and web proxy
 
 ```bash
-00-init.sh
+make start
 ```
 
 This might take a LONG time to start up.
 
 Frontend will *eventually* be on <http://127.0.0.1:8001/api/v1/namespaces/kube-system/services/kubernetes-dashboard/proxy>
-
-Leave this little guy running in a shell.
 
 ## Getting stuff running
 
@@ -49,14 +47,26 @@ Leave this little guy running in a shell.
 
 ## Misc stuff
 
+### Scripts:
+
 * `pod-log.sh <pod>`: Follow the log of a pod by appname (e.g. `./pod-log.sh fabric-ca`)
 * `pod-shell.sh [cmd]`: Execute `cmd` in a pod. `/bin/bash` is the default (`/bin/sh` for busybox)
 * `pod-delete.sh <pod>`: Delete a pod by app name (it will be restarted if in a deployment)
+
+### `make` recipies:
+
 * `make delete-deps`: Remove all deployments in `hlf-service-network` namespace
 * `make delete-pods`: Remove all pods in `hlf-service-network` (they will be restarted if in a deployment)
-* `make stop`: Stop minikube
-* `make nuke`: Kill everything minikube related. Use if you change vm driver
-* `./forwarding.sh stop`: Stop the port forwarders
+* `make start`: Start up `minikube` and `minikube` proxy
+* `make stop`: Stop `minikube`
+* `make nuke`: Kill everything `minikube` related. Use if you change vm driver
+
+### `minikube` forwarder utilities:
+
+* `./forwarding.sh`: Start the fabric port forwarders
+* `./forwarding.sh stop-proxy`: Start the `minikube` proxy
+* `./forwarding.sh stop`: Stop the fabric port forwarders
+* `./forwarding.sh stop-proxy`: Stop the `minikube` proxy
 
 ### Accessing the fabric-ca API for troubleshooting
 

@@ -26,9 +26,11 @@ delete-pods:
 .PHONY: start stop nuke
 start:
 	@if [ ! -e ${PIDFILE} ]; then minikube start --vm-driver=${DRIVER}; fi
+	@./forwarding.sh start-proxy
 
 stop:
 	@./forwarding.sh stop
+	@./forwarding.sh stop-proxy
 	@if [ -e ${PIDFILE} ]; then minikube stop; fi
 
 nuke:	stop

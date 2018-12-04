@@ -1,10 +1,8 @@
 #!/bin/bash
 
 function stop() {
-    name=$1
-    shift
     # MacOS screen is poop. "^C" does not work, we have to embed it direct like
-    screen -S $name -p 0 -X stuff $'\x03' > /dev/null || true
+    screen -S $1 -p 0 -X stuff $'\x03' > /dev/null || true
 }
 
 function create() {
@@ -23,12 +21,25 @@ start)
     create peer0-org1 7051 7053 # 5984
     create peer1-org1 8051:7051 8053:7053 # 6984:5984
     ;;
+start-proxy)
+    stop proxy
+    echo "Starting proxy for dashboard."
+    screen -dmS proxy kubectl proxy
+    echo "Dashboard will be at:"
+    echo "http://127.0.0.1:8001/api/v1/namespaces/kube-system/services/kubernetes-dashboard/proxy/"
+    ;;
+stop-proxy)
+    stop proxy
+    ;;
 status)
     screen -ls
     ;;
-*)
+"")
     $0 stop
     $0 start
     $0 status
+    ;;
+*)
+    echo "usage: $0 [start|stop|start-proxy|stop-proxy|status]"
     ;;
 esac
