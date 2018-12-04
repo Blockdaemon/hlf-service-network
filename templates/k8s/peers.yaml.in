@@ -39,7 +39,7 @@ spec:
             secretName: peer{{PEER}}-msp-keystore
         - name: dockersocket
           hostPath:
-            path: /mnt/docker.sock
+            path: /var/run/docker.sock
       hostname: peer{{PEER}}-org1
       # k8s sucks
       #hostname: peer{{PEER}}

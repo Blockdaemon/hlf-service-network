@@ -23,8 +23,8 @@ start)
     ;;
 start-proxy)
     stop proxy
-    echo "Exporting /var/run to minikube..."
-    screen -dmS mount minikube mount /var/run:/mnt
+    #echo "Exporting /var/run to minikube..."
+    #screen -dmS mount minikube mount /var/run:/mnt1
     echo "Starting proxy for dashboard..."
     screen -dmS proxy kubectl proxy
     echo "Dashboard will be at:"
