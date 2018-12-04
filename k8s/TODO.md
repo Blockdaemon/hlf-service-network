@@ -22,7 +22,9 @@
     * hyperkit totally ignores `spec.hostname` and `spec.domain`. Nice going.
 * Triage problems between minikube/hypervisor specific and kubernetes in general
 * Write nodestate or equivalent (need to decide what that'll look like in k8s)
-    * Figure out how to connect to a peer from external (probably means we have to write/build a client)
+  * Figure out how to connect to a peer from external (probably means we have to write/build a client)
+* Peer chaincode containers are currently spun up on the host vm docker and kubernetes is totally unaware of it.
+  * If pod goes down, nobody knows the chaincode container should be killed with it.
 
 ## Misc junk
 
