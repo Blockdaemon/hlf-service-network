@@ -52,12 +52,6 @@ Frontend will *eventually* be on <http://127.0.0.1:8001/api/v1/namespaces/kube-s
 
 * Change the `Makefile` `DRIVER_xxxx` variable
 
-### Scripts:
-
-* `pod-log.sh <pod>`: Follow the log of a pod by appname (e.g. `./pod-log.sh fabric-ca`)
-* `pod-shell.sh [cmd]`: Execute `cmd` in a pod. `/bin/bash` is the default (`/bin/sh` for busybox)
-* `pod-delete.sh <pod>`: Delete a pod by app name (it will be restarted if in a deployment)
-
 ### `make` recipies:
 
 * `make delete-deps`: Remove all deployments in `hlf-service-network` namespace
@@ -79,16 +73,6 @@ Frontend will *eventually* be on <http://127.0.0.1:8001/api/v1/namespaces/kube-s
 
 ## Troubleshooting
 
-### Peers
-
-Get the pod's name:
-
-    kubectl get pods
-
-Print logs of peer container inside the pod:
-
-    kubectl logs -f pod/<POD-NAME> peer0-container
-
-SSH into pod:
-
-    kubectl exec -ti <POD-NAME> -- /bin/bash
+* `pod-log.sh <pod>`: Follow the log of a pod by appname (e.g. `./pod-log.sh fabric-ca`)
+* `pod-shell.sh [cmd]`: Execute `cmd` in a pod. `/bin/bash` is the default (`/bin/sh` for busybox)
+* `pod-delete.sh <pod>`: Delete a pod by app name (it will be restarted if in a deployment)
