@@ -71,9 +71,10 @@ Frontend will *eventually* be on <http://127.0.0.1:8001/api/v1/namespaces/kube-s
 
 ## Troubleshooting
 
-* `pod-log.sh <pod>`: Follow the log of a pod by appname (e.g. `./pod-log.sh fabric-ca`)
-* `pod-shell.sh [cmd]`: Execute `cmd` in a pod. `/bin/bash` is the default (`/bin/sh` for busybox)
-* `pod-delete.sh <pod>`: Delete a pod by app name (it will be restarted if in a deployment)
+* `./add-debugging.sh`: Add various debugging containers
+* `./pod-log.sh <pod>`: Follow the log of a pod by appname (e.g. `./pod-log.sh fabric-ca`)
+* `./pod-shell.sh [cmd]`: Execute `cmd` in a pod. `/bin/bash` is the default (`/bin/sh` for busybox)
+* `./pod-delete.sh <pod>`: Delete a pod by app name (it will be restarted if in a deployment)
 
 ### Accessing the fabric-ca API for troubleshooting
 
