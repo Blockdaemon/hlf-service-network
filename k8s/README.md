@@ -50,11 +50,11 @@ Frontend will *eventually* be on <http://127.0.0.1:8001/api/v1/namespaces/kube-s
 
 ## Misc stuff
 
-### Changing `minikube` driver:
+### Changing `minikube` driver
 
 * Change the `Makefile` `DRIVER_xxxx` variable
 
-### `make` recipies:
+### `make` recipies
 
 * `make delete-deps`: Remove all deployments in `hlf-service-network` namespace
 * `make delete-pods`: Remove all pods in `hlf-service-network` (they will be restarted if in a deployment)
@@ -62,7 +62,7 @@ Frontend will *eventually* be on <http://127.0.0.1:8001/api/v1/namespaces/kube-s
 * `make stop`: Stop `minikube`
 * `make nuke`: Kill everything `minikube` related. Use if you change vm driver
 
-### `minikube` forwarder utilities:
+### `minikube` forwarder utilities
 
 * `./forwarding.sh`: Start the fabric port forwarders
 * `./forwarding.sh stop-proxy`: Start the `minikube` proxy
