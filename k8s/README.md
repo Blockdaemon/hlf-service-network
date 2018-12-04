@@ -46,7 +46,7 @@ Frontend will *eventually* be on <http://127.0.0.1:8001/api/v1/namespaces/kube-s
 
 ## Getting stuff running
 
-* Run the various `01-...sh` scripts
+* Run the various `##-xxxx.sh` scripts in order
 
 ## Misc stuff
 
