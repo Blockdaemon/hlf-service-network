@@ -13,8 +13,10 @@ brew install coreutils ipcalc kubectl
 brew cask install minikube
 ```
 
-* Install VMWare Fusion (TODO: add instructions)
+### Install VMWare Fusion
 
+* Download from <https://www.vmware.com/products/fusion/fusion-evaluation.html>
+* Get key from 1Password -> Vault: Development -> VMware Fusion Pro 11
 
 ### Debian/Ubuntu
 
@@ -67,12 +69,12 @@ Frontend will *eventually* be on <http://127.0.0.1:8001/api/v1/namespaces/kube-s
 * `./forwarding.sh stop`: Stop the fabric port forwarders
 * `./forwarding.sh stop-proxy`: Stop the `minikube` proxy
 
-### Accessing the fabric-ca API for troubleshooting
-
-    curl https://127.0.0.1:7054/api/v1/cainfo -vk
-
 ## Troubleshooting
 
 * `pod-log.sh <pod>`: Follow the log of a pod by appname (e.g. `./pod-log.sh fabric-ca`)
 * `pod-shell.sh [cmd]`: Execute `cmd` in a pod. `/bin/bash` is the default (`/bin/sh` for busybox)
 * `pod-delete.sh <pod>`: Delete a pod by app name (it will be restarted if in a deployment)
+
+### Accessing the fabric-ca API for troubleshooting
+
+    curl https://127.0.0.1:7054/api/v1/cainfo -vk
