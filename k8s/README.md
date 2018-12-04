@@ -4,7 +4,7 @@
 
 ### MacOS
 
-#### Install utils and `kubectl`, `minikube`, and `vmware-fusion`
+#### Install utils and `kubectl`, `minikube`, and the `hyperkit` driver
 
 Note: *We need `gsed -r` from coreutils because BSD `sed -E` is a POS.*
 
@@ -13,7 +13,7 @@ brew install coreutils ipcalc kubectl
 brew cask install minikube
 ```
 
-### hyperkit driver
+#### hyperkit driver
 
 ```bash
 curl -LO https://storage.googleapis.com/minikube/releases/latest/docker-machine-driver-hyperkit && sudo install -o root -g wheel -m 4755 docker-machine-driver-hyperkit /usr/local/bin/
@@ -66,8 +66,8 @@ Frontend will *eventually* be on <http://127.0.0.1:8001/api/v1/namespaces/kube-s
 ### `minikube` forwarder utilities
 
 * `./forwarding.sh`: Start the fabric port forwarders
-* `./forwarding.sh stop-proxy`: Start the `minikube` proxy
 * `./forwarding.sh stop`: Stop the fabric port forwarders
+* `./forwarding.sh start-proxy`: Start the `minikube` proxy
 * `./forwarding.sh stop-proxy`: Stop the `minikube` proxy
 
 ## Troubleshooting
