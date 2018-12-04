@@ -23,12 +23,15 @@ start)
     ;;
 start-proxy)
     stop proxy
-    echo "Starting proxy for dashboard."
+    echo "Exporting /var/run to minikube..."
+    screen -dmS mount minikube mount /var/run:/mnt
+    echo "Starting proxy for dashboard..."
     screen -dmS proxy kubectl proxy
     echo "Dashboard will be at:"
     echo "http://127.0.0.1:8001/api/v1/namespaces/kube-system/services/kubernetes-dashboard/proxy/"
     ;;
 stop-proxy)
+    stop mount
     stop proxy
     ;;
 status)

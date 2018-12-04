@@ -37,6 +37,9 @@ spec:
         - name: peer{{PEER}}-msp-keystore-secrets
           secret:
             secretName: peer{{PEER}}-msp-keystore
+        - name: dockersocket
+          hostPath:
+            path: /mnt/docker.sock
       hostname: peer{{PEER}}-org1
       # k8s sucks
       #hostname: peer{{PEER}}
@@ -57,6 +60,8 @@ spec:
               mountPath: /var/hyperledger/msp
             - name: peer{{PEER}}-msp-keystore-secrets
               mountPath: /var/hyperledger/msp/keystore
+            - name: dockersocket
+              mountPath: /host/var/run/docker.sock
           {% include 'k8s/peer-env.yaml' %}
         # CouchDB for peer{{PEER}}
         # couch{{PEER}}-org1.{{env.DOMAIN}}
