@@ -8,7 +8,8 @@
   * <https://coredns.io/2017/05/08/custom-dns-entries-for-kubernetes/>
   * <https://github.com/coredns/coredns/tree/master/plugin/rewrite>
   * Corefile.diff has hardcoded domain in it. Can't make it work because it has to escape \.
-  * coredns is tied to minicube - we likely need to write a stub that will do CNAMEs for us that is provier independent
+  * `coredns` is tied to minicube - we likely need to write a stub that will do CNAMEs for us that is provider independent
+  * Possibly back up old versions in configMap?
 
 ## Misc junk
 
