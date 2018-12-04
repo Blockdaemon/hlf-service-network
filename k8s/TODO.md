@@ -21,6 +21,8 @@
     * vmware does the "right" thing, sets both hostname and domain to the "correct" (but still broken) k8s service DNS (e.g. peer0.org1 vs peer0-org)
     * hyperkit totally ignores `spec.hostname` and `spec.domain`. Nice going.
 * Triage problems between minikube/hypervisor specific and kubernetes in general
+* Write nodestate or equivalent (need to decide what that'll look like in k8s)
+    * Figure out how to connect to a peer from external (probably means we have to write/build a client)
 
 ## Misc junk
 
