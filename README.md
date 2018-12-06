@@ -3,11 +3,15 @@
 Skeleton for building a simple Hyperledger Fabric service network
 
 * Docker containers for one ca server, one orderer and two peers
-* Self signed Org CA
-* MSP certs for one orderer and two peers
-* MSP certs for one admin and two users
+* Three eelf signed Org CA's - one top level (orderer) and two sub orgs (one unused)
+* MSP certs for one orderer and two peers (peers are in ONE of the two sub orgs)
+* MSP certs for one admin and two users (first suborg)
+* MSP certs for one admin and one users (second suborg, unused)
 * Orderer genesis block
-* One channel genesis block and an anchor peers update for it
+* Makefile targets for one channel genesis block and an anchor peers update for it
+
+Note the the channel genesis block and anchor peer updates are not used by
+`hlf-service-network`, they are intended for use by a client.
 
 ## Prerequisites
 
@@ -54,6 +58,13 @@ make clean
 
 ```bash
 make persistent
+```
+
+## Make channel genesis block and anchor peers update
+
+```bash
+make channel
+make anchor-peers
 ```
 
 ## Overriding default config.mk
