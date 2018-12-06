@@ -26,13 +26,13 @@ TOOLURL:=https://nexus.hyperledger.org/content/repositories/releases/org/hyperle
 TOOLDIR:=tools/$(UNAME)-$(ARCH)/$(HLF_VERSION)
 BINDIR:=$(TOOLDIR)/bin
 
-CRYPTO_DIR:=crypto-config/peerOrganizations/org1.$(DOMAIN)
+CRYPTO_DIR:=crypto-config/peerOrganizations/$(SUBDOMAIN1).$(DOMAIN)
 CURRENT_SK:=$(CRYPTO_DIR)/ca/current_sk
-MSP_CA_PEM:=$(CRYPTO_DIR)/msp/cacerts/ca.org1.$(DOMAIN)-cert.pem
-MSP_ADMIN_PEM:=$(CRYPTO_DIR)/msp/admincerts/Admin@org1.$(DOMAIN)-cert.pem
+MSP_CA_PEM:=$(CRYPTO_DIR)/msp/cacerts/ca.$(SUBDOMAIN1).$(DOMAIN)-cert.pem
+MSP_ADMIN_PEM:=$(CRYPTO_DIR)/msp/admincerts/Admin@$(SUBDOMAIN1).$(DOMAIN)-cert.pem
 
 .PHONY: all
-all: .env genesis channel anchor-peers
+all: genesis channel anchor-peers
 
 $(BINDIR)/cryptogen $(BINDIR)/configtxgen:
 	mkdir -p $(TOOLDIR)
@@ -61,23 +61,29 @@ artifacts/$(CHANNEL).channel.tx: $(BINDIR)/configtxgen artifacts configtx.yaml $
 
 anchor-peers: artifacts/$(CHANNEL).anchor-peers.tx
 artifacts/$(CHANNEL).anchor-peers.tx: $(BINDIR)/configtxgen artifacts configtx.yaml
-	$(BINDIR)/configtxgen -profile $(PROFILE)Channel -outputAnchorPeersUpdate $@ -channelID $(CHANNEL) -asOrg Org1$(ORG)
+	$(BINDIR)/configtxgen -profile $(PROFILE)Channel -outputAnchorPeersUpdate $@ -channelID $(CHANNEL) -asOrg $(SUBORG1NAME)
 
 # .env file for docker-compose
 .env: $(MKFILES)
 	@echo "HLF_ARCH=$(HLF_ARCH)" > $@
 	@echo "HLF_VERSION=$(HLF_VERSION)" >> $@
 	@echo "PROFILE=$(PROFILE)" >> $@
-	@echo "DOMAIN=$(DOMAIN)" >> $@
 	@echo "CONSORTIUM=$(CONSORTIUM)" >> $@
-	@echo "ORG=$(ORG)" >> $@
+	@echo "ORGNAME=$(ORGNAME)" >> $@
+	@echo "SUBORG1NAME=$(SUBORG1NAME)" >> $@
+	@echo "SUBORG2NAME=$(SUBORG2NAME)" >> $@
+	@echo "DOMAIN=$(DOMAIN)" >> $@
+	@echo "SUBDOMAIN1=$(SUBDOMAIN1)" >> $@
+	@echo "SUBDOMAIN2=$(SUBDOMAIN2)" >> $@
 	@echo "NETWORKID=$(NETWORKID)" >> $@
 	@echo "GOPATH=$(GOPATH)" >> $@
 
 .PHONY: up down persistent
-up: .env artifacts/orderer0.genesis.block
+docker-compose.yaml: .env
+
+up: docker-compose.yaml artifacts/orderer0.genesis.block
 	docker-compose up -d && docker-compose logs -f
-down: .env
+down: docker-compose.yaml
 	docker-compose down
 
 persistent: .env artifacts/orderer0.genesis.block

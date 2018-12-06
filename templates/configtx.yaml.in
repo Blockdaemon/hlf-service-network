@@ -50,30 +50,8 @@ Capabilities:
 ################################################################################
 Organizations:
 
-#   - &Org1
-#       Name: Organization1
-#       ID: Org1
-#       MSPDir: ./crypto-config/peerOrganizations/org1.{{env.DOMAIN}}/peers/peer0.org1.{{env.DOMAIN}}/msp
-#       AdminPrincipal: Role.ADMIN
-#       AnchorPeers:
-#           - Host: peer0.org1.{{env.DOMAIN}}
-#             Port: 7051
-#           - Host: peer1.org1.{{env.DOMAIN}}
-#             Port: 7051
-
-#   - &Org2
-#       Name: Organization2
-#       ID: Org2
-#       MSPDir: ./crypto-config/peerOrganizations/org2.{{env.DOMAIN}}/peers/peer0.org2.{{env.DOMAIN}}/msp
-#       AdminPrincipal: Role.MEMBER
-#       AnchorPeers:
-#           - Host: peer0.org2.{{env.DOMAIN}}
-#             Port: 7051
-#           - Host: peer1.org2.{{env.DOMAIN}}
-#             Port: 7051
-
-    - &{{env.ORG}}
-        Name: {{env.ORG}}
+    - &{{env.ORGNAME}}
+        Name: {{env.ORGNAME}}
         ID: {{env.DOMAIN}}
         AdminPrincipal: Role.ADMIN
         MSPDir: ./crypto-config/ordererOrganizations/{{env.DOMAIN}}/msp
@@ -88,36 +66,36 @@ Organizations:
                 Type: Signature
                 Rule: "OR('{{env.DOMAIN}}.admin')"
 
-    - &Org1{{env.ORG}}
-        Name: Org1{{env.ORG}}
-        ID: org1.{{env.DOMAIN}}
-        MSPDir: ./crypto-config/peerOrganizations/org1.{{env.DOMAIN}}/msp
+    - &{{env.SUBORG1NAME}}
+        Name: {{env.SUBORG1NAME}}
+        ID: {{env.SUBDOMAIN1}}.{{env.DOMAIN}}
+        MSPDir: ./crypto-config/peerOrganizations/{{env.SUBDOMAIN1}}.{{env.DOMAIN}}/msp
         AdminPrincipal: Role.ADMIN
         AnchorPeers:
-            - Host: peer0.org1.{{env.DOMAIN}}
+            - Host: peer0.{{env.SUBDOMAIN1}}.{{env.DOMAIN}}
               Port: 7051
-            - Host: peer1.org1.{{env.DOMAIN}}
+            - Host: peer1.{{env.SUBDOMAIN1}}.{{env.DOMAIN}}
               Port: 7051
         Policies:
             Readers:
                 Type: Signature
-                Rule: "OR('org1.{{env.DOMAIN}}.member')"
+                Rule: "OR('{{env.SUBDOMAIN1}}.{{env.DOMAIN}}.member')"
             Writers:
                 Type: Signature
-                Rule: "OR('org1.{{env.DOMAIN}}.member')"
+                Rule: "OR('{{env.SUBDOMAIN1}}.{{env.DOMAIN}}.member')"
             Admins:
                 Type: Signature
-                Rule: "OR('org1.{{env.DOMAIN}}.admin')"
+                Rule: "OR('{{env.SUBDOMAIN1}}.{{env.DOMAIN}}.admin')"
 
-#   - &Org2{{env.ORG}}
-#       Name: Org2{{env.ORG}}
-#       ID: org2.{{env.DOMAIN}}
-#       MSPDir: ./crypto-config/peerOrganizations/org2.{{env.DOMAIN}}/msp
+#   - &{{env.SUBORG2NAME}}
+#       Name: {{SUBORG2NAME}}
+#       ID: {{env.SUBDOMAIN12}}.{{env.DOMAIN}}
+#       MSPDir: ./crypto-config/peerOrganizations/{{env.SUBDOMAIN12}}.{{env.DOMAIN}}/msp
 #       AdminPrincipal: Role.ADMIN
 #       AnchorPeers:
-#           - Host: peer0.org2.{{env.DOMAIN}}
+#           - Host: peer0.{{env.SUBDOMAIN12}}.{{env.DOMAIN}}
 #             Port: 7051
-#           - Host: peer1.org2.{{env.DOMAIN}}
+#           - Host: peer1.{{env.SUBDOMAIN12}}.{{env.DOMAIN}}
 #             Port: 7051
 
 ################################################################################
@@ -291,14 +269,14 @@ Profiles:
 #       Orderer:
 #           <<: *OrdererDefaults
 #           Organizations:
-#               - *{{env.ORG}}
+#               - *{{env.ORGNAME}}
 #           Capabilities:
 #               <<: *OrdererCapabilities
 #       Consortiums:
 #           {{env.CONSORTIUM}}:
 #               Organizations:
-#                   - *Org1{{env.ORG}}
-#                   - *Org2{{env.ORG}}
+#                   - *{{env.SUBORG1NAME}}
+#                   - *{{env.SUBORG2NAME}}
 
     # SampleInsecureKafka defines a configuration that differs from the
     # SampleInsecureSolo one only in that is uses the Kafka-based orderer.
@@ -314,21 +292,21 @@ Profiles:
 #               - orderer1.{{env.DOMAIN}}:7050
 #               - orderer2.{{env.DOMAIN}}:7050
             Organizations:
-                - *{{env.ORG}}
+                - *{{env.ORGNAME}}
             Capabilities:
                 <<: *OrdererCapabilities
         Application:
             <<: *ApplicationDefaults
             Organizations:
-                - *{{env.ORG}}
+                - *{{env.ORGNAME}}
             Capabilities:
                 <<: *ApplicationCapabilities
         Consortiums:
             {{env.CONSORTIUM}}:
                 Organizations:
-                    - *{{env.ORG}}
-                    - *Org1{{env.ORG}}
-#                   - *Org2{{env.ORG}}
+                    - *{{env.ORGNAME}}
+                    - *{{env.SUBORG1NAME}}
+#                   - *{{env.SUBORG2NAME}}
 
     # SampleSingleMSPSolo defines a configuration which uses the Solo orderer,
     # and contains a single MSP definition (the MSP sampleconfig).
@@ -339,21 +317,21 @@ Profiles:
         Orderer:
             <<: *OrdererDefaults
             Organizations:
-                - *{{env.ORG}}
+                - *{{env.ORGNAME}}
             Capabilities:
                 <<: *OrdererCapabilities
         Application:
             <<: *ApplicationDefaults
             Organizations:
-                - *{{env.ORG}}
+                - *{{env.ORGNAME}}
             Capabilities:
                 <<: *ApplicationCapabilities
         Consortiums:
             {{env.CONSORTIUM}}:
                 Organizations:
-                    - *{{env.ORG}}
-                    - *Org1{{env.ORG}}
-#                   - *Org2{{env.ORG}}
+                    - *{{env.ORGNAME}}
+                    - *{{env.SUBORG1NAME}}
+#                   - *{{env.SUBORG2NAME}}
 
     # SampleEmptyInsecureChannel defines a channel with no members
     # and therefore no access control
@@ -364,7 +342,7 @@ Profiles:
 #       Consortium: {{env.CONSORTIUM}}
 #       Application:
 #           Organizations:
-#               - *{{env.ORG}}
+#               - *{{env.ORGNAME}}
 #           Capabilities:
 #               <<: *ApplicationCapabilities
 
@@ -377,8 +355,8 @@ Profiles:
 #       Application:
 #           <<: *ApplicationDefaults
 #           Organizations:
-#               - *Org1{{env.ORG}}
-#               - *Org2{{env.ORG}}
+#               - *{{env.SUBORG1NAME}}
+#               - *{{env.SUBORG2NAME}}
 #           Capabilities:
 #               <<: *ApplicationCapabilities
 
@@ -394,8 +372,8 @@ Profiles:
         Application:
             <<: *ApplicationDefaults
             Organizations:
-                - *Org1{{env.ORG}}
-#               - *Org2{{env.ORG}}
+                - *{{env.SUBORG1NAME}}
+#               - *{{env.SUBORG2NAME}}
             Capabilities:
                 <<: *ApplicationCapabilities
 

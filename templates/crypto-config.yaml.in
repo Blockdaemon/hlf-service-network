@@ -1,6 +1,6 @@
 # "OrdererOrgs" - Definition of organizations managing orderer nodes
 OrdererOrgs:
-  - Name: {{env.ORG}}
+  - Name: {{env.ORGNAME}}
     Domain: {{env.DOMAIN}}
     CA:
       Country: US
@@ -11,8 +11,8 @@ OrdererOrgs:
       - Hostname: orderer0
 # "PeerOrgs" - Definition of organizations managing peer nodes
 PeerOrgs:
-  - Name: Org1{{env.ORG}}
-    Domain: org1.{{env.DOMAIN}}
+  - Name: {{env.SUBORG1NAME}}
+    Domain: {{env.SUBDOMAIN1}}.{{env.DOMAIN}}
     CA:
       Country: US
       Province: California
