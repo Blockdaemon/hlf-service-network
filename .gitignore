@@ -20,5 +20,6 @@
 /k8s/orderer.yaml
 /k8s/peers.yaml
 /k8s/coredns/tmp
+/k8s/Corefile
 
 .*.swp

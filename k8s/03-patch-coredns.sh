@@ -2,8 +2,6 @@
 
 REV=1 # bump if we need to
 
-# SIGH
-ETAG="blockdaemon\\.io/hlf-patch-rev"
 TAG="blockdaemon.io/hlf-patch-rev"
 
 TMPDIR="coredns/tmp"
@@ -15,6 +13,7 @@ kubectl delete deployment kube-dns --namespace kube-system > /dev/null 2>&1
 
 OBJ="configmap coredns --namespace kube-system"
 
+ETAG=$(echo ${TAG} | sed -e 's/\./\\./')
 currev=$(kubectl get $OBJ -o jsonpath="{.metadata.annotations.${ETAG}}")
 
 if [ "$1" = "-r" ]; then
@@ -32,34 +31,35 @@ else
 	currev=0
     fi
     if [ "$REV" = "$currev" ]; then
-        echo "Already at rev $REV"
-        exit
+	echo "Already at rev $REV"
+	if [ "$1" != "-f" ]; then exit; fi
     fi
 fi
 
 mkdir -p $TMPDIR
 rm -f $TMPDIR/*
 
-#echo Getting Corefile-v$currev
+# Get backup of 0
+#echo Getting Corefile-v0
 kubectl get $OBJ -o jsonpath={.data.Corefile-v0} > $TMPDIR/Corefile-v0
+
+# Get current (maybe v0)
 #echo Getting current to Corefile-v$currev
 kubectl get $OBJ -o jsonpath={.data.Corefile} > $TMPDIR/Corefile-v$currev
+if [ "$wantrev" != 0 ]; then
+    cp -f Corefile $TMPDIR/Corefile
+fi
 
+# Check if we got v0 from either current or a backup
 if [ ! -s $TMPDIR/Corefile-v$currev ]; then
     echo 'WARNING! No current Corefile! Restoring Corefile -v0 from backup'
     cp coredns/dist/Corefile $TMPDIR/Corefile-v0
     currev=0
 fi
 
-if [ "$wantrev" != 0 ]; then
-    #echo Copying latest Corefile to Corefile-v$wantrev
-    cp -f coredns/Corefile $TMPDIR/Corefile-v$wantrev
-fi
-
-echo Setting Corefile to Corefile-v$wantrev
+echo "Setting Corefile(s) to $(ls -1 $TMPDIR)"
 kubectl create $OBJ \
-    --from-file=Corefile-v0=$TMPDIR/Corefile-v0 \
-    --from-file=Corefile=$TMPDIR/Corefile-v$wantrev \
+    --from-file=$TMPDIR/ \
     --dry-run --save-config -o json | kubectl apply -f -
 
 # restore old annotation

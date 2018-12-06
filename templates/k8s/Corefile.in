@@ -1,0 +1,25 @@
+{% set esc = env.DOMAIN | replace(".", "\.") %}
+.:53 {
+    errors
+    log
+    health
+    kubernetes cluster.local in-addr.arpa ip6.arpa {
+        pods insecure
+        upstream
+        fallthrough in-addr.arpa ip6.arpa
+    }
+    prometheus :9153
+    proxy . /etc/resolv.conf
+    loop
+    cache 30
+    loadbalance
+    reload
+    rewrite stop {
+        name regex ([^.]+)\.([^.]+)\.{{esc}}\. {1}-{2}.hlf-service-network.svc.cluster.local.
+        answer name ([^-]+)\-([^-]+)\.hlf-service-network\.svc\.cluster\.local\. {1}.{2}.{{env.DOMAIN}}.
+    }
+    rewrite stop {
+        name regex (.*)\.{{esc}}\. {1}.hlf-service-network.svc.cluster.local.
+        answer name (.*)\.hlf-service-network\.svc\.cluster\.local\. {1}.{{env.DOMAIN}}.
+    }
+}
