@@ -2,7 +2,7 @@
 
 * Switch as much as possible to yaml
 * Put orderer genesis block in `configMap`?
-* Make `org1` white-boxable (also `org1` vs `Org1Blockdaemon` problem)
+* Make `org1` white-boxable in `nginx-ingress`?
 * Put more scripts into `Makefile`? We can automatically know if a yaml changed, why not apply?
 * Automatically `apk add bash curl bind-tools` to alpine container via something sane
 * ##-patch-coredns.sh is a big honking mess
@@ -19,7 +19,7 @@
   * <https://github.com/kubernetes/minikube/issues/1568> (set vm interface to promisc) solves this
   * k8s can't properly set pod's own hostname to something real via `spec.hostname` and `spec.domain`, you have to use their idiotic DNS conventions
   * Results in vmware-fusion and hyperkit differ:
-    * vmware does the "right" thing, sets both hostname and domain to the "correct" (but still broken) k8s service DNS (e.g. `peer0.org1` vs `peer0-org`)
+    * vmware does the "right" thing, sets both hostname and domain to the "correct" (but still broken) k8s service DNS (e.g. `peer0.org1` vs `peer0-org1`)
     * hyperkit totally ignores `spec.hostname` and `spec.domain`. Nice going.
 * Triage problems between minikube/hypervisor specific and kubernetes in general
 * Write nodestate or equivalent (need to decide what that'll look like in k8s)

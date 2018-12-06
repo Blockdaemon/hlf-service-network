@@ -32,7 +32,7 @@ MSP_CA_PEM:=$(CRYPTO_DIR)/msp/cacerts/ca.$(SUBDOMAIN1).$(DOMAIN)-cert.pem
 MSP_ADMIN_PEM:=$(CRYPTO_DIR)/msp/admincerts/Admin@$(SUBDOMAIN1).$(DOMAIN)-cert.pem
 
 .PHONY: all
-all: genesis channel anchor-peers
+all: genesis # channel anchor-peers
 
 $(BINDIR)/cryptogen $(BINDIR)/configtxgen:
 	mkdir -p $(TOOLDIR)
@@ -47,20 +47,20 @@ $(CURRENT_SK) $(MSP_CA_PEM) $(MSP_ADMIN_PEM): $(BINDIR)/cryptogen crypto-config.
 	$(BINDIR)/cryptogen generate --config=./crypto-config.yaml
 	LATEST=$$(ls -1t $(CRYPTO_DIR)/ca/*_sk | head -1); [ ! -z "$$LATEST" ] && mv $$LATEST $(CURRENT_SK)
 
-artifacts:
-	@mkdir -p artifacts
-
 genesis: artifacts/orderer0.genesis.block
-artifacts/orderer0.genesis.block: $(BINDIR)/configtxgen artifacts configtx.yaml $(CRYPTO_DIR)/ca/current_sk
+artifacts/orderer0.genesis.block: $(BINDIR)/configtxgen configtx.yaml $(CRYPTO_DIR)/ca/current_sk
+	@mkdir -p artifacts
 	@# 1.2.0 requires -channelID for genesis block, but this breaks 1.1.0
 	$(BINDIR)/configtxgen -profile $(PROFILE)Solo -outputBlock $@ -channelID genesis-channel
 
 channel: artifacts/$(CHANNEL).channel.tx
-artifacts/$(CHANNEL).channel.tx: $(BINDIR)/configtxgen artifacts configtx.yaml $(MSP_CA_PEM) $(MSP_ADMIN_PEM)
+artifacts/$(CHANNEL).channel.tx: $(BINDIR)/configtxgen configtx.yaml $(MSP_CA_PEM) $(MSP_ADMIN_PEM)
+	@mkdir -p artifacts
 	$(BINDIR)/configtxgen -profile $(PROFILE)Channel -outputCreateChannelTx $@ -channelID $(CHANNEL)
 
 anchor-peers: artifacts/$(CHANNEL).anchor-peers.tx
-artifacts/$(CHANNEL).anchor-peers.tx: $(BINDIR)/configtxgen artifacts configtx.yaml
+artifacts/$(CHANNEL).anchor-peers.tx: $(BINDIR)/configtxgen configtx.yaml
+	@mkdir -p artifacts
 	$(BINDIR)/configtxgen -profile $(PROFILE)Channel -outputAnchorPeersUpdate $@ -channelID $(CHANNEL) -asOrg $(SUBORG1NAME)
 
 # .env file for docker-compose
