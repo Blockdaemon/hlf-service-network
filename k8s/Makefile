@@ -9,9 +9,12 @@ PIDFILE_kvm2:=/var/run/libvirt/qemu/minikube.pid
 
 PIDFILE:=${PIDFILE_${DRIVER}}
 
-.PHONY: all
+.PHONY: all clean
 all:
 	make -C ..
+
+clean:
+	make -C .. k8s_clean
 
 .PHONY: apply delete-deps delete-pods
 apply:
