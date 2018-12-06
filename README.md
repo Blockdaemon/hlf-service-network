@@ -3,7 +3,7 @@
 Skeleton for building a simple Hyperledger Fabric service network
 
 * Docker containers for one ca server, one orderer and two peers
-* Three eelf signed Org CA's - one top level (orderer) and two sub orgs (one unused)
+* Three self signed Org CA's - one top level (orderer) and two sub orgs (one unused)
 * MSP certs for one orderer and two peers (peers are in ONE of the two sub orgs)
 * MSP certs for one admin and two users (first suborg)
 * MSP certs for one admin and one users (second suborg, unused)
