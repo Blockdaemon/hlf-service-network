@@ -37,14 +37,21 @@ spec:
         - name: peer{{PEER}}-msp-keystore-secrets
           secret:
             secretName: peer{{PEER}}-msp-keystore
-        - name: dockersocket
-          hostPath:
-            path: /var/run/docker.sock
+# Commented out because we use dind now
+#        - name: dockersocket
+#          hostPath:
+#            path: /var/run/docker.sock
       hostname: peer{{PEER}}-org1
       # k8s sucks
       #hostname: peer{{PEER}}
       #subdomain: org1
       containers:
+        - name: peer{{PEER}}-dind
+          image: docker.io/docker:stable-dind
+          ports:
+            - containerPort: 2375
+          securityContext:
+            privileged: true
         - name: peer{{PEER}}-container
           image: hyperledger/fabric-peer:{{env.HLF_ARCH}}-{{env.HLF_VERSION}}
           command: ['peer', 'node', 'start']
@@ -52,6 +59,7 @@ spec:
           #args: [ "while true; do sleep 30; done;" ]
           ports:
             - containerPort: 7051
+            - containerPort: 7052
             - containerPort: 7053
           volumeMounts:
             - name: peer{{PEER}}-tls-secrets
@@ -60,8 +68,9 @@ spec:
               mountPath: /var/hyperledger/msp
             - name: peer{{PEER}}-msp-keystore-secrets
               mountPath: /var/hyperledger/msp/keystore
-            - name: dockersocket
-              mountPath: /host/var/run/docker.sock
+# Commented out because we use dind now
+#            - name: dockersocket
+#              mountPath: /host/var/run/docker.sock
           {% include 'k8s/peer-env.yaml' %}
         # CouchDB for peer{{PEER}}
         # couch{{PEER}}-org1.{{env.DOMAIN}}

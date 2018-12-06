@@ -5,7 +5,9 @@
             - name: CORE_LOGGING_LEVEL
               value: "DEBUG"
             - name: CORE_VM_ENDPOINT
-              value: "unix:///host/var/run/docker.sock"
+              value: "http://localhost:2375" # Docker in docker is available here
+            - name: CORE_PEER_CHAINCODELISTENADDRESS
+              value: "localhost:7052" # Chaincode will look for the peer here
             - name: CORE_VM_DOCKER_ATTACHSTDOUT
               value: "true"
             # State DB
