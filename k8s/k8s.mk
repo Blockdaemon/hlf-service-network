@@ -8,5 +8,5 @@ clean: k8s_clean
 k8s/peers.yaml: templates/k8s/peer-env.yaml
 
 k8s_clean:
-	rm -f k8s/ca-deployment.yaml k8s/orderer.yaml k8s/peers.yaml
+	rm -f k8s/ca-server.yaml k8s/orderer.yaml k8s/peers.yaml
 	rm -rf coredns/tmp
