@@ -2,6 +2,8 @@
 
 . functions
 
+read-env
+
 TYPE="--type ClusterIP"	# the default
 #TYPE="--type NodePort"		# expose a 30000+ port per service
 #TYPE="--type LoadBalancer"	# broken for minikube, need load balancer patch

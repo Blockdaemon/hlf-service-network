@@ -2,6 +2,8 @@
 
 . functions
 
+read-env
+
 function stop() {
     # MacOS screen is poop. "^C" does not work, we have to embed it direct like
     screen -S $1 -p 0 -X stuff $'\x03' > /dev/null || true
