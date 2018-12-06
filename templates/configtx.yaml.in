@@ -88,7 +88,7 @@ Organizations:
                 Rule: "OR('{{env.SUBDOMAIN1}}.{{env.DOMAIN}}.admin')"
 
     - &{{env.SUBORG2NAME}}
-        Name: {{SUBORG2NAME}}
+        Name: {{env.SUBORG2NAME}}
         ID: {{env.SUBDOMAIN2}}.{{env.DOMAIN}}
         MSPDir: ./crypto-config/peerOrganizations/{{env.SUBDOMAIN2}}.{{env.DOMAIN}}/msp
         AdminPrincipal: Role.ADMIN
