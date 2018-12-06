@@ -1,5 +1,7 @@
 #!/bin/bash
 
+. functions
+
 function stop() {
     # MacOS screen is poop. "^C" does not work, we have to embed it direct like
     screen -S $1 -p 0 -X stuff $'\x03' > /dev/null || true
@@ -13,13 +15,13 @@ function create() {
 
 case "$1" in
 stop)
-    for i in ca-org1 orderer0 peer0-org peer1-org; do stop $i; done
+    for i in ca-${SUBDOMAIN1} orderer0 peer0-${SUBDOMAIN1} peer1-${SUBDOMAIN1}; do stop $i; done
     ;;
 start)
-    create ca-org1 7054
+    create ca-${SUBDOMAIN1} 7054
     create orderer0 7050
-    create peer0-org1 7051 7053 # 5984
-    create peer1-org1 8051:7051 8053:7053 # 6984:5984
+    create peer0-${SUBDOMAIN1} 7051 7053 # 5984
+    create peer1-${SUBDOMAIN1} 8051:7051 8053:7053 # 6984:5984
     ;;
 start-proxy)
     stop proxy

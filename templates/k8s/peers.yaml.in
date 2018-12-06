@@ -8,7 +8,7 @@ metadata:
   name: fabric-peer{{PEER}}-deployment
   labels:
     app: fabric-peer{{PEER}}
-    org: org1.{{env.DOMAIN}}
+    org: {{env.SUBDOMAIN1}}.{{env.DOMAIN}}
     role: peer
 spec:
   replicas: 1
@@ -19,7 +19,7 @@ spec:
     metadata:
       labels:
         app: fabric-peer{{PEER}}
-        org: org1.{{env.DOMAIN}}
+        org: {{env.SUBDOMAIN1}}.{{env.DOMAIN}}
         role: peer
     spec:
       volumes:
@@ -41,10 +41,10 @@ spec:
 #        - name: dockersocket
 #          hostPath:
 #            path: /var/run/docker.sock
-      hostname: peer{{PEER}}-org1
+      hostname: peer{{PEER}}-{{env.SUBDOMAIN1}}
       # k8s sucks
       #hostname: peer{{PEER}}
-      #subdomain: org1
+      #subdomain: {{env.SUBDOMAIN1}}
       containers:
         - name: peer{{PEER}}-dind
           image: docker.io/docker:stable-dind
@@ -73,7 +73,7 @@ spec:
 #              mountPath: /host/var/run/docker.sock
           {% include 'k8s/peer-env.yaml' %}
         # CouchDB for peer{{PEER}}
-        # couch{{PEER}}-org1.{{env.DOMAIN}}
+        # couch{{PEER}}-{{env.SUBDOMAIN1}}.{{env.DOMAIN}}
         - name: couch{{PEER}}-container
           image: hyperledger/fabric-couchdb
           env:

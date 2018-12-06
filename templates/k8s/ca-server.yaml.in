@@ -4,7 +4,7 @@ metadata:
   name: fabric-ca-deployment
   labels:
     app: fabric-ca
-    org: org1.{{env.DOMAIN}}
+    org: {{env.SUBDOMAIN1}}.{{env.DOMAIN}}
     role: ca-server
 spec:
   replicas: 1
@@ -15,7 +15,7 @@ spec:
     metadata:
       labels:
         app: fabric-ca
-        org: org1.{{env.DOMAIN}}
+        org: {{env.SUBDOMAIN1}}.{{env.DOMAIN}}
         role: ca-server
     spec:
       volumes:
@@ -23,10 +23,10 @@ spec:
           secret:
             secretName: ca
         - name: ca-data
-      hostname: ca-org1
+      hostname: ca-{{env.SUBDOMAIN1}}
       # k8s sucks
       #hostname: ca
-      #subdomain: org1
+      #subdomain: {{env.SUBDOMAIN1}}
       containers:
         - name: ca-container
           image: hyperledger/fabric-ca:{{env.HLF_ARCH}}-{{env.HLF_VERSION}}
@@ -38,15 +38,15 @@ spec:
             - name:  FABRIC_CA_HOME
               value: "/data"
             - name:  FABRIC_CA_SERVER_CA_NAME
-              value: "ca.org1.{{env.DOMAIN}}"
+              value: "ca.{{env.SUBDOMAIN1}}.{{env.DOMAIN}}"
             - name:  FABRIC_CA_SERVER_CA_CERTFILE
-              value: "/secrets/ca.org1.{{env.DOMAIN}}-cert.pem"
+              value: "/secrets/ca.{{env.SUBDOMAIN1}}.{{env.DOMAIN}}-cert.pem"
             - name:  FABRIC_CA_SERVER_CA_KEYFILE
               value: "/secrets/current_sk"
             - name:  FABRIC_CA_SERVER_TLS_ENABLED
               value: "true"
             - name:  FABRIC_CA_SERVER_TLS_CERTFILE
-              value: "/secrets/ca.org1.{{env.DOMAIN}}-cert.pem"
+              value: "/secrets/ca.{{env.SUBDOMAIN1}}.{{env.DOMAIN}}-cert.pem"
             - name:  FABRIC_CA_SERVER_TLS_KEYFILE
               value: "/secrets/current_sk"
           ports:
