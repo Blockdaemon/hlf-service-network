@@ -37,10 +37,10 @@ spec:
         - name: peer{{PEER}}-msp-keystore-secrets
           secret:
             secretName: peer{{PEER}}-msp-keystore
-# Commented out because we use dind now
-#        - name: dockersocket
-#          hostPath:
-#            path: /var/run/docker.sock
+        # Commented out because we use dind now
+        # - name: dockersocket
+        #   hostPath:
+        #     path: /var/run/docker.sock
       hostname: peer{{PEER}}-{{env.SUBDOMAIN1}}
       # k8s sucks
       #hostname: peer{{PEER}}
@@ -68,9 +68,9 @@ spec:
               mountPath: /var/hyperledger/msp
             - name: peer{{PEER}}-msp-keystore-secrets
               mountPath: /var/hyperledger/msp/keystore
-# Commented out because we use dind now
-#            - name: dockersocket
-#              mountPath: /host/var/run/docker.sock
+            # Commented out because we use dind now
+            # - name: dockersocket
+            #   mountPath: /host/var/run/docker.sock
           {% include 'k8s/peer-env.yaml' %}
         # CouchDB for peer{{PEER}}
         # couch{{PEER}}-{{env.SUBDOMAIN1}}.{{env.DOMAIN}}
