@@ -36,29 +36,29 @@ services:
         aliases:
           - orderer0.${DOMAIN}
 
-  ca.org1:
+  ca-org1:
     image: hyperledger/fabric-ca:${HLF_ARCH}-${HLF_VERSION}
-    container_name: ca.org1.${DOMAIN}
+    container_name: ca.${SUBDOMAIN1}.${DOMAIN}
     environment:
       - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
-      - FABRIC_CA_SERVER_CA_NAME=ca.org1.${DOMAIN}
-      - FABRIC_CA_SERVER_CA_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.org1.${DOMAIN}-cert.pem
+      - FABRIC_CA_SERVER_CA_NAME=ca.${SUBDOMAIN1}.${DOMAIN}
+      - FABRIC_CA_SERVER_CA_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.${SUBDOMAIN1}.${DOMAIN}-cert.pem
       - FABRIC_CA_SERVER_CA_KEYFILE=/etc/hyperledger/fabric-ca-server-config/current_sk
       - FABRIC_CA_SERVER_TLS_ENABLED=true
-      - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.org1.${DOMAIN}-cert.pem
+      - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.${SUBDOMAIN1}.${DOMAIN}-cert.pem
       - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/current_sk
     ports:
       - 7054:7054
     command: sh -c 'fabric-ca-server start -b admin:adminpw -d'
     volumes:
-      - ./crypto-config/peerOrganizations/org1.${DOMAIN}/ca/:/etc/hyperledger/fabric-ca-server-config
+      - ./crypto-config/peerOrganizations/${SUBDOMAIN1}.${DOMAIN}/ca/:/etc/hyperledger/fabric-ca-server-config
     networks:
       default:
         aliases:
-          - ca.org1.${DOMAIN}
+          - ca.${SUBDOMAIN1}.${DOMAIN}
 
   couchdb0:
-    container_name: couchdb0.org1.${DOMAIN}
+    container_name: couchdb0.${SUBDOMAIN1}.${DOMAIN}
     image: hyperledger/fabric-couchdb
     env_file:
       - dc-envfiles/couch.env
@@ -67,10 +67,10 @@ services:
     networks:
       default:
         aliases:
-          - couchdb0.org1.${DOMAIN}
+          - couchdb0.${SUBDOMAIN1}.${DOMAIN}
 
   couchdb1:
-    container_name: couchdb1.org1.${DOMAIN}
+    container_name: couchdb1.${SUBDOMAIN1}.${DOMAIN}
     image: hyperledger/fabric-couchdb
     env_file:
       - dc-envfiles/couch.env
@@ -79,30 +79,30 @@ services:
     networks:
       default:
         aliases:
-          - couchdb1.org1.${DOMAIN}
+          - couchdb1.${SUBDOMAIN1}.${DOMAIN}
 
-  peer0.org1:
+  peer0-org1:
     image: hyperledger/fabric-peer:${HLF_ARCH}-${HLF_VERSION}
     #build: ${GOPATH}/src/github.com/hyperledger/fabric/.build/image/peer
-    container_name: peer0.org1.${DOMAIN}
+    container_name: peer0.${SUBDOMAIN1}.${DOMAIN}
     env_file:
       - dc-envfiles/peer.env
     environment:
-      - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb0.org1.${DOMAIN}:5984
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb0.${SUBDOMAIN1}.${DOMAIN}:5984
       - CORE_PEER_NETWORKID=${NETWORKID}
-      - CORE_PEER_ID=peer0.org1.${DOMAIN}
-      - CORE_PEER_ADDRESS=peer0.org1.${DOMAIN}:7051
-      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.org1.${DOMAIN}:7051
-      - CORE_PEER_LOCALMSPID=org1.${DOMAIN}
-      - CORE_PEER_TLS_SERVERHOSTOVERRIDE=peer0.org1.${DOMAIN}
+      - CORE_PEER_ID=peer0.${SUBDOMAIN1}.${DOMAIN}
+      - CORE_PEER_ADDRESS=peer0.${SUBDOMAIN1}.${DOMAIN}:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.${SUBDOMAIN1}.${DOMAIN}:7051
+      - CORE_PEER_LOCALMSPID=${SUBDOMAIN1}.${DOMAIN}
+      - CORE_PEER_TLS_SERVERHOSTOVERRIDE=peer0.${SUBDOMAIN1}.${DOMAIN}
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
     command: peer node start
     volumes:
       - /var/run/docker.sock:/host/var/run/docker.sock
-      - ./crypto-config/peerOrganizations/org1.${DOMAIN}/peers/peer0.org1.${DOMAIN}/msp:/var/hyperledger/msp
-      - ./crypto-config/peerOrganizations/org1.${DOMAIN}/peers/peer0.org1.${DOMAIN}/tls:/var/hyperledger/tls
+      - ./crypto-config/peerOrganizations/${SUBDOMAIN1}.${DOMAIN}/peers/peer0.${SUBDOMAIN1}.${DOMAIN}/msp:/var/hyperledger/msp
+      - ./crypto-config/peerOrganizations/${SUBDOMAIN1}.${DOMAIN}/peers/peer0.${SUBDOMAIN1}.${DOMAIN}/tls:/var/hyperledger/tls
       # Hack for `peer node status` command inside container
-      #- ./crypto-config/peerOrganizations/org1.${DOMAIN}/users:/var/hyperledger/users
+      #- ./crypto-config/peerOrganizations/${SUBDOMAIN1}.${DOMAIN}/users:/var/hyperledger/users
     ports:
       - 7051:7051
       - 7053:7053
@@ -112,30 +112,30 @@ services:
     networks:
       default:
         aliases:
-          - peer0.org1.${DOMAIN}
+          - peer0.${SUBDOMAIN1}.${DOMAIN}
 
-  peer1.org1:
+  peer1-org1:
     image: hyperledger/fabric-peer:${HLF_ARCH}-${HLF_VERSION}
     #build: ${GOPATH}/src/github.com/hyperledger/fabric/.build/image/peer
-    container_name: peer1.org1.${DOMAIN}
+    container_name: peer1.${SUBDOMAIN1}.${DOMAIN}
     env_file:
       - dc-envfiles/peer.env
     environment:
-      - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb1.org1.${DOMAIN}:5984
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb1.${SUBDOMAIN1}.${DOMAIN}:5984
       - CORE_PEER_NETWORKID=${NETWORKID}
-      - CORE_PEER_ID=peer1.org1.${DOMAIN}
-      - CORE_PEER_ADDRESS=peer1.org1.${DOMAIN}:7051
-      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer1.org1.${DOMAIN}:7051
-      - CORE_PEER_LOCALMSPID=org1.${DOMAIN}
-      - CORE_PEER_TLS_SERVERHOSTOVERRIDE=peer1.org1.${DOMAIN}
+      - CORE_PEER_ID=peer1.${SUBDOMAIN1}.${DOMAIN}
+      - CORE_PEER_ADDRESS=peer1.${SUBDOMAIN1}.${DOMAIN}:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer1.${SUBDOMAIN1}.${DOMAIN}:7051
+      - CORE_PEER_LOCALMSPID=${SUBDOMAIN1}.${DOMAIN}
+      - CORE_PEER_TLS_SERVERHOSTOVERRIDE=peer1.${SUBDOMAIN1}.${DOMAIN}
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
     command: peer node start
     volumes:
       - /var/run/docker.sock:/host/var/run/docker.sock
-      - ./crypto-config/peerOrganizations/org1.${DOMAIN}/peers/peer1.org1.${DOMAIN}/msp:/var/hyperledger/msp
-      - ./crypto-config/peerOrganizations/org1.${DOMAIN}/peers/peer1.org1.${DOMAIN}/tls:/var/hyperledger/tls
+      - ./crypto-config/peerOrganizations/${SUBDOMAIN1}.${DOMAIN}/peers/peer1.${SUBDOMAIN1}.${DOMAIN}/msp:/var/hyperledger/msp
+      - ./crypto-config/peerOrganizations/${SUBDOMAIN1}.${DOMAIN}/peers/peer1.${SUBDOMAIN1}.${DOMAIN}/tls:/var/hyperledger/tls
       # Hack for `peer node status` command inside container
-      #- ./crypto-config/peerOrganizations/org1.${DOMAIN}/users:/var/hyperledger/users
+      #- ./crypto-config/peerOrganizations/${SUBDOMAIN1}.${DOMAIN}/users:/var/hyperledger/users
     ports:
       - 8051:7051
       - 8053:7053
@@ -145,4 +145,4 @@ services:
     networks:
       default:
         aliases:
-          - peer1.org1.${DOMAIN}
+          - peer1.${SUBDOMAIN1}.${DOMAIN}

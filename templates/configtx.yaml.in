@@ -87,16 +87,27 @@ Organizations:
                 Type: Signature
                 Rule: "OR('{{env.SUBDOMAIN1}}.{{env.DOMAIN}}.admin')"
 
-#   - &{{env.SUBORG2NAME}}
-#       Name: {{SUBORG2NAME}}
-#       ID: {{env.SUBDOMAIN12}}.{{env.DOMAIN}}
-#       MSPDir: ./crypto-config/peerOrganizations/{{env.SUBDOMAIN12}}.{{env.DOMAIN}}/msp
-#       AdminPrincipal: Role.ADMIN
-#       AnchorPeers:
-#           - Host: peer0.{{env.SUBDOMAIN12}}.{{env.DOMAIN}}
-#             Port: 7051
-#           - Host: peer1.{{env.SUBDOMAIN12}}.{{env.DOMAIN}}
-#             Port: 7051
+    - &{{env.SUBORG2NAME}}
+        Name: {{SUBORG2NAME}}
+        ID: {{env.SUBDOMAIN2}}.{{env.DOMAIN}}
+        MSPDir: ./crypto-config/peerOrganizations/{{env.SUBDOMAIN2}}.{{env.DOMAIN}}/msp
+        AdminPrincipal: Role.ADMIN
+        AnchorPeers:
+            - Host: peer0.{{env.SUBDOMAIN2}}.{{env.DOMAIN}}
+              Port: 7051
+            - Host: peer1.{{env.SUBDOMAIN2}}.{{env.DOMAIN}}
+              Port: 7051
+        Policies:
+            Readers:
+                Type: Signature
+                Rule: "OR('{{env.SUBDOMAIN2}}.{{env.DOMAIN}}.member')"
+            Writers:
+                Type: Signature
+                Rule: "OR('{{env.SUBDOMAIN2}}.{{env.DOMAIN}}.member')"
+            Admins:
+                Type: Signature
+                Rule: "OR('{{env.SUBDOMAIN2}}.{{env.DOMAIN}}.admin')"
+
 
 ################################################################################
 #
@@ -306,7 +317,7 @@ Profiles:
                 Organizations:
                     - *{{env.ORGNAME}}
                     - *{{env.SUBORG1NAME}}
-#                   - *{{env.SUBORG2NAME}}
+                    - *{{env.SUBORG2NAME}}
 
     # SampleSingleMSPSolo defines a configuration which uses the Solo orderer,
     # and contains a single MSP definition (the MSP sampleconfig).
@@ -331,7 +342,7 @@ Profiles:
                 Organizations:
                     - *{{env.ORGNAME}}
                     - *{{env.SUBORG1NAME}}
-#                   - *{{env.SUBORG2NAME}}
+                    - *{{env.SUBORG2NAME}}
 
     # SampleEmptyInsecureChannel defines a channel with no members
     # and therefore no access control
@@ -373,7 +384,7 @@ Profiles:
             <<: *ApplicationDefaults
             Organizations:
                 - *{{env.SUBORG1NAME}}
-#               - *{{env.SUBORG2NAME}}
+                - *{{env.SUBORG2NAME}}
             Capabilities:
                 <<: *ApplicationCapabilities
 

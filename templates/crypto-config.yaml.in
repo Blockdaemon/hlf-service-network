@@ -26,5 +26,16 @@ PeerOrgs:
     Users:
       # The number of user accounts _in addition_ to Admin
       Count: 2
+  - Name: {{env.SUBORG2NAME}}
+    Domain: {{env.SUBDOMAIN2}}.{{env.DOMAIN}}
+    CA:
+      Country: US
+      Province: California
+      Locality: Los Angeles
+    Template:
+      Count: 2
+    Users:
+      # The number of user accounts _in addition_ to Admin
+      Count: 1
 
 # vim:expandtab
