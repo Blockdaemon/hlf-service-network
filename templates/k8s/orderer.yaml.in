@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: fabric-orderer-deployment
+  name: fabric-orderer
   labels:
     app: fabric-orderer
     org: {{env.DOMAIN}}
@@ -38,7 +38,7 @@ spec:
             secretName: orderer-msp-keystore
       hostname: orderer0
       containers:
-        - name: orderer0-container
+        - name: orderer0
           image: hyperledger/fabric-orderer:{{env.HLF_ARCH}}-{{env.HLF_VERSION}}
           command: ['orderer']
           #command: [ "/bin/bash", "-c", "--" ]

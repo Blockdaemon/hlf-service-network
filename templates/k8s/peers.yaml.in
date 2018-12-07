@@ -5,7 +5,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: fabric-peer{{PEER}}-deployment
+  name: fabric-peer{{PEER}}
   labels:
     app: fabric-peer{{PEER}}
     org: {{env.SUBDOMAIN1}}.{{env.DOMAIN}}
@@ -46,13 +46,7 @@ spec:
       #hostname: peer{{PEER}}
       #subdomain: {{env.SUBDOMAIN1}}
       containers:
-        - name: peer{{PEER}}-dind
-          image: docker.io/docker:stable-dind
-          ports:
-            - containerPort: 2375
-          securityContext:
-            privileged: true
-        - name: peer{{PEER}}-container
+        - name: peer{{PEER}}
           image: hyperledger/fabric-peer:{{env.HLF_ARCH}}-{{env.HLF_VERSION}}
           command: ['peer', 'node', 'start']
           #command: [ "/bin/bash", "-c", "--" ]
@@ -74,7 +68,7 @@ spec:
           {% include 'k8s/peer-env.yaml' %}
         # CouchDB for peer{{PEER}}
         # couch{{PEER}}-{{env.SUBDOMAIN1}}.{{env.DOMAIN}}
-        - name: couch{{PEER}}-container
+        - name: couch{{PEER}}
           image: hyperledger/fabric-couchdb
           env:
             - name: COUCHDB_USER
@@ -89,6 +83,13 @@ spec:
                   key: password
           ports:
             - containerPort: 5984
+        - name: dind{{PEER}}
+          image: docker.io/docker:stable-dind
+          ports:
+            - containerPort: 2375
+          securityContext:
+            # FIXME: security risk
+            privileged: true
 # END peer{{PEER}}
 #####################################################################
 {% endfor %}

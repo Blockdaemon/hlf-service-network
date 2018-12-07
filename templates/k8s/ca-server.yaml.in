@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: fabric-ca-deployment
+  name: fabric-ca
   labels:
     app: fabric-ca
     org: {{env.SUBDOMAIN1}}.{{env.DOMAIN}}
@@ -28,7 +28,7 @@ spec:
       #hostname: ca
       #subdomain: {{env.SUBDOMAIN1}}
       containers:
-        - name: ca-container
+        - name: ca-server
           image: hyperledger/fabric-ca:{{env.HLF_ARCH}}-{{env.HLF_VERSION}}
           command: ['fabric-ca-server']
           args: ['start', '-b', 'admin:adminpw', '-d']

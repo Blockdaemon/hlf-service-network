@@ -16,12 +16,15 @@ all:
 clean:
 	make -C .. k8s_clean
 
-.PHONY: apply delete-deps delete-pods
+.PHONY: apply delete-deps delete-services delete-pods
 apply:
 	@for i in *.yaml; do kubectl apply -f $$i; done
 
 delete-deps:
 	kubectl delete deployments --namespace hlf-service-network --all
+
+delete-services:
+	kubectl delete services --namespace hlf-service-network --all
 
 delete-pods:
 	kubectl delete pods --namespace hlf-service-network --all
