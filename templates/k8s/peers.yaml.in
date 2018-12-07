@@ -2,6 +2,29 @@
 ---
 #####################################################################
 # BEGIN peer{{PEER}}
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: fabric-peer{{PEER}}
+    org: {{env.SUBDOMAIN1}}.{{env.DOMAIN}}
+    role: peer{{PEER}}
+  name: peer{{PEER}}-{{env.SUBDOMAIN1}}
+spec:
+  ports:
+  - port: 7051
+    protocol: TCP
+    name: peer
+  - port: 7053
+    protocol: TCP
+    name: gossip
+  #- port: 5984
+  #  protocol: TCP
+  #  name: couchdb
+  selector:
+    app: fabric-peer{{PEER}}
+  type: ClusterIP
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -93,5 +116,5 @@ spec:
 # END peer{{PEER}}
 #####################################################################
 {% endfor %}
-
+---
 # vim: sw=2:expandtab

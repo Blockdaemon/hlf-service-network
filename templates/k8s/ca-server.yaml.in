@@ -1,3 +1,20 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: fabric-ca
+    org: {{env.SUBDOMAIN1}}.{{env.DOMAIN}}
+    role: ca-server
+  name: ca-{{env.SUBDOMAIN1}}
+spec:
+  ports:
+  - port: 7054
+    protocol: TCP
+  selector:
+    app: fabric-ca
+  type: ClusterIP
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -56,5 +73,5 @@ spec:
               mountPath: /secrets
             - name: ca-data
               mountPath: /data
-
+---
 # vim: sw=2:expandtab

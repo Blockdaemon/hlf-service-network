@@ -47,7 +47,8 @@ Frontend will *eventually* be on <http://127.0.0.1:8001/api/v1/namespaces/kube-s
 
 ## Getting stuff running
 
-* Run the various `##-xxxx.sh` scripts in order
+* Run the various `./##-xxxx.sh` scripts in order
+* `./forwarding.sh`: Start the fabric port forwarders (one for each service)
 
 ## Misc stuff
 
@@ -65,7 +66,6 @@ Frontend will *eventually* be on <http://127.0.0.1:8001/api/v1/namespaces/kube-s
 
 ### `minikube` forwarder utilities
 
-* `./forwarding.sh`: Start the fabric port forwarders
 * `./forwarding.sh stop`: Stop the fabric port forwarders
 * `./forwarding.sh start-proxy`: Start the `minikube` proxy
 * `./forwarding.sh stop-proxy`: Stop the `minikube` proxy
