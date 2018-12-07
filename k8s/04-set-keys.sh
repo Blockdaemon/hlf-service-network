@@ -53,3 +53,5 @@ for peer in 0 1; do
         --from-literal="user=${CDUSER}" \
         --from-literal="password=${CDPASS}"
 done
+
+echo "Do \"make delete-pods\" if you want to make sure all the pods see the new keys."

@@ -5,11 +5,11 @@ HLF_ARCH=amd64
 ORGNAME=Blockdaemon
 DOMAIN=hlf.blockdaemon.io
 
-SUBORG1NAME=BlockdaemonOrg1
-SUBDOMAIN1=org1
+SUBORG1NAME=Production
+SUBDOMAIN1=prod
 
-SUBORG2NAME=BlockdaemonOrg2
-SUBDOMAIN2=org2
+SUBORG2NAME=Manufacturing
+SUBDOMAIN2=mfg
 
 PROFILE=SingleMSP
 CONSORTIUM=FabricConsortium
