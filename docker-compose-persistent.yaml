@@ -7,7 +7,7 @@ services:
     volumes:
       - ./data/orderer:/var/hyperledger/production
 
-  #ca.org1:
+  #ca-org1:
   #  volumes:
   #    - ./data/ca:/var/hyperledger/production
 
@@ -19,10 +19,10 @@ services:
     volumes:
       - ./data/couchdb1:/opt/couchdb/data
 
-  peer0.org1:
+  peer0-org1:
     volumes:
       - ./data/peer0:/var/hyperledger/production
 
-  peer1.org1:
+  peer1-org1:
     volumes:
       - ./data/peer1:/var/hyperledger/production
