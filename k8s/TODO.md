@@ -24,6 +24,8 @@
 * Peer chaincode containers are currently spun up on the host vm docker and kubernetes is totally unaware of it.
   * If pod goes down, nobody knows the chaincode container should be killed with it.
   * Docker in Docker solves both?
+* Persistence for everyone in k8s
+  * see also `../docker-compose-persistent.yaml`
 
 ## Research topics
 
