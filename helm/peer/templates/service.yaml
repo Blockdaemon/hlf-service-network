@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: "fabric-{{ .Values.PeerName }}"
+    org: "{{ .Values.OrgName }}.hlf.blockdaemon.io"
+    role: peer0
+  name: "{{ .Values.PeerName}}-{{ .Values.OrgName }}"
+spec:
+  ports:
+  - port: 7051
+    protocol: TCP
+    name: peer
+  - port: 7053
+    protocol: TCP
+    name: gossip
+  #- port: 5984
+  #  protocol: TCP
+  #  name: couchdb
+  selector:
+    app: "fabric-{{ .Values.PeerName }}"
+  type: ClusterIP

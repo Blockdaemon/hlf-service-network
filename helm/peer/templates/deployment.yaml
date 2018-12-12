@@ -1,0 +1,146 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fabric-{{ .Values.PeerName }}-deployment
+  labels:
+    app: fabric-{{ .Values.PeerName }}
+    org: "{{ .Values.OrgName }}.hlf.blockdaemon.io"
+    role: peer
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fabric-{{ .Values.PeerName }}
+  template:
+    metadata:
+      labels:
+        app: fabric-{{ .Values.PeerName }}
+        org: "{{ .Values.OrgName }}.hlf.blockdaemon.io"
+        role: peer
+    spec:
+      volumes:
+        - name: "{{ .Values.PeerName }}-tls-secrets"
+          secret:
+            secretName: "{{ .Values.PeerName }}-tls"
+        - name: "{{ .Values.PeerName }}-msp-volume"
+          configMap:
+            name: "{{ .Values.PeerName }}-msp"
+            items:
+              - key: ca-cert.pem
+                path: cacerts/ca-cert.pem
+              - key: tlsca-cert.pem
+                path: tlscacerts/tlsca-cert.pem
+              - key: admin-cert.pem
+                path: admincerts/admin-cert.pem
+              - key: sign-cert.pem
+                path: signcerts/sign-cert.pem
+        - name: "{{ .Values.PeerName }}-msp-keystore-secrets"
+          secret:
+            secretName: "{{ .Values.PeerName }}-msp-keystore"
+      hostname: "{{ .Values.PeerName }}-{{ .Values.OrgName }}"
+      #hostname: peer0
+      #subdomain: org1
+      containers:
+        - name: {{ .Values.PeerName }}-dind
+          image: docker.io/docker:stable-dind
+          ports:
+            - containerPort: 2375
+          securityContext:
+            privileged: true
+        - name: {{ .Values.PeerName }}-container
+          image: hyperledger/fabric-peer:amd64-1.3.0
+          command: ['peer', 'node', 'start']
+          ports:
+            - containerPort: 7051
+            - containerPort: 7052
+            - containerPort: 7053
+          volumeMounts:
+            - name: {{ .Values.PeerName }}-tls-secrets
+              mountPath: /var/hyperledger/tls
+            - name: {{ .Values.PeerName }}-msp-volume
+              mountPath: /var/hyperledger/msp
+            - name: {{ .Values.PeerName }}-msp-keystore-secrets
+              mountPath: /var/hyperledger/msp/keystore
+          env:
+            # General
+            - name: CORE_LOGGING_LEVEL
+              value: "DEBUG"
+            - name: CORE_VM_ENDPOINT
+              # value: "unix:///host/var/run/docker.sock" (talk to docker directly in vm)
+              value: "http://localhost:2375" # Docker in docker is available here (dind)
+            - name: CORE_PEER_CHAINCODELISTENADDRESS
+              value: "localhost:7052" # Chaincode will look for the peer here (dind)
+            - name: CORE_VM_DOCKER_ATTACHSTDOUT
+              value: "true"
+            # State DB
+            - name: CORE_LEDGER_STATE_STATEDATABASE
+              value: "CouchDB"
+            - name: CORE_LEDGER_STATE_COUCHDBCONFIG_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: couchdb0-creds # TODO: Is it ok to use the same creds for different couchdb?
+                  key: user
+            - name: CORE_LEDGER_STATE_COUCHDBCONFIG_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: couchdb0-creds
+                  key: password
+            - name: CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS
+              # In k8s, co-containers are on localhost
+              #value: "couchdb0.org1.hlf.blockdaemon.io:5984"
+              value: "localhost:5984"
+            # Peer config
+            - name: CORE_PEER_PROFILE_ENABLED
+              value: "true"
+            - name: CORE_PEER_ADDRESSAUTODETECT
+              value: "true"
+            - name: CORE_PEER_NETWORKID
+              value: "blockdaemon"
+            - name: CORE_PEER_ID
+              value: "{{ .Values.PeerName }}.{{ .Values.OrgName }}.hlf.blockdaemon.io"
+            - name: CORE_PEER_ADDRESS
+              value: "{{ .Values.PeerName }}.{{ .Values.OrgName }}.hlf.blockdaemon.io:7051"
+            # Gossip
+            - name: CORE_PEER_GOSSIP_USELEADERELECTION
+              value: "true"
+            - name: CORE_PEER_GOSSIP_ORGLEADER
+              value: "false"
+            - name: CORE_PEER_GOSSIP_SKIPHANDSHAKE
+              value: "true"
+            - name: CORE_PEER_GOSSIP_EXTERNALENDPOINT
+              value: "peer0.org1.hlf.blockdaemon.io:7051"
+            # TLS and MSP
+            - name: CORE_PEER_TLS_ENABLED
+              value: "true"
+            - name: CORE_PEER_TLS_SERVERHOSTOVERRIDE
+              value: "{{ .Values.PeerName }}.{{ .Values.OrgName }}.hlf.blockdaemon.io"
+            - name: CORE_PEER_TLS_CERT_FILE
+              value: "/var/hyperledger/tls/server.crt"
+            - name: CORE_PEER_TLS_KEY_FILE
+              value: "/var/hyperledger/tls/server.key"
+            - name: CORE_PEER_TLS_ROOTCERT_FILE
+              value: "/var/hyperledger/tls/ca.crt"
+            - name: CORE_PEER_LOCALMSPID
+              value: "{{ .Values.OrgName }}.hlf.blockdaemon.io"
+            - name: CORE_PEER_MSPCONFIGPATH
+              value: "/var/hyperledger/msp"
+          # end peer-env.yaml for peer0
+          ###############################################
+        # CouchDB for peer0
+        # couch0-org1.hlf.blockdaemon.io
+        - name: couch{{ .Values.PeerName }}-container # Do we need customized couchb names?
+          image: hyperledger/fabric-couchdb
+          env:
+            - name: COUCHDB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: couchdb0-creds
+                  key: user
+            - name: COUCHDB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: couchdb0-creds
+                  key: password
+          ports:
+            - containerPort: 5984
+

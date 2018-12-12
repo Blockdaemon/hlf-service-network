@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    app: fabric-orderer
+    org: hlf.blockdaemon.io
+    role: orderer
+  name: orderer0
+spec:
+  ports:
+  - port: 7050
+    protocol: TCP
+    targetPort: 7050
+  selector:
+    app: fabric-orderer
+  type: ClusterIP
+status:
+  loadBalancer: {}

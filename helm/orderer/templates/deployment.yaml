@@ -1,0 +1,89 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "orderer.fullname" . }}
+  labels:
+    # TODO: Do we or Helm need these values?
+    app.kubernetes.io/name: {{ include "orderer.name" . }}
+    helm.sh/chart: {{ include "orderer.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+
+    app: fabric-orderer
+    org: hlf.blockdaemon.io
+    role: orderer
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: fabric-orderer
+  template:
+    metadata:
+      labels:
+        app: fabric-orderer
+        org: hlf.blockdaemon.io
+        role: orderer
+    spec:
+      volumes:
+        - name: orderer-genesis-block-secrets
+          secret:
+            secretName: orderer-genesis-block
+        - name: orderer-tls-secrets
+          secret:
+            secretName: orderer-tls
+        - name: orderer-msp-volume
+          configMap:
+            name: orderer-msp
+            items:
+              - key: ca-cert.pem
+                path: cacerts/ca-cert.pem
+              - key: tlsca-cert.pem
+                path: tlscacerts/tlsca-cert.pem
+              - key: admin-cert.pem
+                path: admincerts/admin-cert.pem
+              - key: sign-cert.pem
+                path: signcerts/sign-cert.pem
+        - name: orderer-msp-keystore-secrets
+          secret:
+            secretName: orderer-msp-keystore
+      hostname: orderer0
+      containers:
+        - name: orderer0-container
+          image: hyperledger/fabric-orderer:amd64-1.3.0
+          command: ['orderer']
+          env:
+            - name: ORDERER_GENERAL_LOGLEVEL
+              value: "debug"
+            - name: ORDERER_GENERAL_LISTENADDRESS
+              value: "0.0.0.0"
+            - name: ORDERER_GENERAL_LISTENPORT
+              value: "7050"
+            - name: ORDERER_GENERAL_GENESISPROFILE
+              value: "SingleMSP"
+            - name: ORDERER_GENERAL_GENESISMETHOD
+              value: "file"
+            - name: ORDERER_GENERAL_GENESISFILE
+              value: "/var/hyperledger/orderer/orderer0.genesis.block"
+            - name: ORDERER_GENERAL_LOCALMSPID
+              value: "hlf.blockdaemon.io"
+            - name: ORDERER_GENERAL_LOCALMSPDIR
+              value: "/var/hyperledger/msp"
+            - name: ORDERER_GENERAL_TLS_ENABLED
+              value: "true"
+            - name: ORDERER_GENERAL_TLS_CERTIFICATE
+              value: "/var/hyperledger/tls/server.crt"
+            - name: ORDERER_GENERAL_TLS_PRIVATEKEY
+              value: "/var/hyperledger/tls/server.key"
+            - name: ORDERER_GENERAL_TLS_ROOTCAS
+              value: "[/var/hyperledger/tls/ca.crt]"
+          ports:
+            - containerPort: 7050
+          volumeMounts:
+            - name: orderer-genesis-block-secrets
+              mountPath: /var/hyperledger/orderer
+            - name: orderer-tls-secrets
+              mountPath: /var/hyperledger/tls
+            - name: orderer-msp-volume
+              mountPath: /var/hyperledger/msp
+            - name: orderer-msp-keystore-secrets
+              mountPath: /var/hyperledger/msp/keystore
