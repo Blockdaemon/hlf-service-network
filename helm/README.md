@@ -4,9 +4,7 @@
 
 Generate certs, keys and other data in the root directory:
 
-    pushd ../
-    make
-    popd
+    make -C ..
 
 Please note that this currently creates files for:
 
