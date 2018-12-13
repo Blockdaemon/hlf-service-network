@@ -1,5 +1,19 @@
 # How to run
 
+## Install Helm
+
+* debian: `curl https://raw.githubusercontent.com/helm/helm/master/scripts/get | bash`
+* MacoS: `brew install kubernetes-helm`
+* `helm init`
+
+### Install `nginx-ingress` from Helm (optional)
+
+```bash
+minikube addons disable ingress
+helm install stable/nginx-ingress --namespace kube-system \
+--set controller.hostNetwork=true,controller.kind=DaemonSet,rbac.create=true
+```
+
 ## Generate required files
 
 Generate certs, keys and other data in the root directory:

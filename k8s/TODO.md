@@ -47,17 +47,3 @@
 ```bash
 minikube addons enable ingress
 ```
-
-### Install Helm
-
-* debian: `curl https://raw.githubusercontent.com/helm/helm/master/scripts/get | bash`
-* MacoS: `brew install kubernetes-helm`
-* `helm init`
-
-#### Install `nginx-ingress` from Helm
-
-```bash
-minikube addons disable ingress
-helm install stable/nginx-ingress --namespace kube-system \
---set controller.hostNetwork=true,controller.kind=DaemonSet,rbac.create=true
-```
