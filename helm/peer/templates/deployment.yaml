@@ -108,7 +108,7 @@ spec:
             - name: CORE_PEER_GOSSIP_SKIPHANDSHAKE
               value: "true"
             - name: CORE_PEER_GOSSIP_EXTERNALENDPOINT
-              value: "peer0.org1.hlf.blockdaemon.io:7051"
+              value: "{{ .Values.PeerName }}.{{ .Values.OrgName }}.hlf.blockdaemon.io:7051"
             # TLS and MSP
             - name: CORE_PEER_TLS_ENABLED
               value: "true"
