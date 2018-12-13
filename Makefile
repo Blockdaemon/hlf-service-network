@@ -32,7 +32,7 @@ MSP_CA_PEM:=$(CRYPTO_DIR)/msp/cacerts/ca.$(SUBDOMAIN1).$(DOMAIN)-cert.pem
 MSP_ADMIN_PEM:=$(CRYPTO_DIR)/msp/admincerts/Admin@$(SUBDOMAIN1).$(DOMAIN)-cert.pem
 
 .PHONY: all
-all: genesis # channel anchor-peers
+all: genesis channel anchor-peers
 
 $(BINDIR)/cryptogen $(BINDIR)/configtxgen:
 	mkdir -p $(TOOLDIR)
