@@ -31,7 +31,7 @@ delete-pods:
 
 .PHONY: start stop nuke
 start:
-	@if [ ! -e ${PIDFILE} ]; then minikube start --vm-driver=${DRIVER}; fi
+	@if [ ! -e ${PIDFILE} ]; then minikube start --vm-driver=${DRIVER} --kubernetes-version=v1.13.1 --feature-gates='CoreDNS=true'; fi
 	@./forwarding.sh start-proxy
 
 stop:
