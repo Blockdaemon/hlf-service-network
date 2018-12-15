@@ -9,7 +9,7 @@ TMPDIR="coredns/tmp"
 # some versions of minikube have kube-dns and coredns BOTH installed.
 # remove kube-dns, we want coredns anyway
 # https://github.com/kubernetes/minikube/issues/3233#issuecomment-429787213
-kubectl delete deployment kube-dns --namespace kube-system > /dev/null 2>&1
+#kubectl delete deployment kube-dns --namespace kube-system > /dev/null 2>&1
 
 OBJ="configmap coredns --namespace kube-system"
 
