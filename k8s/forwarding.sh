@@ -35,7 +35,6 @@ start-proxy)
     echo "http://127.0.0.1:8001/api/v1/namespaces/kube-system/services/kubernetes-dashboard/proxy/"
     ;;
 stop-proxy)
-    stop mount
     stop proxy
     ;;
 status)
