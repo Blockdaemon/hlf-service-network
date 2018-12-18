@@ -10,7 +10,7 @@ metadata:
     app.kubernetes.io/managed-by: {{ .Release.Service }}
 
     app: fabric-orderer
-    org: hlf.blockdaemon.io
+    org: {{ .Values.DomainName }}
     role: orderer
 spec:
   replicas: {{ .Values.replicaCount }}
@@ -21,7 +21,7 @@ spec:
     metadata:
       labels:
         app: fabric-orderer
-        org: hlf.blockdaemon.io
+        org: {{ .Values.DomainName }}
         role: orderer
     spec:
       volumes:
@@ -65,7 +65,7 @@ spec:
             - name: ORDERER_GENERAL_GENESISFILE
               value: "/var/hyperledger/orderer/orderer0.genesis.block"
             - name: ORDERER_GENERAL_LOCALMSPID
-              value: "hlf.blockdaemon.io"
+              value: "{{ .Values.DomainName }}"
             - name: ORDERER_GENERAL_LOCALMSPDIR
               value: "/var/hyperledger/msp"
             - name: ORDERER_GENERAL_TLS_ENABLED

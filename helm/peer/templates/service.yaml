@@ -3,7 +3,7 @@ kind: Service
 metadata:
   labels:
     app: "fabric-{{ .Values.PeerName }}"
-    org: "{{ .Values.OrgName }}.hlf.blockdaemon.io"
+    org: "{{ .Values.OrgName }}.{{ .Values.DomainName }}"
     role: peer0
   name: "{{ .Values.PeerName}}-{{ .Values.OrgName }}"
 spec:

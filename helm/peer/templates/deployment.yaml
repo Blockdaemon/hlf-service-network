@@ -4,7 +4,7 @@ metadata:
   name: fabric-{{ .Values.PeerName }}-deployment
   labels:
     app: fabric-{{ .Values.PeerName }}
-    org: "{{ .Values.OrgName }}.hlf.blockdaemon.io"
+    org: "{{ .Values.OrgName }}.{{ .Values.DomainName }}"
     role: peer
 spec:
   replicas: 1
@@ -15,7 +15,7 @@ spec:
     metadata:
       labels:
         app: fabric-{{ .Values.PeerName }}
-        org: "{{ .Values.OrgName }}.hlf.blockdaemon.io"
+        org: "{{ .Values.OrgName }}.{{ .Values.DomainName }}"
         role: peer
     spec:
       volumes:
@@ -87,7 +87,7 @@ spec:
                   key: password
             - name: CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS
               # In k8s, co-containers are on localhost
-              #value: "couchdb0.org1.hlf.blockdaemon.io:5984"
+              #value: "couchdb0.org1.{{ .Values.DomainName }}:5984"
               value: "localhost:5984"
             # Peer config
             - name: CORE_PEER_PROFILE_ENABLED
@@ -97,9 +97,9 @@ spec:
             - name: CORE_PEER_NETWORKID
               value: "blockdaemon"
             - name: CORE_PEER_ID
-              value: "{{ .Values.PeerName }}.{{ .Values.OrgName }}.hlf.blockdaemon.io"
+              value: "{{ .Values.PeerName }}.{{ .Values.OrgName }}.{{ .Values.DomainName }}"
             - name: CORE_PEER_ADDRESS
-              value: "{{ .Values.PeerName }}.{{ .Values.OrgName }}.hlf.blockdaemon.io:7051"
+              value: "{{ .Values.PeerName }}.{{ .Values.OrgName }}.{{ .Values.DomainName }}:7051"
             # Gossip
             - name: CORE_PEER_GOSSIP_USELEADERELECTION
               value: "true"
@@ -108,12 +108,12 @@ spec:
             - name: CORE_PEER_GOSSIP_SKIPHANDSHAKE
               value: "true"
             - name: CORE_PEER_GOSSIP_EXTERNALENDPOINT
-              value: "{{ .Values.PeerName }}.{{ .Values.OrgName }}.hlf.blockdaemon.io:7051"
+              value: "{{ .Values.PeerName }}.{{ .Values.OrgName }}.{{ .Values.DomainName }}:7051"
             # TLS and MSP
             - name: CORE_PEER_TLS_ENABLED
               value: "true"
             - name: CORE_PEER_TLS_SERVERHOSTOVERRIDE
-              value: "{{ .Values.PeerName }}.{{ .Values.OrgName }}.hlf.blockdaemon.io"
+              value: "{{ .Values.PeerName }}.{{ .Values.OrgName }}.{{ .Values.DomainName }}"
             - name: CORE_PEER_TLS_CERT_FILE
               value: "/var/hyperledger/tls/server.crt"
             - name: CORE_PEER_TLS_KEY_FILE
@@ -121,13 +121,13 @@ spec:
             - name: CORE_PEER_TLS_ROOTCERT_FILE
               value: "/var/hyperledger/tls/ca.crt"
             - name: CORE_PEER_LOCALMSPID
-              value: "{{ .Values.OrgName }}.hlf.blockdaemon.io"
+              value: "{{ .Values.OrgName }}.{{ .Values.DomainName }}"
             - name: CORE_PEER_MSPCONFIGPATH
               value: "/var/hyperledger/msp"
           # end peer-env.yaml for peer0
           ###############################################
         # CouchDB for peer0
-        # couch0-org1.hlf.blockdaemon.io
+        # couch0-org1.{{ .Values.DomainName }}
         - name: couch{{ .Values.PeerName }}-container # Do we need customized couchb names?
           image: hyperledger/fabric-couchdb
           env:

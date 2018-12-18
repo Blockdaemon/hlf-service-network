@@ -4,7 +4,7 @@ metadata:
   creationTimestamp: null
   labels:
     app: fabric-orderer
-    org: hlf.blockdaemon.io
+    org: {{ .Values.DomainName }}
     role: orderer
   name: orderer0
 spec:
