@@ -23,7 +23,7 @@ spec:
   #  name: couchdb
   selector:
     app: fabric-peer{{PEER}}
-  type: ClusterIP
+  type: LoadBalancer
 ---
 apiVersion: apps/v1
 kind: Deployment
