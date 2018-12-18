@@ -5,11 +5,11 @@
 apiVersion: v1
 kind: Service
 metadata:
+  name: peer{{PEER}}-{{env.SUBDOMAIN1}}
   labels:
     app: fabric-peer{{PEER}}
     org: {{env.SUBDOMAIN1}}.{{env.DOMAIN}}
     role: peer{{PEER}}
-  name: peer{{PEER}}-{{env.SUBDOMAIN1}}
 spec:
   ports:
   - port: 7051
