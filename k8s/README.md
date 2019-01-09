@@ -9,7 +9,7 @@
 Note: *We need `gsed -r` from coreutils because BSD `sed -E` is a POS.*
 
 ```bash
-brew install coreutils ipcalc kubectl
+brew install coreutils ipcalc jq kubectl
 brew cask install minikube
 ```
 
@@ -24,7 +24,7 @@ curl -LO https://storage.googleapis.com/minikube/releases/latest/docker-machine-
 #### Install utils and `kubectl`, `minikube`, and `kvm2` driver
 
 ```bash
-sudo apt install ipcalc screen
+sudo apt install ipcalc jq screen
 sudp apt install qemu-kvm libvirt-clients libvirt-daemon-system
 sudo adduser $USER libvirt
 curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
