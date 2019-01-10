@@ -11,6 +11,10 @@ spec:
   ports:
   - port: 7050
     protocol: TCP
+    name: orderer
+  - port: 8443
+    protocol: TCP
+    name: operations
   selector:
     app: fabric-orderer
   type: LoadBalancer
@@ -61,8 +65,8 @@ spec:
           #command: [ "/bin/bash", "-c", "--" ]
           #args: [ "while true; do sleep 30; done;" ]
           env:
-            - name: ORDERER_GENERAL_LOGLEVEL
-              value: "debug"
+            - name: FABRIC_LOGGING_SPEC
+              value: "DEBUG"
             - name: ORDERER_GENERAL_LISTENADDRESS
               value: "0.0.0.0"
             - name: ORDERER_GENERAL_LISTENPORT
@@ -85,8 +89,11 @@ spec:
               value: "/var/hyperledger/tls/server.key"
             - name: ORDERER_GENERAL_TLS_ROOTCAS
               value: "[/var/hyperledger/tls/ca.crt]"
+            - name: CORE_OPERATIONS_LISTENADDRESS
+              value: ":8443"
           ports:
             - containerPort: 7050
+            - containerPort: 8443
           volumeMounts:
             # FIXME: put in configMap?
             - name: orderer-genesis-block-secrets
@@ -97,5 +104,9 @@ spec:
               mountPath: /var/hyperledger/msp
             - name: orderer-msp-keystore-secrets
               mountPath: /var/hyperledger/msp/keystore
+          #livenessProbe:
+          #  httpGet:
+          #    path: /healthz
+          #    port: 8443
 ---
 # vim: sw=2:expandtab

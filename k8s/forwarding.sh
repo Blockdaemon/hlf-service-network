@@ -21,9 +21,9 @@ stop)
     ;;
 start)
     create ca-${SUBDOMAIN1} 7054
-    create orderer0 7050
-    create peer0-${SUBDOMAIN1} 7051 7053 # 5984
-    create peer1-${SUBDOMAIN1} 8051:7051 8053:7053 # 6984:5984
+    create orderer0 7050 8443
+    create peer0-${SUBDOMAIN1} 7051 7053 9443 # 5984
+    create peer1-${SUBDOMAIN1} 8051:7051 8053:7053 10443:9443 # 6984:5984
     ;;
 start-proxy)
     stop proxy

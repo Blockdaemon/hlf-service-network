@@ -54,6 +54,7 @@ spec:
             - containerPort: 7051
             - containerPort: 7052
             - containerPort: 7053
+            - containerPort: 9443
           volumeMounts:
             - name: peer{{ .Values.PeerNum }}-tls-secrets
               mountPath: /var/hyperledger/tls
@@ -63,7 +64,7 @@ spec:
               mountPath: /var/hyperledger/msp/keystore
           env:
             # General
-            - name: CORE_LOGGING_LEVEL
+            - name: FABRIC_LOGGING_SPEC
               value: "DEBUG"
             - name: CORE_VM_ENDPOINT
               # value: "unix:///host/var/run/docker.sock" (talk to docker directly in vm)
@@ -124,6 +125,8 @@ spec:
               value: "{{ .Values.OrgName }}.{{ .Values.DomainName }}"
             - name: CORE_PEER_MSPCONFIGPATH
               value: "/var/hyperledger/msp"
+            - name: CORE_OPERATIONS_LISTENADDRESS
+              value: ":9443"
           # end peer-env.yaml for peer{{ .Values.PeerNum }}
           ###############################################
         # CouchDB for peer{{ .Values.PeerNum }}

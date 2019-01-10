@@ -10,7 +10,7 @@ services:
     image: hyperledger/fabric-orderer:${HLF_ARCH}-${HLF_VERSION}
     container_name: orderer0.${DOMAIN}
     environment:
-      - ORDERER_GENERAL_LOGLEVEL=debug
+      - FABRIC_LOGGING_SPEC=DEBUG
       - ORDERER_GENERAL_LISTENADDRESS=0.0.0.0
       - ORDERER_GENERAL_LISTENPORT=7050
       - ORDERER_GENERAL_GENESISPROFILE=${PROFILE}
@@ -22,6 +22,15 @@ services:
       - ORDERER_GENERAL_TLS_CERTIFICATE=/var/hyperledger/orderer/tls/server.crt
       - ORDERER_GENERAL_TLS_PRIVATEKEY=/var/hyperledger/orderer/tls/server.key
       - ORDERER_GENERAL_TLS_ROOTCAS=[/var/hyperledger/orderer/tls/ca.crt]
+      - CORE_OPERATIONS_LISTENADDRESS=:8443
+      #- CORE_OPERATIONS_TLS_ENABLED=true
+      # TODO: DO NOT SHARE CA WITH PEER!!
+      # Ideally this should be real TLS cert e.g. letsencrypt
+      #- CORE_OPERATIONS_TLS_CERT_FILE=/var/hyperledger/tls/server.crt
+      #- CORE_OPERATIONS_TLS_KEY_FILE=/var/hyperledger/tls/server.key
+      # Mutual TLS
+      #- CORE_OPERATIONS_TLS_CLIENTAUTH_REQUIRED=false
+      #- CORE_OPERATIONS_TLS_CLIENTROOTCAS=
 
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric
     command: orderer
@@ -31,6 +40,7 @@ services:
       - ./crypto-config/ordererOrganizations/${DOMAIN}/orderers/orderer0.${DOMAIN}/tls:/var/hyperledger/orderer/tls
     ports:
       - 7050:7050
+      - 8443:8443
     networks:
       default:
         aliases:
@@ -106,6 +116,7 @@ services:
     ports:
       - 7051:7051
       - 7053:7053
+      - 9443:9443
     depends_on:
       - orderer0
       - couchdb0
@@ -139,6 +150,7 @@ services:
     ports:
       - 8051:7051
       - 8053:7053
+      - 10443:9443
     depends_on:
       - orderer0
       - couchdb1

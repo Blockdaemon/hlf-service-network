@@ -21,6 +21,9 @@ spec:
   #- port: 5984
   #  protocol: TCP
   #  name: couchdb
+  - port: 9443
+    protocol: TCP
+    name: operations
   selector:
     app: fabric-peer{{PEER}}
   type: LoadBalancer
@@ -78,6 +81,7 @@ spec:
             - containerPort: 7051
             - containerPort: 7052
             - containerPort: 7053
+            - containerPort: 9443
           volumeMounts:
             - name: peer{{PEER}}-tls-secrets
               mountPath: /var/hyperledger/tls
@@ -88,6 +92,10 @@ spec:
             # Commented out because we use dind now
             # - name: dockersocket
             #   mountPath: /host/var/run/docker.sock
+          #livenessProbe:
+          #  httpGet:
+          #    path: /healthz
+          #    port: 9443
           {% include 'k8s/peer-env.yaml' %}
         # CouchDB for peer{{PEER}}
         # couch{{PEER}}-{{env.SUBDOMAIN1}}.{{env.DOMAIN}}

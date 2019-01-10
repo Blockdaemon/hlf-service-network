@@ -17,6 +17,9 @@ spec:
   #- port: 5984
   #  protocol: TCP
   #  name: couchdb
+  - port: 9443
+    protocol: TCP
+    name: operations
   selector:
     app: "fabric-peer{{ .Values.PeerNum }}"
   type: ClusterIP
