@@ -23,6 +23,9 @@ spec:
         app: fabric-orderer
         org: {{ .Values.DomainName }}
         role: orderer
+      annotations:
+        prometheus.io/scrape: 'true'
+        prometheus.io/port: '8443'
     spec:
       volumes:
         - name: orderer-genesis-block-secrets
@@ -49,7 +52,7 @@ spec:
       hostname: orderer0
       containers:
         - name: orderer0-container
-          image: hyperledger/fabric-orderer:amd64-1.3.0
+          image: hyperledger/fabric-orderer:{{ .Values.HLFTag }}
           command: ['orderer']
           env:
             - name: FABRIC_LOGGING_SPEC
@@ -76,11 +79,15 @@ spec:
               value: "/var/hyperledger/tls/server.key"
             - name: ORDERER_GENERAL_TLS_ROOTCAS
               value: "[/var/hyperledger/tls/ca.crt]"
-            - name: CORE_OPERATIONS_LISTENADDRESS
+            - name: ORDERER_OPERATIONS_LISTENADDRESS
               value: ":8443"
           ports:
             - containerPort: 7050
             - containerPort: 8443
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 8443
           volumeMounts:
             - name: orderer-genesis-block-secrets
               mountPath: /var/hyperledger/orderer

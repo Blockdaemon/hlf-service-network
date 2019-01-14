@@ -38,6 +38,9 @@ spec:
         app: fabric-orderer
         org: {{env.DOMAIN}}
         role: orderer
+      annotations:
+        prometheus.io/scrape: 'true'
+        prometheus.io/port: '8443'
     spec:
       volumes:
         - name: orderer-genesis-block-secrets
@@ -61,6 +64,7 @@ spec:
       containers:
         - name: orderer0
           image: hyperledger/fabric-orderer:{{env.HLF_ARCH}}-{{env.HLF_VERSION}}
+          imagePullPolicy: Always
           command: ['orderer']
           #command: [ "/bin/bash", "-c", "--" ]
           #args: [ "while true; do sleep 30; done;" ]
@@ -89,11 +93,15 @@ spec:
               value: "/var/hyperledger/tls/server.key"
             - name: ORDERER_GENERAL_TLS_ROOTCAS
               value: "[/var/hyperledger/tls/ca.crt]"
-            - name: CORE_OPERATIONS_LISTENADDRESS
+            - name: ORDERER_OPERATIONS_LISTENADDRESS
               value: ":8443"
           ports:
             - containerPort: 7050
             - containerPort: 8443
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 8443
           volumeMounts:
             # FIXME: put in configMap?
             - name: orderer-genesis-block-secrets
@@ -104,9 +112,5 @@ spec:
               mountPath: /var/hyperledger/msp
             - name: orderer-msp-keystore-secrets
               mountPath: /var/hyperledger/msp/keystore
-          #livenessProbe:
-          #  httpGet:
-          #    path: /healthz
-          #    port: 8443
 ---
 # vim: sw=2:expandtab

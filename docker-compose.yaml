@@ -22,15 +22,15 @@ services:
       - ORDERER_GENERAL_TLS_CERTIFICATE=/var/hyperledger/orderer/tls/server.crt
       - ORDERER_GENERAL_TLS_PRIVATEKEY=/var/hyperledger/orderer/tls/server.key
       - ORDERER_GENERAL_TLS_ROOTCAS=[/var/hyperledger/orderer/tls/ca.crt]
-      - CORE_OPERATIONS_LISTENADDRESS=:8443
-      #- CORE_OPERATIONS_TLS_ENABLED=true
-      # TODO: DO NOT SHARE CA WITH PEER!!
+      - ORDERER_OPERATIONS_LISTENADDRESS=:8443
+      #- ORDERER_OPERATIONS_TLS_ENABLED=true
+      # TODO: DO NOT SHARE CA WITH ORDERER!!
       # Ideally this should be real TLS cert e.g. letsencrypt
-      #- CORE_OPERATIONS_TLS_CERT_FILE=/var/hyperledger/tls/server.crt
-      #- CORE_OPERATIONS_TLS_KEY_FILE=/var/hyperledger/tls/server.key
+      #- ORDERER_OPERATIONS_TLS_CERT_FILE=/var/hyperledger/tls/server.crt
+      #- ORDERER_OPERATIONS_TLS_KEY_FILE=/var/hyperledger/tls/server.key
       # Mutual TLS
-      #- CORE_OPERATIONS_TLS_CLIENTAUTH_REQUIRED=false
-      #- CORE_OPERATIONS_TLS_CLIENTROOTCAS=
+      #- ORDERER_OPERATIONS_TLS_CLIENTAUTH_REQUIRED=false
+      #- ORDERER_OPERATIONS_TLS_CLIENTROOTCAS=
 
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric
     command: orderer
