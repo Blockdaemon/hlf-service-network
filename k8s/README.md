@@ -24,9 +24,9 @@ curl -LO https://storage.googleapis.com/minikube/releases/latest/docker-machine-
 #### Install utils and `kubectl`, `minikube`, and `kvm2` driver
 
 ```bash
-sudo apt install ipcalc jq screen
-sudp apt install qemu-kvm libvirt-clients libvirt-daemon-system
 sudo adduser $USER libvirt
+sudo apt install ipcalc jq screen
+sudo apt install qemu-kvm libvirt-clients libvirt-daemon-system
 curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
 echo "deb http://apt.kubernetes.io/ kubernetes-stretch main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
 sudo apt update; sudo apt install kubectl
