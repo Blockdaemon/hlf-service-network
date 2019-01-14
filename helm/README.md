@@ -6,14 +6,6 @@
 * MacoS: `brew install kubernetes-helm`
 * `helm init`
 
-### Install `nginx-ingress` from Helm (optional)
-
-```bash
-minikube addons disable ingress
-helm install stable/nginx-ingress --namespace kube-system \
---set controller.hostNetwork=true,controller.kind=DaemonSet,rbac.create=true
-```
-
 ## Generate required files
 
 Generate certs, keys and other data in the root directory:
@@ -36,7 +28,7 @@ Run the following commands (some of which are workarounds):
 
     pushd ../k8s
     ./01-setup-namespace.sh # Creates the k8s namespace
-    ./02-patch-minikub.sh # To allow pods to talk to themselves
+    ./02-patch-minikube.sh # To allow pods to talk to themselves
     ./03-patch-coredns.sh # Make sure the HL internal domains resolve
     popd
 
@@ -58,13 +50,13 @@ to bring up one orderer and two peers.
 
 minikube only - real k8s will use something different.
 
-    SUBDOMAIN1=prod ./forwarding.sh
+    ./forwarding.sh
 
 This will start forwarders to all services in `screen`.
 
 # Test it
 
-Run https://github.com/Blockdaemon/hlf-database-app according to it's instructions
+Run https://github.com/Blockdaemon/hlf-database-app according to its instructions
 
 # Delete all deployments
 
