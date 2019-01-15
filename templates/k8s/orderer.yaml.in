@@ -6,7 +6,7 @@ metadata:
   labels:
     app: fabric-orderer
     org: {{env.DOMAIN}}
-    role: ca-server
+    role: orderer
 spec:
   ports:
   - port: 7050
