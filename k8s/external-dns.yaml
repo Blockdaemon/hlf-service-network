@@ -1,0 +1,102 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: external-dns
+  namespace: hlf-service-network
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  labels:
+    kubernetes.io/bootstrapping: rbac-defaults
+  name: system:service-reader
+rules:
+- apiGroups:
+  - ""
+  resources:
+  - services
+  verbs:
+  - list
+  - watch
+- apiGroups:
+  - ""
+  resources:
+  - nodes
+  verbs:
+  - get
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  annotations:
+    rbac.authorization.kubernetes.io/autoupdate: "true"
+  labels:
+    kubernetes.io/bootstrapping: rbac-defaults
+  name: system:service-reader
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: system:service-reader
+subjects:
+- kind: ServiceAccount
+  name: external-dns
+  namespace: hlf-service-network
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: external-dns
+  labels:
+    app: edns
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: edns
+  template:
+    metadata:
+      labels:
+        app: edns
+    spec:
+      serviceAccountName: external-dns
+      containers:
+        - name: edns
+          image: blockdaemon/external-dns
+          imagePullPolicy: Always
+#         command: [ "/bin/sh", "-c", "--" ]
+#         args: [ "while true; do sleep 30; done;" ]
+          env:
+            - name: EXTERNAL_DNS_SOURCE
+              value: "service"
+            - name: EXTERNAL_DNS_REGISTRY
+              value: "txt"
+            - name: EXTERNAL_DNS_PROVIDER
+              value: "rfc2136"
+            - name: EXTERNAL_DNS_RFC2136_ZONE
+              valueFrom:
+                configMapKeyRef:
+                  name: external-dns
+                  key: zone
+            - name: EXTERNAL_DNS_RFC2136_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: external-dns
+                  key: host
+            - name: EXTERNAL_DNS_RFC2136_PORT
+              value: "53"
+            - name: EXTERNAL_DNS_RFC2136_TSIG_AXFR
+              value: "true"
+            - name: EXTERNAL_DNS_RFC2136_TSIG_KEYNAME
+              valueFrom:
+                secretKeyRef:
+                  name: external-dns-creds
+                  key: tsig-keyname
+            - name: EXTERNAL_DNS_RFC2136_TSIG_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: external-dns-creds
+                  key: tsig-secret
+            - name: EXTERNAL_DNS_RFC2136_TSIG_SECRET_ALG
+              value: "hmac-md5"
+---
+# vim: sw=2:expandtab

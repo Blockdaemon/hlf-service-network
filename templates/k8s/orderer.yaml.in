@@ -7,6 +7,8 @@ metadata:
     app: fabric-orderer
     org: {{env.DOMAIN}}
     role: orderer
+  annotations:
+    external-dns.alpha.kubernetes.io/hostname: orderer0.{{env.DOMAIN}}.
 spec:
   ports:
   - port: 7050

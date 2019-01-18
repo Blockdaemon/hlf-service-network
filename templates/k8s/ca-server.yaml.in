@@ -7,6 +7,8 @@ metadata:
     app: fabric-ca
     org: {{env.SUBDOMAIN1}}.{{env.DOMAIN}}
     role: ca-server
+  annotations:
+    external-dns.alpha.kubernetes.io/hostname: ca.{{env.SUBDOMAIN1}}.{{env.DOMAIN}}.
 spec:
   ports:
   - port: 7054

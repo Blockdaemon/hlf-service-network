@@ -10,6 +10,8 @@ metadata:
     app: fabric-peer{{PEER}}
     org: {{env.SUBDOMAIN1}}.{{env.DOMAIN}}
     role: peer{{PEER}}
+  annotations:
+    external-dns.alpha.kubernetes.io/hostname: peer{{PEER}}.{{env.SUBDOMAIN1}}.{{env.DOMAIN}}.
 spec:
   ports:
   - port: 7051
