@@ -12,9 +12,9 @@ spec:
   - port: 7050
     protocol: TCP
     name: orderer
-  - port: 8443
-    protocol: TCP
-    name: operations
+# - port: 8443
+#   protocol: TCP
+#   name: operations
   selector:
     app: fabric-orderer
   type: ClusterIP

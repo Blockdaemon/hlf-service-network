@@ -18,12 +18,12 @@ spec:
   - port: 7053
     protocol: TCP
     name: gossip
-  #- port: 5984
-  #  protocol: TCP
-  #  name: couchdb
-  - port: 9443
-    protocol: TCP
-    name: operations
+# - port: 5984
+#   protocol: TCP
+#   name: couchdb
+# - port: 9443
+#   protocol: TCP
+#   name: operations
   selector:
     app: fabric-peer{{PEER}}
   type: LoadBalancer
