@@ -17,9 +17,23 @@ spec:
 # - port: 5984
 #   protocol: TCP
 #   name: couchdb
-# - port: 9443
-#   protocol: TCP
-#   name: operations
+  selector:
+    app: "fabric-peer{{ .Values.PeerNum }}"
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    app: "fabric-peer{{ .Values.PeerNum }}"
+  name: "peer{{ .Values.PeerNum}}-ops-{{ .Values.OrgName }}"
+spec:
+  clusterIP: None
+  ports:
+  - port: 9443
+    protocol: TCP
+    name: operations
   selector:
     app: "fabric-peer{{ .Values.PeerNum }}"
   type: ClusterIP

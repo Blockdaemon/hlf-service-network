@@ -14,12 +14,25 @@ spec:
   - port: 7050
     protocol: TCP
     name: orderer
-# - port: 8443
-#   protocol: TCP
-#   name: operations
   selector:
     app: fabric-orderer
   type: LoadBalancer
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: orderer0-ops
+  labels:
+    app: fabric-orderer
+spec:
+  # Headless
+  clusterIP: None
+  ports:
+  - port: 8443
+    protocol: TCP
+    name: operations
+  selector:
+    app: fabric-orderer
 ---
 apiVersion: apps/v1
 kind: Deployment

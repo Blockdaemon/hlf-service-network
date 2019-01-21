@@ -23,12 +23,25 @@ spec:
 # - port: 5984
 #   protocol: TCP
 #   name: couchdb
-# - port: 9443
-#   protocol: TCP
-#   name: operations
   selector:
     app: fabric-peer{{PEER}}
   type: LoadBalancer
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: peer{{PEER}}-ops-{{env.SUBDOMAIN1}}
+  labels:
+    app: fabric-peer{{PEER}}
+spec:
+  # Headless
+  clusterIP: None
+  ports:
+  - port: 9443
+    protocol: TCP
+    name: operations
+  selector:
+    app: fabric-peer{{PEER}}
 ---
 apiVersion: apps/v1
 kind: Deployment
