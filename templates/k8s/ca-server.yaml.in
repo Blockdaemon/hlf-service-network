@@ -70,6 +70,11 @@ spec:
               value: "/secrets/current_sk"
           ports:
             - containerPort: 7054
+          livenessProbe:
+            httpGet:
+              scheme: HTTPS
+              path: /api/v1/cainfo
+              port: 7054
           volumeMounts:
             - name: ca-fabric-secrets
               mountPath: /secrets
