@@ -1,5 +1,7 @@
 # TODO
 
+* Autogenerate `ca-server` user/password, store in secrets(?)
+  * How to tell user what it is?
 * Switch as much as possible to yaml
 * Put orderer genesis block in `configMap`?
 * Make `org1` white-boxable in `nginx-ingress`?
@@ -23,13 +25,13 @@
   * Figure out how to connect to a peer from external (probably means we have to write/build a client)
 * Peer chaincode containers are currently spun up on the host vm docker and kubernetes is totally unaware of it.
   * If pod goes down, nobody knows the chaincode container should be killed with it.
-  * Docker in Docker solves both?
+  * Docker in Docker sucks - https://jira.hyperledger.org/browse/FAB-7406
 * Persistence for everyone in k8s
   * see also `../docker-compose-persistent.yaml`
 
 ## Research topics
 
-* Hyperledger organzational interoperability
+* Hyperledger organizational interoperability
 * Hyperledger aaS interoperability
 * Hyperledger `cello`
 * Competitors/potential partners
