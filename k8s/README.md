@@ -48,7 +48,9 @@ Frontend will *eventually* be on <http://127.0.0.1:8001/api/v1/namespaces/kube-s
 ## Getting stuff running
 
 * Run the various `./##-xxxx.sh` scripts in order
-* `./forwarding.sh`: Start the fabric port forwarders (one for each service)
+  * If on minikube, run the `02-patch-minikube.sh` script
+  * If on GKE, run the `02-patch-GKE.sh` script
+* `./forwarding.sh`: Start the fabric port forwarders (one for each service). Only needed for minikube.
 
 ## Misc stuff
 
