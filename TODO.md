@@ -1,4 +1,3 @@
 # TODO
 
-* Autogenerate unique `couchdb` user/password
-* Autogenerate unique `ca-server` user/password
+* Use `.secrets` for `ca-server` and `couchdb` instead of hardcoding stuff

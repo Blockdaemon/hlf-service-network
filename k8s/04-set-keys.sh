@@ -8,6 +8,14 @@ read-env
 ARTIFACTS=$HSN_HOME/artifacts
 CRYPTO_CONFIG=$HSN_HOME/crypto-config
 
+SECRETS=$HSN_HOME/.secrets
+if [ ! -r ${SECRETS} ]; then
+    echo "Can't read ${SECRETS}."
+    exit 1
+fi
+
+. ${SECRETS}
+
 function set-secret () {
     kubectl create secret generic $@ --save-config --dry-run -o json | kubectl apply -f -
 }
@@ -19,6 +27,10 @@ function set-configmap() {
 PEM="${DOMAIN}-cert.pem"
 
 # ca-server
+set-secret ca-creds \
+    --from-literal="user=${CAUSER}" \
+    --from-literal="password=${CAPASS}"
+
 CA_TLS_DIR=$CRYPTO_CONFIG/peerOrganizations/$SUBDOMAIN1.$DOMAIN/ca
 set-secret ca --from-file=$CA_TLS_DIR/ca.$SUBDOMAIN1.$DOMAIN-cert.pem --from-file=$CA_TLS_DIR/current_sk
 
@@ -47,11 +59,11 @@ for peer in 0 1; do
     set-secret peer${peer}-msp-keystore --from-file=$PEER_DIR/msp/keystore
 
     # couchdb
-    CDUSER=$(openssl rand -base64 32 | tr -cd '[:alpha:]')
-    CDPASS=$(openssl rand -base64 32 | tr -cd '[:alpha:]')
+    cduser="CDUSER${peer}"
+    cdpass="CDPASS${peer}"
     set-secret couchdb${peer}-creds \
-        --from-literal="user=${CDUSER}" \
-        --from-literal="password=${CDPASS}"
+        --from-literal="user=${!cduser}" \
+        --from-literal="password=${!cdpass}"
 done
 
 echo "Do \"make delete-pods\" if you want to make sure all the pods see the new keys."

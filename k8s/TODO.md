@@ -1,12 +1,9 @@
 # TODO
 
-* Autogenerate `ca-server` user/password, store in secrets(?)
-  * How to tell user what it is?
 * Switch as much as possible to yaml
 * Put orderer genesis block in `configMap`?
-* Make `org1` white-boxable in `nginx-ingress`?
 * Put more scripts into `Makefile`? We can automatically know if a yaml changed, why not apply?
-* Automatically `apk add bash curl bind-tools` to alpine container via something sane
+* Automatically `apk add bash curl bind-tools` to alpine container via something sane (e.g. wait for liveness, build real container, etc)
 * ##-patch-coredns.sh is a big honking mess
   * <https://coredns.io/2017/05/08/custom-dns-entries-for-kubernetes/>
   * <https://github.com/coredns/coredns/tree/master/plugin/rewrite>
@@ -21,13 +18,12 @@
     * vmware does the "right" thing, sets both hostname and domain to the "correct" (but still broken) k8s service DNS (e.g. `peer0.org1` vs `peer0-org1`)
     * hyperkit totally ignores `spec.hostname` and `spec.domain`. Nice going.
 * Triage problems between minikube/hypervisor specific and kubernetes in general
-* Write nodestate or equivalent (need to decide what that'll look like in k8s)
-  * Figure out how to connect to a peer from external (probably means we have to write/build a client)
 * Peer chaincode containers are currently spun up on the host vm docker and kubernetes is totally unaware of it.
   * If pod goes down, nobody knows the chaincode container should be killed with it.
   * Docker in Docker sucks - https://jira.hyperledger.org/browse/FAB-7406
 * Persistence for everyone in k8s
   * see also `../docker-compose-persistent.yaml`
+* Document `external-dns`
 
 ## Research topics
 

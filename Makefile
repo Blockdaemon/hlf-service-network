@@ -10,7 +10,10 @@ endif
 
 export FABRIC_CFG_PATH:=$(shell pwd)
 
-MKFILES:=Makefile config.mk $(wildcard local.mk)	# only care about local.mk if it is there
+# If any of MKFILES changes, redo everything
+# Note that Makefile isn't in this list, or everytime we touch Makefile, it
+# would regenerate everything
+MKFILES:=config.mk $(wildcard local.mk)	# only care about local.mk if it is there
 UNAME:=$(shell uname -s)
 ARCH:=$(shell arch)
 
@@ -32,7 +35,7 @@ MSP_CA_PEM:=$(CRYPTO_DIR)/msp/cacerts/ca.$(SUBDOMAIN1).$(DOMAIN)-cert.pem
 MSP_ADMIN_PEM:=$(CRYPTO_DIR)/msp/admincerts/Admin@$(SUBDOMAIN1).$(DOMAIN)-cert.pem
 
 .PHONY: all
-all: genesis channel anchor-peers
+all: genesis channel anchor-peers .secrets
 
 $(BINDIR)/cryptogen $(BINDIR)/configtxgen:
 	mkdir -p $(TOOLDIR)
@@ -78,6 +81,9 @@ artifacts/$(CHANNEL).anchor-peers.tx: $(BINDIR)/configtxgen configtx.yaml
 	@echo "NETWORKID=$(NETWORKID)" >> $@
 	@echo "GOPATH=$(GOPATH)" >> $@
 
+.secrets:
+	tools/gensecrets
+
 .PHONY: up down persistent
 docker-compose.yaml: .env
 
@@ -94,7 +100,7 @@ TEMPLATES = $(wildcard templates/*.in)
 .PHONY: clean distclean
 clean:
 	rm -rf artifacts crypto-config
-	rm -f configtx.yaml crypto-config.yaml .env
+	rm -f configtx.yaml crypto-config.yaml .env .secrets
 
 distclean: clean
 	rm -rf __pycache__

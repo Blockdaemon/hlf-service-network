@@ -50,7 +50,7 @@ spec:
         - name: ca-server
           image: hyperledger/fabric-ca:{{env.HLF_ARCH}}-{{env.HLF_VERSION}}
           command: ['fabric-ca-server']
-          args: ['start', '-b', 'admin:adminpw', '-d']
+          args: ['start', '-b', "$(CA_USER):$(CA_PASSWORD)", '-d']
           #command: [ "/bin/bash", "-c", "--" ]
           #args: [ "while true; do sleep 30; done;" ]
           env:
@@ -68,6 +68,16 @@ spec:
               value: "/secrets/ca.{{env.SUBDOMAIN1}}.{{env.DOMAIN}}-cert.pem"
             - name:  FABRIC_CA_SERVER_TLS_KEYFILE
               value: "/secrets/current_sk"
+            - name: CA_USER
+              valueFrom:
+                 secretKeyRef:
+                   name: ca-creds
+                   key: user
+            - name: CA_PASSWORD
+              valueFrom:
+                 secretKeyRef:
+                   name: ca-creds
+                   key: password
           ports:
             - containerPort: 7054
           livenessProbe:
