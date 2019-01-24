@@ -65,6 +65,8 @@
               value: "/var/hyperledger/msp"
             - name: CORE_OPERATIONS_LISTENADDRESS
               value: ":9443"
+            - name: CORE_METRICS_PROVIDER
+              value: "prometheus"
           # end peer-env.yaml for peer{{PEER}}
           ###############################################
 {# DO NOT REMOVE, we need it to prevent line concat in the % include also

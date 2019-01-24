@@ -134,6 +134,8 @@ spec:
               value: "/var/hyperledger/msp"
             - name: CORE_OPERATIONS_LISTENADDRESS
               value: ":9443"
+            - name: CORE_METRICS_PROVIDER
+              value: "prometheus"
           # end peer-env.yaml for peer{{ .Values.PeerNum }}
           ###############################################
         # CouchDB for peer{{ .Values.PeerNum }}
