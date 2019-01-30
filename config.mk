@@ -3,7 +3,7 @@ HLF_VERSION=1.4.0
 HLF_ARCH=amd64
 
 ORGNAME=Blockdaemon
-DOMAIN=hlf.blockdaemon.io
+DOMAIN=${USER}.hlf.blockdaemon.io
 
 SUBORG1NAME=Production
 SUBDOMAIN1=prod
