@@ -30,8 +30,8 @@ sudo apt install qemu-kvm libvirt-clients libvirt-daemon-system
 curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
 echo "deb http://apt.kubernetes.io/ kubernetes-stretch main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
 sudo apt update; sudo apt install kubectl
-wget https://github.com/kubernetes/minikube/releases/download/v0.32.0/minikube_0.32-0.deb
-sudo dpkg -i minikube_0.32-0.deb
+wget https://github.com/kubernetes/minikube/releases/download/v0.33.1/minikube_0.33-1.deb
+sudo dpkg -i minikube_0.33-1.deb
 curl -LO https://storage.googleapis.com/minikube/releases/latest/docker-machine-driver-kvm2 && chmod +x docker-machine-driver-kvm2 && sudo mv docker-machine-driver-kvm2 /usr/local/bin
 ```
 
