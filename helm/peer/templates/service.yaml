@@ -11,9 +11,9 @@ spec:
   - port: 7051
     protocol: TCP
     name: peer
-  - port: 7053
-    protocol: TCP
-    name: gossip
+# - port: 7053
+#   protocol: TCP
+#   name: event
 # - port: 5984
 #   protocol: TCP
 #   name: couchdb

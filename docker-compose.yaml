@@ -108,7 +108,7 @@ services:
       #- ./crypto-config/peerOrganizations/${SUBDOMAIN1}.${DOMAIN}/users:/var/hyperledger/users
     ports:
       - 7051:7051
-      - 7053:7053
+      #- 7053:7053
       - 9443:9443
     depends_on:
       - orderer0
@@ -142,7 +142,7 @@ services:
       #- ./crypto-config/peerOrganizations/${SUBDOMAIN1}.${DOMAIN}/users:/var/hyperledger/users
     ports:
       - 8051:7051
-      - 8053:7053
+      #- 8053:7053
       - 10443:9443
     depends_on:
       - orderer0

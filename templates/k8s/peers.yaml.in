@@ -17,9 +17,9 @@ spec:
   - port: 7051
     protocol: TCP
     name: peer
-  - port: 7053
-    protocol: TCP
-    name: gossip
+# - port: 7053
+#   protocol: TCP
+#   name: event
 # - port: 5984
 #   protocol: TCP
 #   name: couchdb
@@ -99,7 +99,7 @@ spec:
           ports:
             - containerPort: 7051
             - containerPort: 7052
-            - containerPort: 7053
+            #- containerPort: 7053
             - containerPort: 9443
           livenessProbe:
             httpGet:

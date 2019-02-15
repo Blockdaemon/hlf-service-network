@@ -63,9 +63,9 @@ data:
   7054: "hlf-service-network/ca-org1:7054"
   7050: "hlf-service-network/orderer0:7050"
   7051: "hlf-service-network/peer0-org1:7051"
-  7053: "hlf-service-network/peer0-org1:7053"
+# 7053: "hlf-service-network/peer0-org1:7053"
   8051: "hlf-service-network/peer1-org1:7051"
-  8053: "hlf-service-network/peer1-org1:7053"
+# 8053: "hlf-service-network/peer1-org1:7053"
 ---
 apiVersion: v1
 kind: ConfigMap
