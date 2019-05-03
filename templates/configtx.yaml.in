@@ -315,7 +315,6 @@ Profiles:
         Consortiums:
             {{env.CONSORTIUM}}:
                 Organizations:
-                    - *{{env.ORGNAME}}
                     - *{{env.SUBORG1NAME}}
                     - *{{env.SUBORG2NAME}}
 
@@ -340,7 +339,6 @@ Profiles:
         Consortiums:
             {{env.CONSORTIUM}}:
                 Organizations:
-                    - *{{env.ORGNAME}}
                     - *{{env.SUBORG1NAME}}
                     - *{{env.SUBORG2NAME}}
 
